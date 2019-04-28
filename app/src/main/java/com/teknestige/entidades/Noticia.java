@@ -1,4 +1,4 @@
-package entidades;
+package com.teknestige.entidades;
 
 import java.util.Date;
 

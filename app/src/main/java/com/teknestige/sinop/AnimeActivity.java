@@ -145,9 +145,6 @@ public class AnimeActivity extends AppCompatActivity
         TextView classificacaoView = (TextView)findViewById(R.id.classificacaoView);
         classificacaoView.setText("Classificação Indicativa: " + animes.getClassificacao());
 
-//        TextView dataView = (TextView)findViewById(R.id.dataLancamentoView);
-//        dataView.setText("Data: " + animes.getData_lan().toString());
-
         TextView episoView = (TextView)findViewById(R.id.numEpView);
         episoView.setText(String.valueOf(animes.getNum_ep()) + " episódios");
 
