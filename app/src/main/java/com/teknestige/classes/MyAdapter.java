@@ -1,0 +1,83 @@
+package com.teknestige.classes;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+    private ArrayList<CreateList> galleryList;
+    private Context context;
+
+    public MyAdapter(Context context, ArrayList<CreateList> galleryList) {
+        this.galleryList = galleryList;
+        this.context = context;
+    }
+
+    @Override
+    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(com.teknestige.sinop.R.layout.cell_layout, viewGroup, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(final MyAdapter.ViewHolder viewHolder, final int i) {
+        viewHolder.title.setText(galleryList.get(i).getImage_title());
+        viewHolder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        viewHolder.img.setImageResource((galleryList.get(i).getImage_ID()));
+
+        viewHolder.img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,galleryList.get(i).getImage_title(), Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
+        viewHolder.img.setOnTouchListener(new View.OnTouchListener()
+        {
+        @Override
+        public boolean onTouch(View v, MotionEvent event)
+        {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                Log.d("Pressed", "Button pressed");
+                viewHolder.img.setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
+            }else if (event.getAction() == MotionEvent.ACTION_UP) {
+
+                Log.d("Released", "Button released");
+                viewHolder.img.setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.LIGHTEN);
+                // TODO Auto-generated method stub
+
+            }
+            return false;
+        }
+    });
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return galleryList.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        private TextView title;
+        private ImageView img;
+        public ViewHolder(View view) {
+            super(view);
+
+            title = (TextView)view.findViewById(com.teknestige.sinop.R.id.title);
+            img = (ImageView) view.findViewById(com.teknestige.sinop.R.id.img);
+        }
+    }
+}
