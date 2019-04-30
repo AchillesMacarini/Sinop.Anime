@@ -18,7 +18,7 @@ import java.net.URL;
 
 public class BDHelper {
 
-    private static String URL_GLOBAL_DB = "http://192.168.137.21/ws_otaku/";
+    private static String URL_GLOBAL_DB = "http://10.21.80.199/ws_otaku/";
 
     public JSONArray selectUserInfo(Context context, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {

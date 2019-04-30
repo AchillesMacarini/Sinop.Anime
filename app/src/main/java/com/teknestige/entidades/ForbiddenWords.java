@@ -8,6 +8,7 @@ public class ForbiddenWords {
 
     public ForbiddenWords(String []palavras){
         this.palavras=palavras;
+        setPalavras();
     }
 //polenta
     public void setPalavras(){

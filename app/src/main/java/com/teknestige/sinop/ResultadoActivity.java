@@ -42,6 +42,8 @@ import DbControler.BDHelper;
 public class ResultadoActivity  extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
+
+    //instances
     Usuario usuario = new Usuario();
     ForbiddenWords forbiddenWords = new ForbiddenWords();
     BDHelper bdHelper = new BDHelper();
@@ -63,6 +65,7 @@ public class ResultadoActivity  extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         construirUsuario();
@@ -71,14 +74,11 @@ public class ResultadoActivity  extends AppCompatActivity
 
         try {
             removeDangerWords();
-            arrayPesquisinha();
-            System.out.println("deu cero");
+            arraySearchs();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("deu ero");
         } catch (JSONException e) {
             e.printStackTrace();
-            System.out.println("deu ero2");
         }
     }
 
@@ -93,94 +93,15 @@ public class ResultadoActivity  extends AppCompatActivity
                 (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-
         return true;
     }
 
     public void removeDangerWords() throws IOException, JSONException {
         String s = handleIntent(getIntent());
         String[] words = s.split("\\s+");
-        String[] sentences = s.split("[.,\\/]");
-        String [] palavras = new String []
-                {"quero saber",
-                        "que",
-                        "do",
-                        "um",
-                        "de",
-                        "onde",
-                        "o",
-                        "os",
-                        "a",
-                        "as",
-                        "uns",
-                        "uma",
-                        "umas",
-                        "cujo",
-                        "cuja",
-                        "cujos",
-                        "cujas",
-                        "qual",
-                        "quais",
-                        "eles",
-                        "ele",
-                        "ela",
-                        "elas",
-                        "eu",
-                        "tu",
-                        "você",
-                        "nós",
-                        "vós",
-                        "vocês",
-                        "isso",
-                        "já",
-                        "aquilo",
-                        "isto",
-                        "esta",
-                        "este",
-                        "essa",
-                        "esse",
-                        "estes",
-                        "esses",
-                        "essas",
-                        "estas",
-                        "aquele",
-                        "aqueles",
-                        "aquela",
-                        "aquelas",
-                        "havia",
-                        "há",
-                        "houve",
-                        "haviam",
-                        "haviamos",
-                        "haverão",
-                        "haverá",
-                        "e",
-                        "com",
-                        "antes",
-                        "em",
-                        "tinha",
-                        "tem",
-                        "têm",
-                        "entre",
-                        "como",
-                        "no",
-                        "nos",
-                        "na",
-                        "nas",
-                        "me",
-                        "se",
-                        "te",
-                        "tchê",
-                        "anime",
-                        "muito",
-                        "muitos",
-                        "muita"};
+        String [] palavras = forbiddenWords.getPalavras();
 
         for (int i = 0; i < words.length; i++) {
-
-            // You may want to check for a non-word character before blindly
-            // performing a replacement
-            // It may also be necessary to adjust the character class
             words[i] = words[i].replaceAll("[^\\w]", "");
             list.add(words[i]);
             for (int j=0; j<palavras.length; j++) {
@@ -189,11 +110,8 @@ public class ResultadoActivity  extends AppCompatActivity
                 }
             }
         }
-        System.out.println(list);
-
         for (int j=0; j < list.size(); j ++){
                 bdHelper.insertIntoTesterinoUsuario(getApplicationContext(), list.get(j), getUserEmail().toLowerCase());
-
         }
     }
 
@@ -223,7 +141,7 @@ public class ResultadoActivity  extends AppCompatActivity
         }
     }
 
-    public void arrayPesquisinha() throws IOException, JSONException{
+    public void arraySearchs() throws IOException, JSONException{
         JSONArray jsonPesquisas = bdHelper.selectAllFromPesquisinha(getApplicationContext(), getUserEmail());
         JSONArray jsonTesterino = bdHelper.selectAllFromTesterino(getApplicationContext(), getUserEmail());
 
@@ -320,22 +238,6 @@ public class ResultadoActivity  extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void alertDialog (String titulo, String mensagem) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(titulo);
-        builder.setMessage(mensagem);
-
-        DialogInterface.OnClickListener btn = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                return;
-            }
-        };
-
-        builder.setPositiveButton("Ok", btn);
-        builder.create().show();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
