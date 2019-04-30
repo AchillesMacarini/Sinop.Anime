@@ -42,15 +42,14 @@ import DbControler.BDHelper;
 public class ResultadoActivity  extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
-
-    //instances
-    Usuario usuario = new Usuario();
-    ForbiddenWords forbiddenWords = new ForbiddenWords();
-    BDHelper bdHelper = new BDHelper();
-    ArrayList<String> nomesParecidos = new ArrayList<String>();
-    ArrayList<String> listaNomes = new ArrayList<String>();
-    ArrayList<String> arrayPesquisas = new ArrayList<String>();
-    ArrayList<String> list = new ArrayList<String>();
+    //atributos
+    private Usuario usuario = new Usuario();
+    private ForbiddenWords forbiddenWords = new ForbiddenWords();
+    private BDHelper bdHelper = new BDHelper();
+    private ArrayList<String> nomesParecidos = new ArrayList<String>();
+    private ArrayList<String> listaNomes = new ArrayList<String>();
+    private ArrayList<String> arrayPesquisas = new ArrayList<String>();
+    private ArrayList<String> list = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +98,7 @@ public class ResultadoActivity  extends AppCompatActivity
     public void removeDangerWords() throws IOException, JSONException {
         String s = handleIntent(getIntent());
         String[] words = s.split("\\s+");
-        String [] palavras = forbiddenWords.getPalavras();
+        String[] palavras = forbiddenWords.getPalavras();
 
         for (int i = 0; i < words.length; i++) {
             words[i] = words[i].replaceAll("[^\\w]", "");

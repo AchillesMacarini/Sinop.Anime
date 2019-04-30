@@ -220,6 +220,7 @@ public class BDHelper {
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         StringBuilder sb = new StringBuilder();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        System.out.println("testando");
         String json;
         while ((json = bufferedReader.readLine()) != null) {
             sb.append(json + "\n");
