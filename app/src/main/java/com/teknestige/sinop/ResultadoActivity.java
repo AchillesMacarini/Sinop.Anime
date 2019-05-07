@@ -1,19 +1,14 @@
 package com.teknestige.sinop;
 
-import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.teknestige.entidades.ForbiddenWords;
 import com.teknestige.entidades.Usuario;
 
 import org.json.JSONArray;
@@ -35,7 +29,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import DbControler.BDHelper;
 
@@ -44,7 +37,6 @@ public class ResultadoActivity  extends AppCompatActivity
 
     //atributos
     private Usuario usuario = new Usuario();
-    private ForbiddenWords forbiddenWords = new ForbiddenWords();
     private BDHelper bdHelper = new BDHelper();
     private ArrayList<String> nomesParecidos = new ArrayList<String>();
     private ArrayList<String> listaNomes = new ArrayList<String>();
@@ -96,15 +88,24 @@ public class ResultadoActivity  extends AppCompatActivity
     }
 
     public void removeDangerWords() throws IOException, JSONException {
+        ArrayList arrayForbidden = new ArrayList();
+        JSONArray jsonForbidden = bdHelper.selectAllFromForbidden(getApplicationContext());
+
+        if (jsonForbidden != null) {
+            for (int i=0;i<jsonForbidden.length();i++){
+                JSONObject userObject = jsonForbidden.getJSONObject(i);
+                arrayForbidden.add(userObject.getString("id_palavras_proibidas"));
+            }
+        }
+
         String s = handleIntent(getIntent());
         String[] words = s.split("\\s+");
-        String[] palavras = forbiddenWords.getPalavras();
 
         for (int i = 0; i < words.length; i++) {
             words[i] = words[i].replaceAll("[^\\w]", "");
             list.add(words[i]);
-            for (int j=0; j<palavras.length; j++) {
-                if (words[i].toLowerCase().equals(palavras[j])) {
+            for (int j=0; j<arrayForbidden.size(); j++) {
+                if (words[i].toLowerCase().equals(arrayForbidden.get(j))) {
                     list.remove(words[i]);
                 }
             }
@@ -147,7 +148,7 @@ public class ResultadoActivity  extends AppCompatActivity
         if (jsonTesterino != null) {
             for (int i=0;i<jsonTesterino.length();i++){
                 JSONObject userObject = jsonTesterino.getJSONObject(i);
-                arrayPesquisas.add(userObject.getString("Testerino_conteudo"));
+                arrayPesquisas.add(userObject.getString("id_palavras_proibidas"));
             }
         }
 
