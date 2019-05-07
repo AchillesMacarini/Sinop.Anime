@@ -96,23 +96,33 @@ public class ResultadoActivity  extends AppCompatActivity
                 JSONObject userObject = jsonForbidden.getJSONObject(i);
                 arrayForbidden.add(userObject.getString("id_palavras_proibidas"));
             }
+            System.out.println(arrayForbidden);
         }
 
         String s = handleIntent(getIntent());
+        String[] forbiddenWords = new String[arrayForbidden.size()];
+        for (int i=0; i < arrayForbidden.size(); i++){
+            forbiddenWords[i] = (String) arrayForbidden.get(i);
+        }
+
         String[] words = s.split("\\s+");
 
         for (int i = 0; i < words.length; i++) {
             words[i] = words[i].replaceAll("[^\\w]", "");
             list.add(words[i]);
-            for (int j=0; j<arrayForbidden.size(); j++) {
-                if (words[i].toLowerCase().equals(arrayForbidden.get(j))) {
+            for (int j=0; j<forbiddenWords.length; j++) {
+                if (words[i].toLowerCase().equals(forbiddenWords[j].toLowerCase())) {
+                    System.out.println(arrayForbidden);
                     list.remove(words[i]);
+                    System.out.println("lista: " + list);
                 }
             }
         }
         for (int j=0; j < list.size(); j ++){
                 bdHelper.insertIntoTesterinoUsuario(getApplicationContext(), list.get(j), getUserEmail().toLowerCase());
+
         }
+
     }
 
 
@@ -146,9 +156,11 @@ public class ResultadoActivity  extends AppCompatActivity
         JSONArray jsonTesterino = bdHelper.selectAllFromTesterino(getApplicationContext(), getUserEmail());
 
         if (jsonTesterino != null) {
+            System.out.println("deu cero");
             for (int i=0;i<jsonTesterino.length();i++){
                 JSONObject userObject = jsonTesterino.getJSONObject(i);
-                arrayPesquisas.add(userObject.getString("id_palavras_proibidas"));
+                arrayPesquisas.add(userObject.getString("Testerino_conteudo"));
+                System.out.println("minha vida:"+arrayPesquisas);
             }
         }
 
