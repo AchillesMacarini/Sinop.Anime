@@ -9,7 +9,7 @@ public class ForbiddenWords {
     public ForbiddenWords(String []palavras){
         this.palavras=palavras;
     }
-//polenta manin
+
     public void setPalavras(){
         this.palavras= new String []
                 {"quero saber",
