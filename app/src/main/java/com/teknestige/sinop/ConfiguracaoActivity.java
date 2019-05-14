@@ -15,9 +15,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.teknestige.entidades.Usuario;
+
+import DbControler.BDHelper;
 
 public class ConfiguracaoActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    Usuario usuario = new Usuario();
+    BDHelper bdHelper = new BDHelper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +50,51 @@ public class ConfiguracaoActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        construirUsuario();
+        printNavHederUser();
     }
+
+
+    public void construirUsuario(){
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        String emailUser = sp.getString("emailLogado",null);
+        usuario.setEmail(emailUser);
+        String nickUser = sp.getString("nickLogado",null);
+        usuario.setNickname(nickUser);
+        String biographUser = sp.getString("biographLogado",null);
+        usuario.setBiograph(biographUser);
+        String dateUser = sp.getString("dateLogado",null);
+        usuario.setDataCadastro(dateUser);
+        String qntUser = sp.getString("qntLogado",null);
+        usuario.setQtdTags(Integer.valueOf(String.valueOf(qntUser)));
+    }
+
+    public String getUserEmail() {
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        String emailName = sp.getString("emailLogado",null);
+        return emailName;
+    }
+
+    public void printNavHederUser(){
+        nickNavHeaderUser();
+        emailNavHeaderUser();
+    }
+
+    public void nickNavHeaderUser(){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        TextView text = (TextView) header.findViewById(R.id.user_nick_header);
+        text.setText(usuario.getNickname());
+    }
+
+    public void emailNavHeaderUser(){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        TextView text = (TextView) header.findViewById(R.id.user_email_header);
+        text.setText(usuario.getEmail().toLowerCase());
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -112,6 +163,7 @@ public class ConfiguracaoActivity extends AppCompatActivity
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

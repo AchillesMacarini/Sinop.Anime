@@ -87,7 +87,7 @@
         android:background="#3e3565"
         android:onClick="logar"
         android:text="LOGIN"
-        android:textColor="@android:color/li"
+        android:textColor="@android:color/background_light"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

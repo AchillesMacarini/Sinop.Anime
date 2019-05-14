@@ -1,14 +1,19 @@
 package com.teknestige.sinop;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.teknestige.entidades.ForbiddenWords;
 import com.teknestige.entidades.Usuario;
 
 import org.json.JSONArray;
@@ -29,19 +35,20 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import DbControler.BDHelper;
 
 public class ResultadoActivity  extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
-    //atributos
-    private Usuario usuario = new Usuario();
-    private BDHelper bdHelper = new BDHelper();
-    private ArrayList<String> nomesParecidos = new ArrayList<String>();
-    private ArrayList<String> listaNomes = new ArrayList<String>();
-    private ArrayList<String> arrayPesquisas = new ArrayList<String>();
-    private ArrayList<String> list = new ArrayList<String>();
+    Usuario usuario = new Usuario();
+    ForbiddenWords forbiddenWords = new ForbiddenWords();
+    BDHelper bdHelper = new BDHelper();
+    ArrayList<String> nomesParecidos = new ArrayList<String>();
+    ArrayList<String> listaNomes = new ArrayList<String>();
+    ArrayList<String> arrayPesquisas = new ArrayList<String>();
+    ArrayList<String> list = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +63,6 @@ public class ResultadoActivity  extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         construirUsuario();
@@ -65,11 +71,14 @@ public class ResultadoActivity  extends AppCompatActivity
 
         try {
             removeDangerWords();
-            arraySearchs();
+            arrayPesquisinha();
+            System.out.println("deu cero");
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("deu ero");
         } catch (JSONException e) {
             e.printStackTrace();
+            System.out.println("deu ero2");
         }
     }
 
@@ -84,45 +93,108 @@ public class ResultadoActivity  extends AppCompatActivity
                 (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 
     public void removeDangerWords() throws IOException, JSONException {
-        ArrayList arrayForbidden = new ArrayList();
-        JSONArray jsonForbidden = bdHelper.selectAllFromForbidden(getApplicationContext());
-
-        if (jsonForbidden != null) {
-            for (int i=0;i<jsonForbidden.length();i++){
-                JSONObject userObject = jsonForbidden.getJSONObject(i);
-                arrayForbidden.add(userObject.getString("id_palavras_proibidas"));
-            }
-            System.out.println(arrayForbidden);
-        }
-
         String s = handleIntent(getIntent());
-        String[] forbiddenWords = new String[arrayForbidden.size()];
-        for (int i=0; i < arrayForbidden.size(); i++){
-            forbiddenWords[i] = (String) arrayForbidden.get(i);
-        }
-
         String[] words = s.split("\\s+");
+        String[] sentences = s.split("[.,\\/]");
+        String [] palavras = new String []
+                {"quero saber",
+                        "que",
+                        "do",
+                        "um",
+                        "de",
+                        "onde",
+                        "o",
+                        "os",
+                        "a",
+                        "as",
+                        "uns",
+                        "uma",
+                        "umas",
+                        "cujo",
+                        "cuja",
+                        "cujos",
+                        "cujas",
+                        "qual",
+                        "quais",
+                        "eles",
+                        "ele",
+                        "ela",
+                        "elas",
+                        "eu",
+                        "tu",
+                        "você",
+                        "nós",
+                        "vós",
+                        "vocês",
+                        "isso",
+                        "já",
+                        "aquilo",
+                        "isto",
+                        "esta",
+                        "este",
+                        "essa",
+                        "esse",
+                        "estes",
+                        "esses",
+                        "essas",
+                        "estas",
+                        "aquele",
+                        "aqueles",
+                        "aquela",
+                        "aquelas",
+                        "havia",
+                        "há",
+                        "houve",
+                        "haviam",
+                        "haviamos",
+                        "haverão",
+                        "haverá",
+                        "e",
+                        "com",
+                        "antes",
+                        "em",
+                        "tinha",
+                        "tem",
+                        "têm",
+                        "entre",
+                        "como",
+                        "no",
+                        "nos",
+                        "na",
+                        "nas",
+                        "me",
+                        "se",
+                        "te",
+                        "tchê",
+                        "anime",
+                        "muito",
+                        "muitos",
+                        "muita"};
 
         for (int i = 0; i < words.length; i++) {
+
+            // You may want to check for a non-word character before blindly
+            // performing a replacement
+            // It may also be necessary to adjust the character class
             words[i] = words[i].replaceAll("[^\\w]", "");
             list.add(words[i]);
-            for (int j=0; j<forbiddenWords.length; j++) {
-                if (words[i].toLowerCase().equals(forbiddenWords[j].toLowerCase())) {
-                    System.out.println(arrayForbidden);
+            for (int j=0; j<palavras.length; j++) {
+                if (words[i].toLowerCase().equals(palavras[j])) {
                     list.remove(words[i]);
-                    System.out.println("lista: " + list);
                 }
             }
         }
+        System.out.println(list);
+
         for (int j=0; j < list.size(); j ++){
                 bdHelper.insertIntoTesterinoUsuario(getApplicationContext(), list.get(j), getUserEmail().toLowerCase());
 
         }
-
     }
 
 
@@ -151,16 +223,14 @@ public class ResultadoActivity  extends AppCompatActivity
         }
     }
 
-    public void arraySearchs() throws IOException, JSONException{
+    public void arrayPesquisinha() throws IOException, JSONException{
         JSONArray jsonPesquisas = bdHelper.selectAllFromPesquisinha(getApplicationContext(), getUserEmail());
         JSONArray jsonTesterino = bdHelper.selectAllFromTesterino(getApplicationContext(), getUserEmail());
 
         if (jsonTesterino != null) {
-            System.out.println("deu cero");
             for (int i=0;i<jsonTesterino.length();i++){
                 JSONObject userObject = jsonTesterino.getJSONObject(i);
                 arrayPesquisas.add(userObject.getString("Testerino_conteudo"));
-                System.out.println("minha vida:"+arrayPesquisas);
             }
         }
 
@@ -250,6 +320,22 @@ public class ResultadoActivity  extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void alertDialog (String titulo, String mensagem) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(titulo);
+        builder.setMessage(mensagem);
+
+        DialogInterface.OnClickListener btn = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                return;
+            }
+        };
+
+        builder.setPositiveButton("Ok", btn);
+        builder.create().show();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

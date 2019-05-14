@@ -65,6 +65,9 @@ public class AnimeActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
+
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -99,6 +102,7 @@ public class AnimeActivity extends AppCompatActivity
         Bundle bundle = intent.getExtras();
         String nomeClicado = bundle.getString("nomeAnime");
         return nomeClicado;
+
     }
 
     public void construirAnime() throws IOException, JSONException {
@@ -182,9 +186,11 @@ public class AnimeActivity extends AppCompatActivity
         return emailName;
     }
 
+
         @Override
     public void finish() {
             long endTime = System.nanoTime();
+//        NumberFormat formatter = new DecimalFormat("#0.00");
             long totalTime = NANOSECONDS.toSeconds(endTime - startTime);
             System.out.println(totalTime + " seconds");
             Intent in = getIntent();
