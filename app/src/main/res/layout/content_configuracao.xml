@@ -9,4 +9,71 @@
     tools:context=".ConfiguracaoActivity"
     tools:showIn="@layout/app_bar_configuracao">
 
+    <LinearLayout
+        android:layout_width="396dp"
+        android:layout_height="644dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
+            android:text="Account"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center_vertical"
+            android:text="Notifications"
+            android:textSize="24sp"
+            android:textColor="@color/cardview_light_background" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center_vertical"
+            android:text="Theme"
+            android:textSize="24sp"
+            android:textColor="@color/cardview_light_background" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center_vertical"
+            android:text="Language"
+            android:textSize="24sp"
+            android:textColor="@color/cardview_light_background" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/cardview_light_background" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center_vertical"
+            android:text="Help"
+            android:textSize="24sp"
+            android:textColor="@color/cardview_light_background" />
+
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
