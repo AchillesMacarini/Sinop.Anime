@@ -99,82 +99,20 @@ public class ResultadoActivity  extends AppCompatActivity
 
     public void removeDangerWords() throws IOException, JSONException {
         String s = handleIntent(getIntent());
+
+
+        JSONArray jsonForbidden = bdHelper.selectAllFromForbidden(getApplicationContext());
+        String [] palavras = new String[jsonForbidden.length()];
+        if (jsonForbidden != null) {
+            for (int i=0;i<jsonForbidden.length();i++){
+                JSONObject userObject = jsonForbidden.getJSONObject(i);
+                palavras[i] = (userObject.getString("id_palavras_proibidas"));
+            }
+        }
+
+
         String[] words = s.split("\\s+");
         String[] sentences = s.split("[.,\\/]");
-        String [] palavras = new String []
-                {"quero saber",
-                        "que",
-                        "do",
-                        "um",
-                        "de",
-                        "onde",
-                        "o",
-                        "os",
-                        "a",
-                        "as",
-                        "uns",
-                        "uma",
-                        "umas",
-                        "cujo",
-                        "cuja",
-                        "cujos",
-                        "cujas",
-                        "qual",
-                        "quais",
-                        "eles",
-                        "ele",
-                        "ela",
-                        "elas",
-                        "eu",
-                        "tu",
-                        "você",
-                        "nós",
-                        "vós",
-                        "vocês",
-                        "isso",
-                        "já",
-                        "aquilo",
-                        "isto",
-                        "esta",
-                        "este",
-                        "essa",
-                        "esse",
-                        "estes",
-                        "esses",
-                        "essas",
-                        "estas",
-                        "aquele",
-                        "aqueles",
-                        "aquela",
-                        "aquelas",
-                        "havia",
-                        "há",
-                        "houve",
-                        "haviam",
-                        "haviamos",
-                        "haverão",
-                        "haverá",
-                        "e",
-                        "com",
-                        "antes",
-                        "em",
-                        "tinha",
-                        "tem",
-                        "têm",
-                        "entre",
-                        "como",
-                        "no",
-                        "nos",
-                        "na",
-                        "nas",
-                        "me",
-                        "se",
-                        "te",
-                        "tchê",
-                        "anime",
-                        "muito",
-                        "muitos",
-                        "muita"};
 
         for (int i = 0; i < words.length; i++) {
 
