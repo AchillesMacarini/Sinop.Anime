@@ -17,9 +17,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".LanguagesActivity"
+            android:label="@string/title_activity_languages"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".HelpActivity"
             android:label="@string/title_activity_help"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".NotificationSettingsActivity"
             android:label="@string/title_activity_notification_settings"
