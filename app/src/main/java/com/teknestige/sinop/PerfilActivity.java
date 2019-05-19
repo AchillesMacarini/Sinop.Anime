@@ -1,11 +1,11 @@
 package com.teknestige.sinop;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.teknestige.entidades.Usuario;
@@ -36,8 +38,7 @@ public class PerfilActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                buildAlertDialog();
             }
         });
 
@@ -76,6 +77,27 @@ public class PerfilActivity extends AppCompatActivity
         usuario.setDataCadastro(dateUser);
         String qntUser = sp.getString("qntLogado",null);
         usuario.setQtdTags(Integer.valueOf(String.valueOf(qntUser)));
+    }
+
+    public void buildAlertDialog(){
+
+        // custom dialog
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_edit_profile);
+        dialog.setTitle("Title...");
+
+        // set the custom dialog components - text, image and button
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
     }
 
     public String getUserEmail() {

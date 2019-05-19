@@ -62,8 +62,8 @@ public class ConfiguracaoActivity extends AppCompatActivity
     }
 
 
-    public void buildAlertDialog(View v){
 
+    public void buildAlertDialog(View v){
 
             // custom dialog
             final Dialog dialog = new Dialog(this);
