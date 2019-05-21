@@ -61,21 +61,11 @@ public class ConfiguracaoActivity extends AppCompatActivity
         printNavHederUser();
     }
 
-
-
     public void buildAlertDialog(View v){
 
-            // custom dialog
             final Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.dialog);
             dialog.setTitle("Title...");
-
-            // set the custom dialog components - text, image and button
-            TextView text = (TextView) dialog.findViewById(R.id.text);
-            text.setText("Android custom dialog example!");
-            ImageView image = (ImageView) dialog.findViewById(R.id.image);
-            image.setImageResource(R.drawable.ic_delete_white_24dp);
-
             Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
             // if button is clicked, close the custom dialog
             dialogButton.setOnClickListener(new View.OnClickListener() {
