@@ -61,10 +61,27 @@ public class ConfiguracaoActivity extends AppCompatActivity
         printNavHederUser();
     }
 
+    public void goToAccountSettins(View v){
+        Intent intent = new Intent(this, AccountSettingsActivity.class);
+        startActivity(intent);
+    }
 
+    public void goToNotificationSettins(View v){
+        Intent intent = new Intent(this, NotificationSettingsActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToLanguagesSettins(View v){
+        Intent intent = new Intent(this, LanguagesActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToHelp(View v){
+        Intent intent = new Intent(this, HelpActivity.class);
+        startActivity(intent);
+    }
 
     public void buildAlertDialog(View v){
-
             // custom dialog
             final Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.dialog);

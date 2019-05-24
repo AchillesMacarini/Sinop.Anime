@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:gravity="center_vertical"
-            android:onClick="buildAlertDialog"
+            android:onClick="goToAccountSettins"
             android:text="Account"
             android:textColor="#ffffff"
             android:textSize="25dp"
@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:gravity="center_vertical"
-            android:onClick="buildAlertDialog"
+            android:onClick="goToNotificationSettins"
             android:text="Notifications"
             android:textColor="#ffffff"
             android:textSize="25dp"
@@ -51,9 +51,10 @@
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:gravity="center_vertical"
+            android:onClick="buildAlertDialog"
             android:text="Theme"
-            android:textColor="#ffffff"
 
+            android:textColor="#ffffff"
             android:textSize="25dp"
             app:fontFamily="sans-serif-light" />
 
@@ -62,9 +63,10 @@
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:gravity="center_vertical"
+            android:onClick="goToLanguagesSettins"
             android:text="Language"
-            android:textColor="@android:color/background_light"
 
+            android:textColor="@android:color/background_light"
             android:textSize="25dp"
             app:fontFamily="sans-serif-light" />
 
@@ -79,9 +81,10 @@
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:gravity="center_vertical"
+            android:onClick="goToHelp"
             android:text="Help"
-            android:textColor="#ffffff"
 
+            android:textColor="#ffffff"
             android:textSize="25dp"
             app:fontFamily="sans-serif-light" />
 
