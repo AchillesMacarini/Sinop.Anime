@@ -61,17 +61,17 @@ public class ConfiguracaoActivity extends AppCompatActivity
         printNavHederUser();
     }
 
-    public void goToAccountSettins(View v){
+    public void goToAccountSettings(View v){
         Intent intent = new Intent(this, AccountSettingsActivity.class);
         startActivity(intent);
     }
 
-    public void goToNotificationSettins(View v){
+    public void goToNotificationSettings(View v){
         Intent intent = new Intent(this, NotificationSettingsActivity.class);
         startActivity(intent);
     }
 
-    public void goToLanguagesSettins(View v){
+    public void goToLanguagesSettings(View v){
         Intent intent = new Intent(this, LanguagesActivity.class);
         startActivity(intent);
     }
@@ -86,12 +86,6 @@ public class ConfiguracaoActivity extends AppCompatActivity
             final Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.dialog);
             dialog.setTitle("Title...");
-
-            // set the custom dialog components - text, image and button
-            TextView text = (TextView) dialog.findViewById(R.id.text);
-            text.setText("Android custom dialog example!");
-            ImageView image = (ImageView) dialog.findViewById(R.id.image);
-            image.setImageResource(R.drawable.ic_delete_white_24dp);
 
             Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
             // if button is clicked, close the custom dialog
