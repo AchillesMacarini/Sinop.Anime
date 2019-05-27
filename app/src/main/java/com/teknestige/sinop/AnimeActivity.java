@@ -3,9 +3,19 @@ package com.teknestige.sinop;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.media.Image;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,7 +26,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.teknestige.classes.CreateList;
+import com.teknestige.classes.MyAdapter;
 import com.teknestige.entidades.Anime;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
@@ -26,7 +42,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -40,7 +60,9 @@ public class AnimeActivity extends AppCompatActivity
     BDHelper bdHelper = new BDHelper();
     Anime animes = new Anime();
     ArrayList<String> listaNomesAnimes = new ArrayList<String>();
-
+    String imgUserUrl = "http://192.168.1.28/ws_otaku/ws_images_users/";
+    String imgAnimeUrl = "http://192.168.1.28/ws_otaku/ws_images_animes/";
+    String imgNewUrl = "http://192.168.1.28/ws_otaku/ws_images_news/";
     long startTime = System.nanoTime();
 
     @Override
@@ -66,7 +88,15 @@ public class AnimeActivity extends AppCompatActivity
         toggle.syncState();
 
 
-
+//        try {
+//            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//            View headerView = navigationView.inflateHeaderView(R.layout.nav_header_inicio);
+//            ImageView pedra = (ImageView) headerView.findViewById(R.id.imageUserProfile);
+//            pedra.setImageBitmap(LoadImageFromWebOperations(imgUserUrl+getUserEmail()+".png"));
+//        }catch (NullPointerException e) {
+////            ImageView pedra = (ImageView) findViewById(R.id.imageView4);
+////            pedra.setImageResource(R.drawable.img2);
+//        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -78,12 +108,26 @@ public class AnimeActivity extends AppCompatActivity
             arrayAnimes();
             construirAnime();
             settarAnimeView();
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+    }
+    public Bitmap LoadImageFromWebOperations(String url) {
+        try {
+            ImageView i = null;
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            return bitmap;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
@@ -95,8 +139,22 @@ public class AnimeActivity extends AppCompatActivity
             String nomeAnime = animeObject.getString("Nome");
             listaNomesAnimes.add(nomeAnime);
         }
+
+        ArrayAdapter<String> adapterComment = new ArrayAdapter<String>(this, R.layout.coment_layout_item, R.id.textView11, listaNomesAnimes);
+        ListView neoListView = (ListView) findViewById(R.id.comentRecycler);
+
+        neoListView.setAdapter(adapterComment);
+
+//        ArrayAdapter<String> adapterAnswer = new ArrayAdapter<String>(this, R.layout.answer_layout_item, R.id.textView111, listaNomesAnimes);
+//        ListView neoNeoListView = (ListView) findViewById(R.id.answersList);
+//
+//        neoNeoListView.setAdapter(adapterAnswer);
+//        neoListView.addView(neoNeoListView);
     }
 
+public void colocarLayoutChato() throws  IOException, JSONException{
+
+}
     public String nomeClicado(){
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -104,6 +162,55 @@ public class AnimeActivity extends AppCompatActivity
         return nomeClicado;
 
     }
+
+    private ArrayList<CreateList> prepareData(){
+
+        ArrayList<CreateList> theimage = new ArrayList<>();
+
+
+        return theimage;
+    }
+//
+//    public void createRecyclerView(){
+//        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.comentRecycler);
+//        recyclerView.setHasFixedSize(true);
+//
+//        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),1);
+//        recyclerView.setLayoutManager(layoutManager);
+//        ArrayList<CreateList> createLists = prepareData();
+//        MyAdapter adapter = new MyAdapter(getApplicationContext(), createLists);
+//        recyclerView.setAdapter(adapter);
+//
+//        String path = Environment.getRootDirectory().toString();
+//        File f = new File(path);
+//        File file[] = f.listFiles();
+//        for (int i=0; i < file.length; i++)
+//        {
+//            CreateList createList = new CreateList();
+//            createList.setImage_Location(file[i].getName());
+//        }
+//
+//        ItemTouchHelper.SimpleCallback itemTouchHelperCallback1 = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+//            @Override
+//            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+//                // Row is swiped from recycler view
+//                // remove it from adapter
+//            }
+//
+//            @Override
+//            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+//                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+//            }
+//        };
+//
+//        // attaching the touch helper to recycler view
+//        new ItemTouchHelper(itemTouchHelperCallback1).attachToRecyclerView(recyclerView);
+//    }
 
     public void construirAnime() throws IOException, JSONException {
 
@@ -219,6 +326,9 @@ public class AnimeActivity extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
         TextView text = (TextView) header.findViewById(R.id.user_nick_header);
         text.setText(usuario.getNickname());
+
+        ImageView pedra = (ImageView) header.findViewById(R.id.imageUserProfile);
+        pedra.setImageBitmap(LoadImageFromWebOperations(imgUserUrl+getUserEmail()+".png"));
     }
 
     public void emailNavHeaderUser(){

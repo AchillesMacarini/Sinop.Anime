@@ -184,10 +184,10 @@
 
             >
 
-            <android.support.v7.widget.RecyclerView
+            <ListView
                 android:id="@+id/comentRecycler"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                android:layout_height="wrap_content"></ListView>
         </RelativeLayout>
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

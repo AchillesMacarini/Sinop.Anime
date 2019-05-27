@@ -3,6 +3,9 @@ package com.teknestige.sinop;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,12 +29,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import DbControler.BDHelper;
 
+import static com.teknestige.sinop.R.id.myAnimeList;
+
 public class ListaAnimesActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener  {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
     BDHelper bdHelper = new BDHelper();
 
     Usuario usuario = new Usuario();
@@ -46,7 +55,7 @@ public class ListaAnimesActivity extends AppCompatActivity
         getSupportActionBar().setTitle("Lista de Animes");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this , drawer , toolbar , R.string.navigation_drawer_open , R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         construirUsuario();
@@ -61,46 +70,46 @@ public class ListaAnimesActivity extends AppCompatActivity
             System.out.println("Deu certo");
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Deu erro"+e.getMessage());
+            System.out.println("Deu erro" + e.getMessage());
         } catch (JSONException e) {
             e.printStackTrace();
             System.out.println("Deu erro 2");
         }
     }
 
-    public void construirUsuario(){
-        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
-        String emailUser = sp.getString("emailLogado",null);
+    public void construirUsuario() {
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados" , Context.MODE_PRIVATE);
+        String emailUser = sp.getString("emailLogado" , null);
         usuario.setEmail(emailUser);
-        String nickUser = sp.getString("nickLogado",null);
+        String nickUser = sp.getString("nickLogado" , null);
         usuario.setNickname(nickUser);
-        String biographUser = sp.getString("biographLogado",null);
+        String biographUser = sp.getString("biographLogado" , null);
         usuario.setBiograph(biographUser);
-        String dateUser = sp.getString("dateLogado",null);
+        String dateUser = sp.getString("dateLogado" , null);
         usuario.setDataCadastro(dateUser);
-        String qntUser = sp.getString("qntLogado",null);
+        String qntUser = sp.getString("qntLogado" , null);
         usuario.setQtdTags(Integer.valueOf(String.valueOf(qntUser)));
     }
 
     public String getUserEmail() {
-        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
-        String emailName = sp.getString("emailLogado",null);
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados" , Context.MODE_PRIVATE);
+        String emailName = sp.getString("emailLogado" , null);
         return emailName;
     }
 
-    public void printNavHederUser(){
+    public void printNavHederUser() {
         nickNavHeaderUser();
         emailNavHeaderUser();
     }
 
-    public void nickNavHeaderUser(){
+    public void nickNavHeaderUser() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         TextView text = (TextView) header.findViewById(R.id.user_nick_header);
         text.setText(usuario.getNickname());
     }
 
-    public void emailNavHeaderUser(){
+    public void emailNavHeaderUser() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         TextView text = (TextView) header.findViewById(R.id.user_email_header);
@@ -120,7 +129,7 @@ public class ListaAnimesActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.lista_animes, menu);
+        getMenuInflater().inflate(R.menu.lista_animes , menu);
         return true;
     }
 
@@ -146,22 +155,22 @@ public class ListaAnimesActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_inicio) {
-            Intent intent = new Intent(this, InicioActivity.class);
+            Intent intent = new Intent(this , InicioActivity.class);
             startActivity(intent);
-        }else if (id == R.id.nav_camera) {
-            Intent intent = new Intent(this, PerfilActivity.class);
+        } else if (id == R.id.nav_camera) {
+            Intent intent = new Intent(this , PerfilActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
-            Intent intent = new Intent(this, ListaAnimesActivity.class);
+            Intent intent = new Intent(this , ListaAnimesActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
-            Intent intent = new Intent(this, ListaNoticiasActivity.class);
+            Intent intent = new Intent(this , ListaNoticiasActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_manage) {
-            Intent intent = new Intent(this, ListaAnimesActivity.class);
+            Intent intent = new Intent(this , ListaAnimesActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_send) {
-            SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+            SharedPreferences sp = getSharedPreferences("dadosCompartilhados" , Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
             editor.remove("emailLogado");
             editor.remove("nickLogado");
@@ -171,7 +180,7 @@ public class ListaAnimesActivity extends AppCompatActivity
             editor.apply();
 
 
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this , LoginActivity.class);
             startActivity(intent);
         }
 
@@ -181,7 +190,7 @@ public class ListaAnimesActivity extends AppCompatActivity
     }
 
     public void arrayAnimes() throws IOException, JSONException //
-     {
+    {
 
         JSONArray jsonAnimes = bdHelper.selectAllFromAnime(getApplicationContext());
 
@@ -191,24 +200,47 @@ public class ListaAnimesActivity extends AppCompatActivity
             String nomeAnime = animeObject.getString("Nome");
             listaNomes.add(nomeAnime);
         }
-            listaNomes.add("nomeAnime");
+        listaNomes.add("nomeAnime");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_style, R.id.textview, listaNomes);
-       // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listaNomes);
-         ListView neoListView = (ListView) findViewById(R.id.myAnimeList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this , R.layout.list_style , R.id.textview , listaNomes);
+        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listaNomes);
+        ListView neoListView = (ListView) findViewById(myAnimeList);
 
-         neoListView.setOnItemClickListener(this);
+        neoListView.setOnItemClickListener(this);
         neoListView.setAdapter(adapter);
+
+//        ArrayList<ImageView> pics;
+//        pics = new ArrayList<ImageView>();
+//        pics.add(LoadImageFromWebOperations("http://192.168.1.28/ws_otaku/ws_read/maria_thumb.png"));
+
+//       ArrayAdapter<ImageView> adaptadero = new ArrayAdapter<ImageView>(this, R.layout.list_style, R.id.imageView9, );
 
     }
 
+
     @Override
-    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        String nomeAnime =  listaNomes.get(position);
+    public void onItemClick(AdapterView<?> parent , View v , int position , long id) {
+        String nomeAnime = listaNomes.get(position);
         Bundle b = new Bundle();
-        Intent intent = new Intent(this, AnimeActivity.class);
-        b.putString("nomeAnime", nomeAnime.toString());
+        Intent intent = new Intent(this , AnimeActivity.class);
+        b.putString("nomeAnime" , nomeAnime.toString());
         intent.putExtras(b);
         startActivity(intent);
     }
+
+    public ImageView LoadImageFromWebOperations(String url) {
+        try {
+            ImageView i = null;
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            i.setImageBitmap(bitmap);
+            return i;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
