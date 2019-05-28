@@ -126,6 +126,7 @@ public class ListaNoticiasActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -145,7 +146,7 @@ public class ListaNoticiasActivity extends AppCompatActivity
             Intent intent = new Intent(this, ListaNoticiasActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_manage) {
-            Intent intent = new Intent(this, ListaAnimesActivity.class);
+            Intent intent = new Intent(this, ConfiguracaoActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_send) {
             SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);

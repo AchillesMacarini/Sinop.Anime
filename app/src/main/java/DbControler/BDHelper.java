@@ -15,10 +15,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
 public class BDHelper {
 
-    private static String URL_GLOBAL_DB = "http://192.168.1.28/ws_otaku/";
+    private static String URL_GLOBAL_DB = "http://10.21.80.199/ws_otaku/";
 
     public JSONArray selectUserInfo(Context context, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
@@ -36,7 +35,9 @@ public class BDHelper {
         JSONArray jsonArray = new JSONArray(sb.toString().trim());
         return jsonArray;
     }
-
+    public String returnUrl(){
+        return URL_GLOBAL_DB;
+    }
     public void insertIntoTesterino(Context context, String conteudo) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
 

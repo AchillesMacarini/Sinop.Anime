@@ -148,6 +148,7 @@ public class ListaAnimesActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -155,22 +156,22 @@ public class ListaAnimesActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_inicio) {
-            Intent intent = new Intent(this , InicioActivity.class);
+            Intent intent = new Intent(this, InicioActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_camera) {
-            Intent intent = new Intent(this , PerfilActivity.class);
+        }else if (id == R.id.nav_camera) {
+            Intent intent = new Intent(this, PerfilActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
-            Intent intent = new Intent(this , ListaAnimesActivity.class);
+            Intent intent = new Intent(this, ListaAnimesActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
-            Intent intent = new Intent(this , ListaNoticiasActivity.class);
+            Intent intent = new Intent(this, ListaNoticiasActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_manage) {
-            Intent intent = new Intent(this , ListaAnimesActivity.class);
+            Intent intent = new Intent(this, ConfiguracaoActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_send) {
-            SharedPreferences sp = getSharedPreferences("dadosCompartilhados" , Context.MODE_PRIVATE);
+            SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
             editor.remove("emailLogado");
             editor.remove("nickLogado");
@@ -180,7 +181,7 @@ public class ListaAnimesActivity extends AppCompatActivity
             editor.apply();
 
 
-            Intent intent = new Intent(this , LoginActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
 

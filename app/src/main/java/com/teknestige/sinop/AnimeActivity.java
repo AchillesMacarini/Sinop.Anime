@@ -60,9 +60,9 @@ public class AnimeActivity extends AppCompatActivity
     BDHelper bdHelper = new BDHelper();
     Anime animes = new Anime();
     ArrayList<String> listaNomesAnimes = new ArrayList<String>();
-    String imgUserUrl = "http://192.168.1.28/ws_otaku/ws_images_users/";
-    String imgAnimeUrl = "http://192.168.1.28/ws_otaku/ws_images_animes/";
-    String imgNewUrl = "http://192.168.1.28/ws_otaku/ws_images_news/";
+    String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
+    String imgAnimeUrl = bdHelper.returnUrl()+"ws_images_animes/";
+    String imgNewUrl = bdHelper.returnUrl()+"ws_images_news/";
     long startTime = System.nanoTime();
 
     @Override
@@ -87,19 +87,10 @@ public class AnimeActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
-//        try {
-//            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//            View headerView = navigationView.inflateHeaderView(R.layout.nav_header_inicio);
-//            ImageView pedra = (ImageView) headerView.findViewById(R.id.imageUserProfile);
-//            pedra.setImageBitmap(LoadImageFromWebOperations(imgUserUrl+getUserEmail()+".png"));
-//        }catch (NullPointerException e) {
-////            ImageView pedra = (ImageView) findViewById(R.id.imageView4);
-////            pedra.setImageResource(R.drawable.img2);
-//        }
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
 
         construirUsuario();
         printNavHederUser();
@@ -170,47 +161,6 @@ public void colocarLayoutChato() throws  IOException, JSONException{
 
         return theimage;
     }
-//
-//    public void createRecyclerView(){
-//        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.comentRecycler);
-//        recyclerView.setHasFixedSize(true);
-//
-//        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),1);
-//        recyclerView.setLayoutManager(layoutManager);
-//        ArrayList<CreateList> createLists = prepareData();
-//        MyAdapter adapter = new MyAdapter(getApplicationContext(), createLists);
-//        recyclerView.setAdapter(adapter);
-//
-//        String path = Environment.getRootDirectory().toString();
-//        File f = new File(path);
-//        File file[] = f.listFiles();
-//        for (int i=0; i < file.length; i++)
-//        {
-//            CreateList createList = new CreateList();
-//            createList.setImage_Location(file[i].getName());
-//        }
-//
-//        ItemTouchHelper.SimpleCallback itemTouchHelperCallback1 = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-//            @Override
-//            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-//                // Row is swiped from recycler view
-//                // remove it from adapter
-//            }
-//
-//            @Override
-//            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-//                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-//            }
-//        };
-//
-//        // attaching the touch helper to recycler view
-//        new ItemTouchHelper(itemTouchHelperCallback1).attachToRecyclerView(recyclerView);
-//    }
 
     public void construirAnime() throws IOException, JSONException {
 
@@ -328,7 +278,14 @@ public void colocarLayoutChato() throws  IOException, JSONException{
         text.setText(usuario.getNickname());
 
         ImageView pedra = (ImageView) header.findViewById(R.id.imageUserProfile);
-        pedra.setImageBitmap(LoadImageFromWebOperations(imgUserUrl+getUserEmail()+".png"));
+        Bitmap imagem = LoadImageFromWebOperations(imgUserUrl+getUserEmail()+".png");
+
+        if (imagem == null) {
+            pedra.setImageResource(R.drawable.img2);
+        } else {
+            pedra.setImageBitmap(imagem);
+        }
+
     }
 
     public void emailNavHeaderUser(){
@@ -360,6 +317,7 @@ public void colocarLayoutChato() throws  IOException, JSONException{
         return super.onOptionsItemSelected(item);
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -379,7 +337,7 @@ public void colocarLayoutChato() throws  IOException, JSONException{
             Intent intent = new Intent(this, ListaNoticiasActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_manage) {
-            Intent intent = new Intent(this, ListaAnimesActivity.class);
+            Intent intent = new Intent(this, ConfiguracaoActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_send) {
             SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);

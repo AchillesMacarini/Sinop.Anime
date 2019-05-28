@@ -1,5 +1,8 @@
 package com.teknestige.sinop;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -72,27 +75,44 @@ public class HelpActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
+        if (id == R.id.nav_inicio) {
+            Intent intent = new Intent(this, InicioActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.nav_camera) {
+            Intent intent = new Intent(this, PerfilActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
-
+            Intent intent = new Intent(this, ListaAnimesActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
+            Intent intent = new Intent(this, ListaNoticiasActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_manage) {
+            Intent intent = new Intent(this, ConfiguracaoActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_send) {
+            SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.remove("emailLogado");
+            editor.remove("nickLogado");
+            editor.remove("biographLogado");
+            editor.remove("dateLogado");
+            editor.remove("qntLogado");
+            editor.apply();
 
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
