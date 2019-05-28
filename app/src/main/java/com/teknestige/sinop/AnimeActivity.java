@@ -145,11 +145,11 @@ public class AnimeActivity extends AppCompatActivity
 
         neoListView.setAdapter(adapterComment);
 
-//        ArrayAdapter<String> adapterAnswer = new ArrayAdapter<String>(this, R.layout.answer_layout_item, R.id.textView111, listaNomesAnimes);
-//        ListView neoNeoListView = (ListView) findViewById(R.id.answersList);
-//
-//        neoNeoListView.setAdapter(adapterAnswer);
-//        neoListView.addView(neoNeoListView);
+        ArrayAdapter<String> adapterAnswer = new ArrayAdapter<String>(this, R.layout.answer_layout_item, R.id.textView111, listaNomesAnimes);
+        ListView neoNeoListView = (ListView) neoListView.findViewById(R.id.answersList);
+
+        neoNeoListView.setAdapter(adapterAnswer);
+
     }
 
 public void colocarLayoutChato() throws  IOException, JSONException{
