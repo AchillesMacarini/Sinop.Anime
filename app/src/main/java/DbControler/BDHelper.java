@@ -4,12 +4,17 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.StrictMode;
+import android.util.Log;
 import android.widget.Toast;
 
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -38,6 +43,37 @@ public class BDHelper {
     public String returnUrl(){
         return URL_GLOBAL_DB;
     }
+
+    public void goforIt(){
+
+        FTPClient con = null;
+
+        try
+        {
+            con = new FTPClient();
+            con.connect(URL_GLOBAL_DB);
+
+            if (con.login("Administrator", "KUjWbk"))
+            {
+                con.enterLocalPassiveMode(); // important!
+                con.setFileType(FTP.BINARY_FILE_TYPE);
+                String data = "/sdcard/vivekm4a.m4a";
+
+                FileInputStream in = new FileInputStream(new File(data));
+                boolean result = con.storeFile("/vivekm4a.m4a", in);
+                in.close();
+                if (result) Log.v("upload result", "succeeded");
+                con.logout();
+                con.disconnect();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
     public void insertIntoTesterino(Context context, String conteudo) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
 
