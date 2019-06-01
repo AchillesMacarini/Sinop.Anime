@@ -1,11 +1,21 @@
 package com.teknestige.sinop;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.PermissionChecker;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,8 +28,12 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.teknestige.classes.UploadFile;
 import com.teknestige.entidades.Usuario;
+
+import java.io.FileNotFoundException;
 
 import DbControler.BDHelper;
 
@@ -27,6 +41,10 @@ public class PerfilActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
         Usuario usuario = new Usuario();
         BDHelper bdHelper = new BDHelper();
+
+    private static final int CAMERA_REQUEST = 1888;
+    private ImageView imageView;
+    private static final int MY_CAMERA_PERMISSION_CODE = 100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +57,18 @@ public class PerfilActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 buildAlertDialog();
+
+                int permission = PermissionChecker.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA);
+
+                if (permission == PermissionChecker.PERMISSION_GRANTED) {
+                    // good to go
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                } else {
+                    // permission not granted, you decide what to do
+//            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+                }
+
             }
         });
 
@@ -55,6 +85,8 @@ public class PerfilActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -64,6 +96,35 @@ public class PerfilActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
+    public void onClicar(View v) {
+// TODO Auto-generated method stub
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, 0);
+        }
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+    imageView = (ImageView) findViewById(R.id.imageView6);
+        if (resultCode == RESULT_OK){
+        Uri targetUri = data.getData();
+        Bitmap bitmap;
+        try {
+        bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
+        imageView.setImageBitmap(bitmap);
+        imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            UploadFile uploadFile = new UploadFile();
+        uploadFile.doInBackground(getUserEmail(),targetUri.toString());
+        } catch (FileNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+        }
+        }
+        }
+
 
     public void construirUsuario(){
         SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
