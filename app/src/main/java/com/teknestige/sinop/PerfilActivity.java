@@ -1,20 +1,16 @@
 package com.teknestige.sinop;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -28,12 +24,15 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.teknestige.classes.UploadFile;
 import com.teknestige.entidades.Usuario;
 
+import org.json.JSONException;
+
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import DbControler.BDHelper;
 
@@ -102,7 +101,18 @@ public class PerfilActivity extends AppCompatActivity
         Intent intent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, 0);
+        imageView = (ImageView) findViewById(R.id.imageView6);
+        System.out.println(bytesToHex(imageToByte(imageView)));
+
+        try {
+            bdHelper.goforIt(getApplicationContext(), bytesToHex(imageToByte(imageView)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+    }
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -124,6 +134,23 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         }
         }
         }
+public byte[] imageToByte(ImageView imageView) {
+    Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    bitmap.compress(Bitmap.CompressFormat.JPEG , 100 , baos);
+    byte[] imageInByte = baos.toByteArray();
+    return imageInByte;
+}
+
+    private static String bytesToHex(byte[] hashInBytes) {
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < hashInBytes.length; i++) {
+            sb.append(Integer.toString((hashInBytes[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        return sb.toString();
+
+    }
 
 
     public void construirUsuario(){
@@ -139,6 +166,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String qntUser = sp.getString("qntLogado",null);
         usuario.setQtdTags(Integer.valueOf(String.valueOf(qntUser)));
     }
+
 
     public void buildAlertDialog(){
 

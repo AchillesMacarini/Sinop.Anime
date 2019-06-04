@@ -6,24 +6,29 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.StrictMode;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-      import org.apache.commons.net.ftp.FTP;
+import com.android.volley.toolbox.HttpResponse;
+
+import org.apache.commons.net.ftp.FTP;
      import org.apache.commons.net.ftp.FTPClient;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class BDHelper {
 
-    private static String URL_GLOBAL_DB = "http://192.168.1.18/ws_otaku/";
+    private static String URL_GLOBAL_DB = "http://192.168.137.130/ws_otaku/";
 
     public JSONArray selectUserInfo(Context context, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
@@ -45,37 +50,15 @@ public class BDHelper {
         return URL_GLOBAL_DB;
     }
 
-    public void goforIt(String uri){
+    public void goforIt(Context context, String hexadecimal)throws JSONException, IOException{
+        if (!checkNetworkConnection(context)) {
 
-        FTPClient con = null;
-        /*********  work only for Dedicated IP ***********/
-         final String FTP_HOST= "localhost";
-
-        /*********  FTP USERNAME ***********/
-        final String FTP_USER = "admin";
-        try
-        {
-            con = new FTPClient();
-            con.connect(URL_GLOBAL_DB);
-
-            if (con.login("admin", "123123"))
-            {
-                con.enterLocalPassiveMode(); // important!
-                con.setFileType(FTP.BINARY_FILE_TYPE);
-                String data = uri;
-
-                FileInputStream in = new FileInputStream(new File(data));
-                boolean result = con.storeFile(uri, in);
-                in.close();
-                if (result) Log.v("upload result", "succeeded");
-                con.logout();
-                con.disconnect();
-            }
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        checkThreadPolicy();
+        URL url = new URL(URL_GLOBAL_DB + "ws_images_users/addImage.php?conteudo="+hexadecimal);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String response = bufferedReader.readLine();
 
     }
 
@@ -95,6 +78,8 @@ public class BDHelper {
 
         }
     }
+
+
 
     public void deleteFromUsuarioTesterino(Context context, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
