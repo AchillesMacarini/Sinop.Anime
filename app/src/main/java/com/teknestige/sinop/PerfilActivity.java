@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.PermissionChecker;
 import android.view.View;
@@ -25,6 +26,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.teknestige.classes.ClasseFTP;
 import com.teknestige.classes.UploadFile;
 import com.teknestige.entidades.Usuario;
 
@@ -33,6 +35,7 @@ import org.json.JSONException;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.UUID;
 
 import DbControler.BDHelper;
 
@@ -40,7 +43,8 @@ public class PerfilActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
         Usuario usuario = new Usuario();
         BDHelper bdHelper = new BDHelper();
-
+        ClasseFTP ftpClas = new ClasseFTP();
+        private Uri mImageCaptureUri;
     private static final int CAMERA_REQUEST = 1888;
     private ImageView imageView;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
@@ -58,14 +62,17 @@ public class PerfilActivity extends AppCompatActivity
                 buildAlertDialog();
 
                 int permission = PermissionChecker.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA);
-
-                if (permission == PermissionChecker.PERMISSION_GRANTED) {
-                    // good to go
-                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                } else {
-                    // permission not granted, you decide what to do
+                int permission_externalStorage = PermissionChecker.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
+                int permission_WrexternalStorage = PermissionChecker.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (permission_externalStorage == PermissionChecker.PERMISSION_GRANTED && permission_WrexternalStorage== PermissionChecker.PERMISSION_GRANTED) {
+                    if (permission == PermissionChecker.PERMISSION_GRANTED) {
+                        // good to go
+                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(cameraIntent , CAMERA_REQUEST);
+                    } else {
+                        // permission not granted, you decide what to do
 //            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+                    }
                 }
 
             }
@@ -101,16 +108,17 @@ public class PerfilActivity extends AppCompatActivity
         Intent intent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, 0);
-        imageView = (ImageView) findViewById(R.id.imageView6);
-        System.out.println(bytesToHex(imageToByte(imageView)));
 
-        try {
-            bdHelper.goforIt(getApplicationContext(), bytesToHex(imageToByte(imageView)));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        //        System.out.println(bytesToHex(imageToByte(imageView)));
+
+//        try {
+//            bdHelper.goforIt(getApplicationContext(), bytesToHex(imageToByte(imageView)));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -119,6 +127,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
     imageView = (ImageView) findViewById(R.id.imageView6);
+    ImageView image = (ImageView) findViewById(R.id.imageView6);
         if (resultCode == RESULT_OK){
         Uri targetUri = data.getData();
         Bitmap bitmap;
@@ -126,15 +135,31 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
         imageView.setImageBitmap(bitmap);
         imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            UploadFile uploadFile = new UploadFile();
-        uploadFile.doInBackground(getUserEmail(),targetUri.toString());
+            ftpClas.Conectar();
+            ftpClas.Upload("/DCIM/Camera/", "IMG_20190601_201203.jpg");
+            System.out.println("acho que deu");
+
+//        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+//            image.setImageBitmap(thumbnail);
+//            String pathToImage = mImageCaptureUri.getPath();
+
+//               String file = "mamai";
+//        System.out.println(file);
         } catch (FileNotFoundException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
         }
         }
         }
-public byte[] imageToByte(ImageView imageView) {
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), inImage, UUID.randomUUID().toString() + ".png", "drawing");
+        return Uri.parse(path);
+    }
+
+    public byte[] imageToByte(ImageView imageView) {
     Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     bitmap.compress(Bitmap.CompressFormat.JPEG , 100 , baos);

@@ -13,6 +13,7 @@ import com.android.volley.toolbox.HttpResponse;
 
 import org.apache.commons.net.ftp.FTP;
      import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,9 +27,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class BDHelper {
+import static com.android.volley.VolleyLog.TAG;
 
-    private static String URL_GLOBAL_DB = "http://192.168.137.130/ws_otaku/";
+public class BDHelper {
+    FTPClient mFtp;
+    String TAG = "classeFTP";
+    private static String URL_GLOBAL_DB = "http://192.168.1.12/ws_otaku/";
 
     public JSONArray selectUserInfo(Context context, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
@@ -61,6 +65,8 @@ public class BDHelper {
         String response = bufferedReader.readLine();
 
     }
+
+
 
     public void insertIntoTesterino(Context context, String conteudo) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
