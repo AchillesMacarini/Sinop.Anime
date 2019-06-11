@@ -11,9 +11,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.PermissionChecker;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.PermissionChecker;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,13 +28,14 @@ import android.widget.TextView;
 import com.teknestige.classes.UploadFile;
 import com.teknestige.entidades.Usuario;
 
-import org.json.JSONException;
+import org.apache.commons.codec.binary.Hex;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 
 import DbControler.BDHelper;
+
 
 public class PerfilActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -96,60 +97,73 @@ public class PerfilActivity extends AppCompatActivity
         }
     }
 
-    public void onClicar(View v) {
+    public void onClicar(View v) throws UnsupportedEncodingException {
 // TODO Auto-generated method stub
         Intent intent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, 0);
         imageView = (ImageView) findViewById(R.id.imageView6);
-        System.out.println(bytesToHex(imageToByte(imageView)));
-
-        try {
-            bdHelper.goforIt(getApplicationContext(), bytesToHex(imageToByte(imageView)));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        byte[] hexImage = imageToByte(imageView);
+        System.out.println(hexImage);
+//        try {
+////            bdHelper.goforIt(getApplicationContext(), hexImage);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
-@Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-    imageView = (ImageView) findViewById(R.id.imageView6);
+        imageView = (ImageView) findViewById(R.id.imageView6);
         if (resultCode == RESULT_OK){
-        Uri targetUri = data.getData();
-        Bitmap bitmap;
-        try {
-        bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
-        imageView.setImageBitmap(bitmap);
-        imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            UploadFile uploadFile = new UploadFile();
-        uploadFile.doInBackground(getUserEmail(),targetUri.toString());
-        } catch (FileNotFoundException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+         Uri targetUri = data.getData();
+            Bitmap bitmap;
+            try {
+                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
+                imageView.setImageBitmap(bitmap);
+                imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    UploadFile uploadFile = new UploadFile();
+                uploadFile.doInBackground(getUserEmail(),targetUri.toString());
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
-        }
-        }
-public byte[] imageToByte(ImageView imageView) {
-    Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.JPEG , 100 , baos);
-    byte[] imageInByte = baos.toByteArray();
-    return imageInByte;
-}
+    }
 
-    private static String bytesToHex(byte[] hashInBytes) {
+    public byte[] imageToByte(ImageView imageView) {
+        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.PNG , 25 , baos);
+//        byte[] imageInByte = baos.toByteArray();
+//        return imageInByte;
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < hashInBytes.length; i++) {
-            sb.append(Integer.toString((hashInBytes[i] & 0xff) + 0x100, 16).substring(1));
-        }
-        return sb.toString();
 
+        int size = bitmap.getRowBytes() * bitmap.getHeight();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(size);
+        bitmap.copyPixelsToBuffer(byteBuffer);
+        return byteBuffer.array();
+
+    }
+
+    private static String bytesToHex(byte[] hashInBytes) throws UnsupportedEncodingException {
+
+//        StringBuilder sb = new StringBuilder();
+//        for (int i = 0; i < hashInBytes.length; i++) {
+//            sb.append(Integer.toString((hashInBytes[i] & 0xff) + 0x100, 16).substring(1));
+//        }
+//        return sb.toString();
+        byte[] bytes = hashInBytes;
+        System.out.println(String.valueOf(Hex.encodeHex(bytes)));
+       String s = String.valueOf(Hex.encodeHex(bytes));
+//        String s = String.valueOf(Hex.encodeHex(bytes));
+
+        return s;
     }
 
 
