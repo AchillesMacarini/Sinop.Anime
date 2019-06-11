@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.os.StrictMode;
 import android.widget.Toast;
 
+import org.apache.commons.net.ftp.FTPClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -16,7 +17,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class BDHelper {
-
+    FTPClient mFtp;
+    String TAG = "classeFTP";
     private static String URL_GLOBAL_DB = "http://10.21.80.199/ws_otaku/";
 
     public JSONArray selectUserInfo(Context context, String email) throws JSONException, IOException {
@@ -50,6 +52,8 @@ public class BDHelper {
         String response = bufferedReader.readLine();
 
     }
+
+
 
     public void insertIntoTesterino(Context context, String conteudo) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
