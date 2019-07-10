@@ -151,7 +151,6 @@ public void colocarLayoutChato() throws  IOException, JSONException{
         Bundle bundle = intent.getExtras();
         String nomeClicado = bundle.getString("nomeAnime");
         return nomeClicado;
-
     }
 
     private ArrayList<CreateList> prepareData(){
@@ -210,7 +209,9 @@ public void colocarLayoutChato() throws  IOException, JSONException{
 
     }
 
-
+    public void btnHelpPressed(View v){
+        minusUpdater();
+    }
 
     @Override
     public void onBackPressed() {
@@ -220,7 +221,7 @@ public void colocarLayoutChato() throws  IOException, JSONException{
         } else {
             super.onBackPressed();
 
-                System.out.println("hoje é festa");
+
         }
     }
     public void construirUsuario(){
@@ -243,28 +244,34 @@ public void colocarLayoutChato() throws  IOException, JSONException{
         return emailName;
     }
 
-
-        @Override
+    @Override
     public void finish() {
-            long endTime = System.nanoTime();
-//        NumberFormat formatter = new DecimalFormat("#0.00");
-            long totalTime = NANOSECONDS.toSeconds(endTime - startTime);
-            System.out.println(totalTime + " seconds");
-            Intent in = getIntent();
-            Bundle b = in.getExtras();
-            String abcd[] = b.getStringArray("myKey");
-            if (totalTime < 3) {
-                for (int i = 0; i < abcd.length; i++) {
-                    try {
-                        bdHelper.updateMinusRelacao(getApplicationContext() , abcd[i] , getUserEmail().toLowerCase());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                super.finish();
+        long endTime = System.nanoTime();
+        long totalTime = NANOSECONDS.toSeconds(endTime - startTime);
+        Intent in = getIntent();
+        Bundle b = in.getExtras();
+        String abcd[] = b.getStringArray("myKey");
+        if (totalTime < 3) {
+            for (int i = 0; i < abcd.length; i++) {
+                    minusUpdater();
             }
+            super.finish();
         }
+    }
+
+    public void minusUpdater(){
+        Intent in = getIntent();
+        Bundle b = in.getExtras();
+        String abcd[] = b.getStringArray("myKey");
+            for (int i = 0; i < abcd.length; i++) {
+                try {
+                    bdHelper.updateMinusRelacao(getApplicationContext() , abcd[i] , getUserEmail().toLowerCase());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+    }
+
 
     public void printNavHederUser(){
         nickNavHeaderUser();

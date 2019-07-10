@@ -18,9 +18,9 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyViewHolder> {
+public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.MyViewHolder> {
     private Context context;
-    private List<com.teknestige.classes.Item> cartList;
+    private List<com.teknestige.classes.Item> imageList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name, description, price;
@@ -39,9 +39,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
     }
 
 
-    public CartListAdapter(Context context, List<com.teknestige.classes.Item> cartList) {
+    public ImageListAdapter(Context context, List<com.teknestige.classes.Item> imageList) {
         this.context = context;
-        this.cartList = cartList;
+        this.imageList = imageList;
     }
 
     @Override
@@ -54,10 +54,10 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        final com.teknestige.classes.Item item = cartList.get(position);
+        final com.teknestige.classes.Item item = imageList.get(position);
         holder.name.setText(item.getName());
         holder.description.setText(item.getDescription());
-        holder.price.setText("₹" + item.getPrice());
+//        holder.price.setText("₹" + item.getPrice());
 
         Glide.with(context)
                 .load(item.getThumbnail())
@@ -66,11 +66,11 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return cartList.size();
+        return imageList.size();
     }
 
     public void removeItem(int position) {
-        cartList.remove(position);
+        imageList.remove(position);
         // notify the item removed by position
         // to perform recycler view delete animations
         // NOTE: don't call notifyDataSetChanged()
@@ -78,7 +78,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
     }
 
     public void restoreItem(Item item, int position) {
-        cartList.add(position, item);
+        imageList.add(position, item);
         // notify item added by position
         notifyItemInserted(position);
     }

@@ -26,15 +26,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.teknestige.classes.ClasseFTP;
-import com.teknestige.classes.UploadFile;
 import com.teknestige.entidades.Usuario;
-
-import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.UUID;
 
 import DbControler.BDHelper;
@@ -43,7 +38,7 @@ public class PerfilActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
         Usuario usuario = new Usuario();
         BDHelper bdHelper = new BDHelper();
-        ClasseFTP ftpClas = new ClasseFTP();
+//        ClasseFTP ftpClas = new ClasseFTP();
         private Uri mImageCaptureUri;
     private static final int CAMERA_REQUEST = 1888;
     private ImageView imageView;
@@ -135,8 +130,8 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
         imageView.setImageBitmap(bitmap);
         imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            ftpClas.Conectar();
-            ftpClas.Upload("/DCIM/Camera/", "IMG_20190601_201203.jpg");
+//            ftpClas.Conectar();
+//            ftpClas.Upload("/DCIM/Camera/", "IMG_20190601_201203.jpg");
             System.out.println("acho que deu");
 
 //        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");

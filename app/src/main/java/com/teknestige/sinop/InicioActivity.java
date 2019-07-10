@@ -7,11 +7,9 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,7 +26,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.teknestige.classes.CartListAdapter;
+import com.teknestige.classes.ImageListAdapter;
 import com.teknestige.classes.CreateList;
 import com.teknestige.classes.Item;
 import com.teknestige.classes.MyAdapter;
@@ -53,7 +51,7 @@ public class InicioActivity extends AppCompatActivity
     private static final String TAG = MainActivity.class.getSimpleName();
     private RecyclerView recyclerView;
     private List<Item> cartList;
-    private CartListAdapter mAdapter;
+    private ImageListAdapter mAdapter;
     private DrawerLayout coordinatorLayout;
 
 
@@ -209,7 +207,7 @@ public class InicioActivity extends AppCompatActivity
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof CartListAdapter.MyViewHolder) {
+        if (viewHolder instanceof ImageListAdapter.MyViewHolder) {
             // get the removed item name to display it in snack bar
             String name = cartList.get(viewHolder.getAdapterPosition()).getName();
 

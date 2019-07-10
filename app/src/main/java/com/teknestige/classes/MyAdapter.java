@@ -1,5 +1,6 @@
 package com.teknestige.classes;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -30,6 +31,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return new ViewHolder(view);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(final MyAdapter.ViewHolder viewHolder, final int i) {
         viewHolder.title.setText(galleryList.get(i).getImage_title());

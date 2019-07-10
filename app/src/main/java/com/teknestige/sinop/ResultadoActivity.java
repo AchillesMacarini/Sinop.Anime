@@ -1,13 +1,10 @@
 package com.teknestige.sinop;
 
-import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,13 +17,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import org.tartarus.snowball.ext.portugueseStemmer;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.teknestige.entidades.ForbiddenWords;
 import com.teknestige.entidades.Usuario;
 
 import org.json.JSONArray;
@@ -35,7 +33,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import DbControler.BDHelper;
 
@@ -43,7 +40,7 @@ public class ResultadoActivity  extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
     Usuario usuario = new Usuario();
-    ForbiddenWords forbiddenWords = new ForbiddenWords();
+//    ForbiddenWords forbiddenWords = new ForbiddenWords();
     BDHelper bdHelper = new BDHelper();
     ArrayList<String> nomesParecidos = new ArrayList<String>();
     ArrayList<String> listaNomes = new ArrayList<String>();
@@ -71,7 +68,7 @@ public class ResultadoActivity  extends AppCompatActivity
 
         try {
             removeDangerWords();
-            arrayPesquisinha();
+            makeAnimeArray();
             System.out.println("deu cero");
         } catch (IOException e) {
             e.printStackTrace();
@@ -99,10 +96,12 @@ public class ResultadoActivity  extends AppCompatActivity
 
     public void removeDangerWords() throws IOException, JSONException {
         String s = handleIntent(getIntent());
-
+        portugueseStemmer stemmer = new portugueseStemmer();
+        String[] words = s.split("\\s+");
 
         JSONArray jsonForbidden = bdHelper.selectAllFromForbidden(getApplicationContext());
         String [] palavras = new String[jsonForbidden.length()];
+
         if (jsonForbidden != null) {
             for (int i=0;i<jsonForbidden.length();i++){
                 JSONObject userObject = jsonForbidden.getJSONObject(i);
@@ -111,28 +110,22 @@ public class ResultadoActivity  extends AppCompatActivity
         }
 
 
-        String[] words = s.split("\\s+");
-        String[] sentences = s.split("[.,\\/]");
-
         for (int i = 0; i < words.length; i++) {
 
-            // You may want to check for a non-word character before blindly
-            // performing a replacement
-            // It may also be necessary to adjust the character class
             words[i] = words[i].replaceAll("[^\\w]", "");
             list.add(words[i]);
             for (int j=0; j<palavras.length; j++) {
+                stemmer.setCurrent(list.get(i));
                 if (words[i].toLowerCase().equals(palavras[j])) {
                     list.remove(words[i]);
                 }
             }
         }
-        System.out.println(list);
 
         for (int j=0; j < list.size(); j ++){
                 bdHelper.insertIntoTesterinoUsuario(getApplicationContext(), list.get(j), getUserEmail().toLowerCase());
-
         }
+
     }
 
 
@@ -161,7 +154,8 @@ public class ResultadoActivity  extends AppCompatActivity
         }
     }
 
-    public void arrayPesquisinha() throws IOException, JSONException{
+    public void makeAnimeArray() throws IOException, JSONException{
+
         JSONArray jsonPesquisas = bdHelper.selectAllFromPesquisinha(getApplicationContext(), getUserEmail());
         JSONArray jsonTesterino = bdHelper.selectAllFromTesterino(getApplicationContext(), getUserEmail());
 
@@ -184,6 +178,25 @@ public class ResultadoActivity  extends AppCompatActivity
 
         neoListView.setOnItemClickListener(this);
         neoListView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+        String nomeAnime =  listaNomes.get(position);
+        Bundle b = new Bundle();
+        Intent intent = new Intent(this, AnimeActivity.class);
+        b.putString("nomeAnime", nomeAnime.toString());
+        intent.putExtras(b);
+
+        for (int i=0; i<arrayPesquisas.size(); i++) {
+            try {
+                bdHelper.updateRelacao(getApplicationContext(), nomeAnime, arrayPesquisas.get(i));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        intent.putExtra("myKey", arrayPesquisas);
+        startActivity(intent);
     }
 
     public void construirUsuario(){
@@ -226,24 +239,7 @@ public class ResultadoActivity  extends AppCompatActivity
     }
 
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        String nomeAnime =  listaNomes.get(position);
-        Bundle b = new Bundle();
-        Intent intent = new Intent(this, AnimeActivity.class);
-        b.putString("nomeAnime", nomeAnime.toString());
-        intent.putExtras(b);
 
-        for (int i=0; i<arrayPesquisas.size(); i++) {
-            try {
-                bdHelper.updateRelacao(getApplicationContext(), nomeAnime, arrayPesquisas.get(i));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        intent.putExtra("myKey", arrayPesquisas);
-        startActivity(intent);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
