@@ -1,6 +1,10 @@
 package com.teknestige.classes;
 
+import DbControler.BDHelper;
+
 public class Constants {
-    public static final String UPLOAD_URL = "http://192.168.1.28/AndroidImageUpload/upload.php";
-    public static final String IMAGES_URL = "http://192.168.1.28/AndroidImageUpload/getImages.php";
+    static BDHelper bdHelper;
+
+    public static final String UPLOAD_URL = bdHelper.returnUrl() + "upload.php";
+    public static final String IMAGES_URL = bdHelper.returnUrl() + "getImages.php";
 }

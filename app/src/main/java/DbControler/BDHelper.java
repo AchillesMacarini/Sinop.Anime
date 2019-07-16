@@ -1,38 +1,22 @@
 package DbControler;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.StrictMode;
-import android.util.Log;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.HttpResponse;
-
-import org.apache.commons.net.ftp.FTP;
-     import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPReply;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import static com.android.volley.VolleyLog.TAG;
-
 public class BDHelper {
-    FTPClient mFtp;
-    String TAG = "classeFTP";
-    private static String URL_GLOBAL_DB = "http://192.168.1.12/ws_otaku/";
+    public static String URL_GLOBAL_DB = "http://192.168.1.14/ws_otaku/";
 
     public JSONArray selectUserInfo(Context context, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
@@ -65,8 +49,6 @@ public class BDHelper {
         String response = bufferedReader.readLine();
 
     }
-
-
 
     public void insertIntoTesterino(Context context, String conteudo) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
@@ -215,7 +197,7 @@ public class BDHelper {
         }
         checkThreadPolicy();
         String values = "Email="+email+"&"+"Nickname="+nickname+"&"+"Biograph="+biograph+"&"+"senha="+senha+"&"+"Data_cadastro="+dataCadastro+"&"+"Quant_tags="+qtdTags;
-        URL url = new URL(URL_GLOBAL_DB + "ws_insert/ws_insert_usuario.php?"+values);
+        URL url = new URL(URL_GLOBAL_DB + "ws_insert/ws_insert_usuarios.php?"+values);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String response = bufferedReader.readLine();

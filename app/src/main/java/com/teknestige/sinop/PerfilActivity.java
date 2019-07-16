@@ -5,16 +5,18 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.PermissionChecker;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.PermissionChecker;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,15 +37,15 @@ import java.util.UUID;
 
 import DbControler.BDHelper;
 
-public class PerfilActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-        Usuario usuario = new Usuario();
-        BDHelper bdHelper = new BDHelper();
-//        ClasseFTP ftpClas = new ClasseFTP();
-        private Uri mImageCaptureUri;
+public class PerfilActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    Usuario usuario = new Usuario();
+    BDHelper bdHelper = new BDHelper();
+
+    private Uri mImageCaptureUri;
     private static final int CAMERA_REQUEST = 1888;
     private ImageView imageView;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +58,8 @@ public class PerfilActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 buildAlertDialog();
-
                 int permission = PermissionChecker.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA);
-                int permission_externalStorage = PermissionChecker.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
-                int permission_WrexternalStorage = PermissionChecker.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                if (permission_externalStorage == PermissionChecker.PERMISSION_GRANTED && permission_WrexternalStorage== PermissionChecker.PERMISSION_GRANTED) {
+                if (isStoragePermissionGranted()){
                     if (permission == PermissionChecker.PERMISSION_GRANTED) {
                         // good to go
                         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -69,7 +69,6 @@ public class PerfilActivity extends AppCompatActivity
 //            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
                     }
                 }
-
             }
         });
 
@@ -95,6 +94,34 @@ public class PerfilActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+//                Log.v(TAG,"Permission is granted");
+                return true;
+            } else {
+
+//                Log.v(TAG,"Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+//            Log.v(TAG,"Permission is granted");
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+//            Log.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
+//            resume tasks needing this Manifest.permission
         }
     }
 
@@ -130,8 +157,6 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
         imageView.setImageBitmap(bitmap);
         imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-//            ftpClas.Conectar();
-//            ftpClas.Upload("/DCIM/Camera/", "IMG_20190601_201203.jpg");
             System.out.println("acho que deu");
 
 //        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
