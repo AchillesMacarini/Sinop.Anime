@@ -7,8 +7,10 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -23,9 +25,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.HeaderViewListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.JsonArray;
 import com.teknestige.classes.ImageListAdapter;
 import com.teknestige.classes.CreateList;
 import com.teknestige.classes.Item;
@@ -33,11 +37,14 @@ import com.teknestige.classes.MyAdapter;
 import com.teknestige.classes.RecyclerItemTouchHelper;
 import com.teknestige.entidades.Usuario;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -53,26 +60,19 @@ public class InicioActivity extends AppCompatActivity
     private List<Item> cartList;
     private ImageListAdapter mAdapter;
     private DrawerLayout coordinatorLayout;
+    private ArrayList<String> listaManchetes = new ArrayList<String>();
+
 
 
     Usuario usuario = new Usuario();
     BDHelper bdHelper = new BDHelper();
 
-    private final String image_titles[] = {
-            "O cheiro dos dados",
-            "Pedra",
-            "Eu sou o Groot",
-            "Vruuum Marquinhos"
-    };
+    String imgNewUrl = bdHelper.returnUrl()+"ws_images_news/";
 
-    private final Integer image_ids[] = {
-            R.drawable.img1,
-            R.drawable.img2,
-            R.drawable.img3,
-            R.drawable.img4
-    };
-
-
+    int i;
+    JSONArray jsonManchetes;
+    String[] image_titles = new String[i];
+    int[] image_ids = new int[i];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,13 +92,33 @@ public class InicioActivity extends AppCompatActivity
         printNavHederUser();
 
         try {
+            jsonManchetes = bdHelper.selectAllFromMancheteNoticia(getApplicationContext());
+
+            listarManchetes();
             bdHelper.deleteFromUsuarioTesterino(getApplicationContext(), getUserEmail());
+
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         createRecyclerView();
+    }
+
+    public void listarManchetes() throws IOException, JSONException {
+        for (int i = 0; i < 5; i++) {
+            JSONObject animeObject = jsonManchetes.getJSONObject(i);
+            String nomeAnime = animeObject.getString("Manchete");
+            listaManchetes.add(nomeAnime);
+        }
+
+        image_titles = new String[listaManchetes.size()];
+        image_ids = new int[listaManchetes.size()];
+
+        for (int i = 0; i < listaManchetes.size(); i++){
+            image_titles[i]=listaManchetes.get(i);
+        }
+
     }
 
     public void construirUsuario(){
@@ -232,6 +252,16 @@ public class InicioActivity extends AppCompatActivity
             return null;
         }
     }
+
+//    public static Drawable LoadImageFromWebOperations(String url) {
+//        try {
+//            InputStream is = (InputStream) new URL(url).getContent();
+//            Drawable d = Drawable.createFromStream(is, "src name");
+//            return d;
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
 
     private ArrayList<CreateList> prepareData(){
 

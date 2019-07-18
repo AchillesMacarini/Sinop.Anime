@@ -1,7 +1,10 @@
 package com.teknestige.classes;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
@@ -14,11 +17,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import DbControler.BDHelper;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private ArrayList<CreateList> galleryList;
     private Context context;
+    BDHelper bdHelper = new BDHelper();
+    String imgNewUrl = bdHelper.returnUrl()+"ws_images_news/";
+
+    private ArrayList<String> listaNews = new ArrayList<String>();
 
     public MyAdapter(Context context, ArrayList<CreateList> galleryList) {
         this.galleryList = galleryList;
@@ -36,7 +55,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public void onBindViewHolder(final MyAdapter.ViewHolder viewHolder, final int i) {
         viewHolder.title.setText(galleryList.get(i).getImage_title());
         viewHolder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        viewHolder.img.setImageResource((galleryList.get(i).getImage_ID()));
+        Bitmap imagem = null;
+        try {
+//            System.out.println(imgNewUrl+returnIdImg(galleryList.get(i).getImage_title().toString(), i)+".png");
+            imagem = LoadImageFromWebOperations(imgNewUrl+returnIdImg(galleryList.get(i).getImage_title().toString(), i)+".png");
+//                imagem= LoadImageFromWebOperations(imgNewUrl+"01.png");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        System.out.println(galleryList.get(i).getImage_title());
+        viewHolder.img.setImageBitmap(imagem);
 
         viewHolder.img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,4 +112,38 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             img = (ImageView) view.findViewById(com.teknestige.sinop.R.id.img);
         }
     }
+    public Bitmap LoadImageFromWebOperations(String url) {
+        try {
+            ImageView i = null;
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            return bitmap;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String returnIdImg(String tittle, int x) throws IOException, JSONException {
+        JSONArray jsonNews = bdHelper.selectAllFromNoticias(context);
+
+        for (int i = 0; i < 5; i++) {
+            JSONObject animeObject = jsonNews.getJSONObject(i);
+            String id = animeObject.getString("noticia_imagem");
+            listaNews.add(id);
+        }
+        for (int i = 0; i < listaNews.size(); i++){
+            if (listaNews.get(x).equals(tittle)){
+                return listaNews.get(x);
+            }
+        }
+        return listaNews.get(x);
+    }
+
+    private Context getContext() {
+        return MyApplication.getContext();
+    }
+
 }

@@ -16,7 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class BDHelper {
-    public static String URL_GLOBAL_DB = "http://192.168.1.14/ws_otaku/";
+    public static String URL_GLOBAL_DB = "http://192.168.1.2/ws_otaku/";
 
     public JSONArray selectUserInfo(Context context, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
@@ -190,6 +190,24 @@ public class BDHelper {
         JSONArray jsonArray = new JSONArray(sb.toString().trim());
         return jsonArray;
     }
+
+    public JSONArray selectAllFromMancheteNoticia(Context context) throws JSONException, IOException {
+        if (!checkNetworkConnection(context)) {
+            return null;
+        }
+        checkThreadPolicy();
+        URL url = new URL(URL_GLOBAL_DB + "ws_read/ws_read_noticia_manchete.php");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        StringBuilder sb = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String json;
+        while ((json = bufferedReader.readLine()) != null) {
+            sb.append(json + "\n");
+        }
+        JSONArray jsonArray = new JSONArray(sb.toString().trim());
+        return jsonArray;
+    }
+
 
     public int insertIntoUsuarios(Context context, String email, String nickname, String biograph, String senha, String dataCadastro, String qtdTags) throws IOException {
         if (!checkNetworkConnection(context)) {
