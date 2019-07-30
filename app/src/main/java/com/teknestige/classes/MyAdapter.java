@@ -38,6 +38,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     String imgNewUrl = bdHelper.returnUrl()+"ws_images_news/";
 
     private ArrayList<String> listaNews = new ArrayList<String>();
+    String imgAnimeUrl = bdHelper.returnUrl()+"ws_images_animes/";
 
     public MyAdapter(Context context, ArrayList<CreateList> galleryList) {
         this.galleryList = galleryList;

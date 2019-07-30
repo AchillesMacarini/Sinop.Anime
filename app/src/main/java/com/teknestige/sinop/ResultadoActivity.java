@@ -22,9 +22,12 @@ import org.tartarus.snowball.ext.portugueseStemmer;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.teknestige.classes.CustomListViewAdapter;
+import com.teknestige.classes.Item;
 import com.teknestige.entidades.Usuario;
 
 import org.json.JSONArray;
@@ -33,19 +36,22 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import DbControler.BDHelper;
 
+import static com.teknestige.sinop.R.drawable.add;
+import static com.teknestige.sinop.R.drawable.ic_menu_camera;
+
 public class ResultadoActivity  extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
-
     Usuario usuario = new Usuario();
-//    ForbiddenWords forbiddenWords = new ForbiddenWords();
     BDHelper bdHelper = new BDHelper();
     ArrayList<String> nomesParecidos = new ArrayList<String>();
     ArrayList<String> listaNomes = new ArrayList<String>();
     ArrayList<String> arrayPesquisas = new ArrayList<String>();
     ArrayList<String> list = new ArrayList<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,20 +86,6 @@ public class ResultadoActivity  extends AppCompatActivity
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-
-        return true;
-    }
-
     public void removeDangerWords() throws IOException, JSONException {
         String s = handleIntent(getIntent());
         portugueseStemmer stemmer = new portugueseStemmer();
@@ -115,7 +107,7 @@ public class ResultadoActivity  extends AppCompatActivity
             words[i] = words[i].replaceAll("[^\\w]", "");
             list.add(words[i]);
             for (int j=0; j<palavras.length; j++) {
-                stemmer.setCurrent(list.get(i));
+//                stemmer.setCurrent(list.get(i));
                 if (words[i].toLowerCase().equals(palavras[j])) {
                     list.remove(words[i]);
                 }
@@ -160,24 +152,36 @@ public class ResultadoActivity  extends AppCompatActivity
         JSONArray jsonTesterino = bdHelper.selectAllFromTesterino(getApplicationContext(), getUserEmail());
 
         if (jsonTesterino != null) {
+
             for (int i=0;i<jsonTesterino.length();i++){
                 JSONObject userObject = jsonTesterino.getJSONObject(i);
                 arrayPesquisas.add(userObject.getString("Testerino_conteudo"));
             }
         }
+        List<Item> rowItems = new ArrayList<Item>();
+        Item[] item = new Item[jsonPesquisas.length()];
+
 
         for (int i = 0; i < jsonPesquisas.length(); i++) {
             JSONObject animeObject = jsonPesquisas.getJSONObject(i);
             String nomeAnime = animeObject.getString("Anime_Nome");
             listaNomes.add(nomeAnime);
+
+            item[i] = new Item();
+            item[i].setTitle(nomeAnime);
+
+            rowItems.add(item[i]);
+
         }
 
         ListView neoListView = (ListView) findViewById(R.id.listViewResultado);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_style, R.id.textview, listaNomes);
-
-
-        neoListView.setOnItemClickListener(this);
-        neoListView.setAdapter(adapter);
+//        ArrayAdapter<String> adapterI = new ArrayAdapter<String>(this, R.layout.list_style, R.id.animeTitle, listaNomes);
+//        for (int i=0; i<rowItems.size(); i++) {
+            CustomListViewAdapter adapter = new CustomListViewAdapter(this ,
+                    R.layout.list_style , listaNomes);
+            neoListView.setOnItemClickListener(this);
+            neoListView.setAdapter(adapter);
+//        }
     }
 
     @Override

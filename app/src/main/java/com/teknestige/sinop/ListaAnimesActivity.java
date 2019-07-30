@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.teknestige.classes.CustomListViewAdapter;
+import com.teknestige.classes.Item;
 import com.teknestige.entidades.Usuario;
 
 import org.json.JSONArray;
@@ -41,9 +43,10 @@ import static com.teknestige.sinop.R.id.myAnimeList;
 public class ListaAnimesActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
     BDHelper bdHelper = new BDHelper();
-
     Usuario usuario = new Usuario();
+    ArrayList<String> list = new ArrayList<String>();
     ArrayList<String> listaNomes = new ArrayList<String>();
+    ArrayList<Item> rowItems = new ArrayList<Item>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,32 +193,29 @@ public class ListaAnimesActivity extends AppCompatActivity
         return true;
     }
 
-    public void arrayAnimes() throws IOException, JSONException //
-    {
+    public void arrayAnimes() throws IOException, JSONException {
 
         JSONArray jsonAnimes = bdHelper.selectAllFromAnime(getApplicationContext());
 
+        Item[] item = new Item[jsonAnimes.length()];
 
         for (int i = 0; i < jsonAnimes.length(); i++) {
             JSONObject animeObject = jsonAnimes.getJSONObject(i);
             String nomeAnime = animeObject.getString("Nome");
             listaNomes.add(nomeAnime);
+
+            item[i] = new Item();
+            item[i].setTitle(nomeAnime);
+            item[i].setImageId(0);
+
+            rowItems.add(item[i]);
         }
-        listaNomes.add("nomeAnime");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this , R.layout.list_style , R.id.textview , listaNomes);
-        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listaNomes);
-        ListView neoListView = (ListView) findViewById(myAnimeList);
-
-        neoListView.setOnItemClickListener(this);
+        ListView neoListView = (ListView) findViewById(R.id.myAnimeList);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_style, R.id.animeTitle, listaNomes);
+        CustomListViewAdapter adapter = new CustomListViewAdapter(this, R.layout.list_style, listaNomes);
         neoListView.setAdapter(adapter);
-
-//        ArrayList<ImageView> pics;
-//        pics = new ArrayList<ImageView>();
-//        pics.add(LoadImageFromWebOperations("http://192.168.1.28/ws_otaku/ws_read/maria_thumb.png"));
-
-//       ArrayAdapter<ImageView> adaptadero = new ArrayAdapter<ImageView>(this, R.layout.list_style, R.id.imageView9, );
-
+        neoListView.setOnItemClickListener(this);
     }
 
 

@@ -6,9 +6,17 @@
 
     <item
         android:id="@+id/menu_search"
-        android:title="Search"
+        android:title="@string/menu_search"
         appcompat:actionViewClass="android.support.v7.widget.SearchView"
-        appcompat:showAsAction="always"/>
+        appcompat:showAsAction="always"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:lines="5"
+        android:minLines="2"
+        android:gravity="top|left"
+        android:maxLines="10"
+        android:scrollbars="vertical"
+        android:inputType="textMultiLine|textCapSentences"/>
 
 
 

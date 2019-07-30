@@ -10,6 +10,8 @@ public class Item {
     String name;
     String description;
     String thumbnail;
+    static String title;
+    static int imageId;
 
     public Item() {
     }
@@ -45,4 +47,22 @@ public class Item {
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
+
+    public static String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public static int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId= imageId;
+    }
+
+
 }
