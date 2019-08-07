@@ -16,7 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class BDHelper {
-    public static String URL_GLOBAL_DB = "http://192.168.1.12/ws_otaku/";
+    public static String URL_GLOBAL_DB = "http://192.168.1.22/ws_otaku/";
 
     public JSONArray selectUserInfo(Context context, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
@@ -162,6 +162,40 @@ public class BDHelper {
         }
         checkThreadPolicy();
         URL url = new URL(URL_GLOBAL_DB + "ws_read/ws_read_palavras_proibidas.php");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        StringBuilder sb = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String json;
+        while ((json = bufferedReader.readLine()) != null) {
+            sb.append(json + "\n");
+        }
+        JSONArray jsonArray = new JSONArray(sb.toString().trim());
+        return jsonArray;
+    }
+
+    public JSONArray selectAllFromComentario(Context context, String anime) throws JSONException, IOException {
+        if (!checkNetworkConnection(context)) {
+            return null;
+        }
+        checkThreadPolicy();
+        URL url = new URL(URL_GLOBAL_DB + "ws_read/ws_read_comentario.php?nome="+anime);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        StringBuilder sb = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String json;
+        while ((json = bufferedReader.readLine()) != null) {
+            sb.append(json + "\n");
+        }
+        JSONArray jsonArray = new JSONArray(sb.toString().trim());
+        return jsonArray;
+    }
+
+    public JSONArray selectAllFromResposta(Context context, String coment) throws JSONException, IOException {
+        if (!checkNetworkConnection(context)) {
+            return null;
+        }
+        checkThreadPolicy();
+        URL url = new URL(URL_GLOBAL_DB + "ws_read/ws_read_resposta.php?id="+coment);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         StringBuilder sb = new StringBuilder();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));

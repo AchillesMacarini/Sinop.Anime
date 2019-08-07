@@ -3,6 +3,8 @@ package com.teknestige.sinop;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,9 +17,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.teknestige.classes.Constants;
+import com.teknestige.entidades.Noticia;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+
+import DbControler.BDHelper;
 
 public class NoticiaActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    BDHelper bdHelper = new BDHelper();
+    Noticia noticia = new Noticia();
+    String imgNewUrl = bdHelper.returnUrl()+"ws_images_news/";
+
+    ArrayList<String> listaNews = new ArrayList<String>();
+    String newsNamae;
+    Bitmap imagem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +69,15 @@ public class NoticiaActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        try {
+            construirNoticia();
+            setImageNew();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -117,4 +152,81 @@ public class NoticiaActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public String nomeClicado(){
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        String nomeClicado = bundle.getString("nomeNews");
+        return nomeClicado;
+    }
+
+    public void construirNoticia() throws IOException, JSONException {
+        JSONArray jsonNews = bdHelper.selectAllFromNoticias(getApplicationContext());
+        for (int i = 0; i < jsonNews.length(); i++) {
+            JSONObject newsObject = jsonNews.getJSONObject(i);
+            String nomeManchete = newsObject.getString("Manchete");
+            System.out.println(nomeClicado());
+            if (nomeManchete.equals(nomeClicado())) {
+                String conteudo = newsObject.getString("Conteudo");
+                String data = newsObject.getString("Data");
+                noticia.setManchete(nomeManchete);
+                noticia.setConteudo(conteudo);
+                noticia.setData(data);
+            }
+        }
+
+        TextView titulo = (TextView) findViewById(R.id.tituloView);
+        titulo.setText(noticia.getManchete());
+        TextView conteudo = (TextView) findViewById(R.id.conteudoView);
+        conteudo.setText(noticia.getConteudo());
+        TextView data = (TextView) findViewById(R.id.dataView);
+        data.setText(noticia.getData());
+
+
+    }
+
+    public void setImageNew() throws IOException, JSONException{
+
+        try {
+            System.out.println(imgNewUrl+returnIdImg(noticia.getManchete().toString())+".png");
+            imagem = LoadImageFromWebOperations(imgNewUrl+returnIdImg(noticia.getManchete().toString())+".png");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ImageView imageView = (ImageView) findViewById(R.id.imageView11);
+        imageView.setImageBitmap(imagem);
+    }
+
+    public Bitmap LoadImageFromWebOperations(String url) {
+        try {
+            ImageView i = null;
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            return bitmap;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String returnIdImg(String tittle) throws IOException, JSONException {
+        JSONArray jsonNews = bdHelper.selectAllFromNoticias(getApplicationContext());
+
+        for (int i = 0; i < jsonNews.length(); i++) {
+            JSONObject animeObject = jsonNews.getJSONObject(i);
+            String name = animeObject.getString("Manchete");
+            if (name.equals(noticia.getManchete())) {
+                String id = animeObject.getString("noticia_imagem");
+            newsNamae = id;
+
+            }
+        }
+        return newsNamae;
+    }
+
+
 }

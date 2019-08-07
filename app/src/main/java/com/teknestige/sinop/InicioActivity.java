@@ -207,6 +207,7 @@ public class InicioActivity extends AppCompatActivity
                 return false;
             }
 
+
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 // Row is swiped from recycler view

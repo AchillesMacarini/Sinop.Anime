@@ -7,4 +7,6 @@ public class Constants {
 
     public static final String UPLOAD_URL = bdHelper.returnUrl() + "upload.php";
     public static final String IMAGES_URL = bdHelper.returnUrl() + "getImages.php";
+    public static final String imgNewUrl = bdHelper.returnUrl()+"ws_images_news/";
+
 }

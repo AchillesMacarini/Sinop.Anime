@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,16 +27,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.teknestige.classes.CommentListAdapter;
 import com.teknestige.classes.CreateList;
 import com.teknestige.classes.MyAdapter;
 import com.teknestige.entidades.Anime;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
+import com.teknestige.entidades.Comment;
 import com.teknestige.entidades.Usuario;
 
 import org.json.JSONArray;
@@ -59,11 +63,14 @@ public class AnimeActivity extends AppCompatActivity
     Usuario usuario = new Usuario();
     BDHelper bdHelper = new BDHelper();
     Anime animes = new Anime();
+    Comment comment = new Comment();
     ArrayList<String> listaNomesAnimes = new ArrayList<String>();
     String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
     String imgAnimeUrl = bdHelper.returnUrl()+"ws_images_animes/";
     String imgNewUrl = bdHelper.returnUrl()+"ws_images_news/";
     long startTime = System.nanoTime();
+    ArrayList<String> coments = new ArrayList<String>();
+    ArrayList<Comment> commentArrayList = new ArrayList<Comment>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +106,7 @@ public class AnimeActivity extends AppCompatActivity
             arrayAnimes();
             construirAnime();
             settarAnimeView();
-
+            buildComments();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -131,21 +138,44 @@ public class AnimeActivity extends AppCompatActivity
             listaNomesAnimes.add(nomeAnime);
         }
 
-        ArrayAdapter<String> adapterComment = new ArrayAdapter<String>(this, R.layout.coment_layout_item, R.id.textView11, listaNomesAnimes);
-        ListView neoListView = (ListView) findViewById(R.id.comentRecycler);
-
-        neoListView.setAdapter(adapterComment);
-
-//        ArrayAdapter<String> adapterAnswer = new ArrayAdapter<String>(this, R.layout.answer_layout_item, R.id.textView111, listaNomesAnimes);
-//        ListView neoNeoListView = (ListView) neoListView.findViewById(R.id.answersList);
-
-//        neoNeoListView.setAdapter(adapterAnswer);
-
+//        ArrayAdapter<String> adapterComment = new ArrayAdapter<String>(this, R.layout.coment_layout_item, R.id.textView11, listaNomesAnimes);
+//        ListView neoListView = (ListView) findViewById(R.id.comentRecycler);
+//
+//        neoListView.setAdapter(adapterComment);
     }
 
-public void colocarLayoutChato() throws  IOException, JSONException{
+public void buildComments() throws  IOException, JSONException{
+    JSONArray jsonComments = bdHelper.selectAllFromComentario(getApplicationContext(), nomeClicado());
 
+    for (int i=0; i<jsonComments.length(); i++){
+        JSONObject commentObject = jsonComments.getJSONObject(i);
+        String coment = commentObject.getString("comentario_cont");
+        coments.add(coment);
+    }
+
+    ListView neoListView = (ListView) findViewById(R.id.comentRecycler);
+    CommentListAdapter adapter = new CommentListAdapter(getApplicationContext(), nomeClicado(), commentArray());
+    neoListView.setAdapter(adapter);
 }
+
+    public ArrayList<Comment> commentArray() throws IOException, JSONException {
+        JSONArray jsonAnimes = bdHelper.selectAllFromAnime(getApplicationContext());
+        JSONArray jsonComments = bdHelper.selectAllFromComentario(getApplicationContext(), nomeClicado());
+ for (int i=0; i<jsonComments.length(); i++){
+        JSONObject animeObject = jsonAnimes.getJSONObject(i);
+        JSONObject commentObject = jsonComments.getJSONObject(i);
+        String coment = commentObject.getString("comentario_cont");
+        String email = commentObject.getString("usuario_Email");
+        String id = commentObject.getString("idcomentario");
+        comment.setEmailCom(email);
+        comment.setConteudo(coment);
+        comment.setIdCom(id);
+
+        commentArrayList.add(comment);
+    }
+        return commentArrayList;
+}
+
     public String nomeClicado(){
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();

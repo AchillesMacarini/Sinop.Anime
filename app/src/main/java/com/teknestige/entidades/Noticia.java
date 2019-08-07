@@ -5,12 +5,12 @@ import java.util.Date;
 public class Noticia {
     private String manchete;
     private String conteudo;
-    private Date data;
+    private String data;
 
 
     public Noticia(){}
 
-    public Noticia(String manchete, String conteudo, Date data) {
+    public Noticia(String manchete, String conteudo, String data) {
         this.manchete = manchete;
         this.conteudo = conteudo;
         this.data = data;
@@ -32,11 +32,11 @@ public class Noticia {
         this.conteudo = conteudo;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(String data) {
         this.data = data;
     }
 }
