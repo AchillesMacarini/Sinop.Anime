@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import DbControler.BDHelper;
 
@@ -104,6 +103,7 @@ public class CustomListViewAdapter extends ArrayAdapter<String> {
             String name = animeObject.getString("Nome");
             listaAnimes.add(name);
         }
+
         for (int i = 0; i < listaAnimes.size(); i++){
             if (listaAnimes.get(i).equals(tittle)){
                 JSONObject animeObject = jsonAnimes.getJSONObject(i);
