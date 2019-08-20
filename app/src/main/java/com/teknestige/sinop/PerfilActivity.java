@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -22,17 +23,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.teknestige.entidades.Usuario;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import DbControler.BDHelper;
@@ -45,6 +55,8 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
     private static final int CAMERA_REQUEST = 1888;
     private ImageView imageView;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
+    String imgNewUrl = bdHelper.returnUrl()+"ws_images_news/";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,6 +222,44 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         usuario.setDataCadastro(dateUser);
         String qntUser = sp.getString("qntLogado",null);
         usuario.setQtdTags(Integer.valueOf(String.valueOf(qntUser)));
+    }
+
+
+    public void buildTableDyn() {
+        {
+
+            TableLayout tl = (TableLayout) findViewById(R.id.tableLayout);
+            TableRow row = new TableRow(this.getApplicationContext());
+
+            tl.setGravity(Gravity.CENTER);
+            tl.setBackgroundResource(R.color.background);
+
+
+
+            ArrayList<ImageView> images = new ArrayList<ImageView>();
+
+            for (int i = 0; i < 10; i++) {
+                images.add(LoadImageFromWebOperations(imgNewUrl+"01.png"));
+                row.addView(images.get(i));
+
+            }
+            tl.addView(row);
+        }
+    }
+
+    public ImageView LoadImageFromWebOperations(String url) {
+        try {
+            ImageView i = null;
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            i.setImageBitmap(bitmap);
+            return i;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
