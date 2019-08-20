@@ -48,7 +48,6 @@ import java.util.List;
 
 import DbControler.BDHelper;
 
-
 public class InicioActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -57,8 +56,6 @@ public class InicioActivity extends AppCompatActivity
     private ImageListAdapter mAdapter;
     private DrawerLayout coordinatorLayout;
     private ArrayList<String> listaManchetes = new ArrayList<String>();
-
-
 
     Usuario usuario = new Usuario();
     BDHelper bdHelper = new BDHelper();
@@ -69,6 +66,7 @@ public class InicioActivity extends AppCompatActivity
     JSONArray jsonManchetes;
     String[] image_titles = new String[i];
     int[] image_ids = new int[i];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,8 +125,6 @@ public class InicioActivity extends AppCompatActivity
         usuario.setBiograph(biographUser);
         String dateUser = sp.getString("dateLogado",null);
         usuario.setDataCadastro(dateUser);
-//        String qntUser = sp.getString("qntLogado",null);
-//        usuario.setQtdTags(Integer.valueOf(String.valueOf(qntUser)));
     }
 
     public String getUserEmail() {
@@ -217,13 +213,6 @@ public class InicioActivity extends AppCompatActivity
         new ItemTouchHelper(itemTouchHelperCallback1).attachToRecyclerView(recyclerView);
     }
 
-
-    /**
-     * callback when recycler view is swiped
-     * item will be removed on swiped
-     * undo option will be provided in snackbar to restore the item
-     */
-
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof ImageListAdapter.MyViewHolder) {
@@ -251,16 +240,6 @@ public class InicioActivity extends AppCompatActivity
             return null;
         }
     }
-
-//    public static Drawable LoadImageFromWebOperations(String url) {
-//        try {
-//            InputStream is = (InputStream) new URL(url).getContent();
-//            Drawable d = Drawable.createFromStream(is, "src name");
-//            return d;
-//        } catch (Exception e) {
-//            return null;
-//        }
-//    }
 
     private ArrayList<CreateList> prepareData(){
 
@@ -330,7 +309,6 @@ public class InicioActivity extends AppCompatActivity
             editor.remove("dateLogado");
             editor.remove("qntLogado");
             editor.apply();
-
 
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
