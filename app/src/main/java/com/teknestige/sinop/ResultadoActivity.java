@@ -12,17 +12,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import org.tartarus.snowball.ext.portugueseStemmer;
-
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,15 +26,13 @@ import com.teknestige.entidades.Usuario;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.tartarus.snowball.ext.portugueseStemmer;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import DbControler.BDHelper;
-
-import static com.teknestige.sinop.R.drawable.add;
-import static com.teknestige.sinop.R.drawable.ic_menu_camera;
 
 public class ResultadoActivity  extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
@@ -174,14 +165,16 @@ public class ResultadoActivity  extends AppCompatActivity
 
         }
 
+        if (listaNomes.isEmpty()){
+            Intent voltar = new Intent(this, MainActivity.class);
+            startActivity(voltar);
+        }
+
         ListView neoListView = (ListView) findViewById(R.id.listViewResultado);
-//        ArrayAdapter<String> adapterI = new ArrayAdapter<String>(this, R.layout.list_style, R.id.animeTitle, listaNomes);
-//        for (int i=0; i<rowItems.size(); i++) {
             CustomListViewAdapter adapter = new CustomListViewAdapter(this ,
                     R.layout.list_style , listaNomes);
             neoListView.setOnItemClickListener(this);
             neoListView.setAdapter(adapter);
-//        }
     }
 
     @Override

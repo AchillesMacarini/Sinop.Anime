@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.teknestige.entidades.Anime;
 import com.teknestige.entidades.Comment;
 import com.teknestige.sinop.R;
 
@@ -18,19 +17,14 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import DbControler.BDHelper;
-
 public class CommentListAdapter extends BaseAdapter {
     // ArrayList<String> name, company, email, id, status;
     Comment comment;
     ArrayList<Comment> commentArrayList;
     Context c;
     String anime;
-    BDHelper bdHelper;
-    Anime animes;
     JSONArray jsonAnimes;
     JSONArray jsonComments;
-    private Context context;
 
     public CommentListAdapter(Context c, String anime, ArrayList<Comment> list) {
         this.c = c;
@@ -76,7 +70,6 @@ public class CommentListAdapter extends BaseAdapter {
         TextView email = (TextView) row.findViewById(R.id.emailCommentView);
         email.setText(comment.getEmail());
         return row;
-
     }
 
     public ArrayList<Comment> buildComments() throws IOException, JSONException {

@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -28,7 +27,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -143,17 +141,6 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, 0);
 
-
-        //        System.out.println(bytesToHex(imageToByte(imageView)));
-
-//        try {
-//            bdHelper.goforIt(getApplicationContext(), bytesToHex(imageToByte(imageView)));
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
     }
 
 @Override
@@ -237,9 +224,10 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 
             ArrayList<ImageView> images = new ArrayList<ImageView>();
-
+            System.out.println(imgNewUrl+"01.png");
             for (int i = 0; i < 10; i++) {
-                images.add(LoadImageFromWebOperations(imgNewUrl+"01.png"));
+                images.add(LoadImageFromWebOperations(imgNewUrl+"01"+".png"));
+
                 row.addView(images.get(i));
 
             }
