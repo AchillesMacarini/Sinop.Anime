@@ -22,14 +22,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.teknestige.entidades.Usuario;
@@ -40,7 +38,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.UUID;
 
 import DbControler.BDHelper;
@@ -84,6 +81,7 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
 
         construirUsuario();
         printNavHederUser();
+        buildTableDyn();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -142,7 +140,7 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
         startActivityForResult(intent, 0);
 
     }
-
+//https://stackoverflow.com/questions/14728157/dynamic-gridlayout
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
@@ -215,23 +213,14 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     public void buildTableDyn() {
         {
 
-            TableLayout tl = (TableLayout) findViewById(R.id.tableLayout);
-            TableRow row = new TableRow(this.getApplicationContext());
-
-            tl.setGravity(Gravity.CENTER);
-            tl.setBackgroundResource(R.color.background);
-
-
-
-            ArrayList<ImageView> images = new ArrayList<ImageView>();
+            GridLayout gl = (GridLayout) findViewById(R.id.gridLayout);
+            gl.setBackgroundResource(R.color.background);
+            GridLayout.LayoutParams gridParam;
             System.out.println(imgNewUrl+"01.png");
             for (int i = 0; i < 10; i++) {
-                images.add(LoadImageFromWebOperations(imgNewUrl+"01"+".png"));
-
-                row.addView(images.get(i));
-
+                //gridParam = new GridLayout.LayoutParams(null, colspan);
+                gl.addView(LoadImageFromWebOperations(imgNewUrl+"01"+".png"));
             }
-            tl.addView(row);
         }
     }
 
