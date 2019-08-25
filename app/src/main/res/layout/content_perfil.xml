@@ -23,12 +23,12 @@
         app:layout_constraintBottom_toTopOf="@+id/activity_horizontalView1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/imageView6"
+        app:layout_constraintStart_toStartOf="@+id/prophoto"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.089" />
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/prophoto"
         android:layout_width="124dp"
         android:layout_height="122dp"
         android:layout_marginStart="8dp"
@@ -43,7 +43,7 @@
         app:srcCompat="@drawable/img2" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/nickname_edit"
         android:layout_width="221dp"
         android:layout_height="40dp"
         android:layout_marginStart="17dp"
@@ -55,11 +55,11 @@
         android:textColor="@color/cardview_light_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintStart_toEndOf="@+id/prophoto"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView19"
+        android:id="@+id/biography_edit"
         android:layout_width="220dp"
         android:layout_height="34dp"
         android:layout_marginStart="17dp"
@@ -71,7 +71,7 @@
         android:textColor="@color/cardview_light_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintStart_toEndOf="@+id/prophoto"
         app:layout_constraintTop_toTopOf="parent" />
 
     <HorizontalScrollView
@@ -87,28 +87,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11">
+        app:layout_constraintTop_toBottomOf="@+id/tag_num">
 
         <GridLayout
-            android:id="@+id/gridLayout"
-            android:layout_width="390dp"
+            android:id="@+id/gridLay"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxHeight="300px"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="144dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:background="@android:color/background_light"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:columnCount="10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView6"/>
+            app:layout_constraintTop_toBottomOf="@+id/prophoto"/>
     </HorizontalScrollView>
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/tag_num"
         android:layout_width="86dp"
         android:layout_height="84dp"
         android:layout_marginStart="8dp"
@@ -120,11 +121,11 @@
         android:textColor="@color/cardview_light_background"
         app:layout_constraintEnd_toEndOf="@+id/view"
         app:layout_constraintHorizontal_bias="0.61"
-        app:layout_constraintStart_toStartOf="@+id/textView15"
-        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+        app:layout_constraintStart_toStartOf="@+id/especialization"
+        app:layout_constraintTop_toBottomOf="@+id/biography_edit" />
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/especialization"
         android:layout_width="124dp"
         android:layout_height="31dp"
         android:layout_marginTop="4dp"
@@ -133,10 +134,10 @@
         app:layout_constraintEnd_toEndOf="@+id/view"
         app:layout_constraintHorizontal_bias="0.029"
         app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+        app:layout_constraintTop_toBottomOf="@+id/prophoto" />
 
     <TextView
-        android:id="@+id/textView14"
+        android:id="@+id/com_num"
         android:layout_width="86dp"
         android:layout_height="84dp"
         android:layout_marginTop="40dp"
@@ -145,6 +146,6 @@
         app:layout_constraintEnd_toEndOf="@+id/view"
         app:layout_constraintHorizontal_bias="0.941"
         app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+        app:layout_constraintTop_toBottomOf="@+id/biography_edit" />
 
 </android.support.constraint.ConstraintLayout>

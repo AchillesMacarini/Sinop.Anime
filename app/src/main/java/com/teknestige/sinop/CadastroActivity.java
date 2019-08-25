@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -28,7 +25,6 @@ import com.teknestige.entidades.Usuario;
 
 import net.gotev.uploadservice.MultipartUploadRequest;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -150,7 +146,7 @@ public class CadastroActivity extends AppCompatActivity {
         EditText emailText = (EditText) findViewById(R.id.email);
         String email = emailText.getText().toString().toLowerCase();
 
-        EditText nickText = (EditText) findViewById(R.id.nickname);
+        EditText nickText = (EditText) findViewById(R.id.nickname_edit);
         String nickname = nickText.getText().toString().toLowerCase();
 
         EditText bioText = (EditText) findViewById(R.id.biograph);

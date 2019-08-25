@@ -50,7 +50,7 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
     private static final int CAMERA_REQUEST = 1888;
     private ImageView imageView;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
-    String imgNewUrl = bdHelper.returnUrl()+"ws_images_news/";
+    String imgConUrl = bdHelper.returnUrl()+"ws_images_conquistas/";
 
 
     @Override
@@ -82,6 +82,7 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
         construirUsuario();
         printNavHederUser();
         buildTableDyn();
+        setInfoUser();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -93,7 +94,19 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    public void setInfoUser(){
+        TextView nickname = (TextView) findViewById(R.id.nickname_edit);
+        TextView biogra = (TextView) findViewById(R.id.biography_edit);
+        TextView especialization = (TextView) findViewById(R.id.especialization);
+        TextView tagCount = (TextView) findViewById(R.id.tag_num);
+        TextView comCount = (TextView) findViewById(R.id.com_num);
 
+        nickname.setText(usuario.getNickname());
+        biogra.setText(usuario.getBiograph());
+        especialization.setText("Moderador");
+        tagCount.setText("14");
+        comCount.setText("1");
+    }
 
     @Override
     public void onBackPressed() {
@@ -145,8 +158,7 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-    imageView = (ImageView) findViewById(R.id.imageView6);
-    ImageView image = (ImageView) findViewById(R.id.imageView6);
+    ImageView image = (ImageView) findViewById(R.id.prophoto);
         if (resultCode == RESULT_OK){
         Uri targetUri = data.getData();
         Bitmap bitmap;
@@ -155,13 +167,6 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         imageView.setImageBitmap(bitmap);
         imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             System.out.println("acho que deu");
-
-//        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-//            image.setImageBitmap(thumbnail);
-//            String pathToImage = mImageCaptureUri.getPath();
-
-//               String file = "mamai";
-//        System.out.println(file);
         } catch (FileNotFoundException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
@@ -213,21 +218,22 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     public void buildTableDyn() {
         {
 
-            GridLayout gl = (GridLayout) findViewById(R.id.gridLayout);
+            GridLayout gl = (GridLayout) findViewById(R.id.gridLay);
             gl.setBackgroundResource(R.color.background);
             GridLayout.LayoutParams gridParam;
-            System.out.println(imgNewUrl+"01.png");
+            System.out.println(imgConUrl+"01.png");
             for (int i = 0; i < 10; i++) {
                 //gridParam = new GridLayout.LayoutParams(null, colspan);
-                gl.addView(LoadImageFromWebOperations(imgNewUrl+"01"+".png"));
+                gl.addView(LoadImageFromWebOperations(imgConUrl+"01"+".png"));
             }
         }
     }
 
     public ImageView LoadImageFromWebOperations(String url) {
         try {
-            ImageView i = null;
+
             Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            ImageView i = new ImageView(this);
             i.setImageBitmap(bitmap);
             return i;
         } catch (MalformedURLException e) {

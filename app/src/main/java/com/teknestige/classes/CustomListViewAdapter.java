@@ -1,3 +1,4 @@
+
 package com.teknestige.classes;
 
 import android.app.Activity;
@@ -64,11 +65,11 @@ public class CustomListViewAdapter extends ArrayAdapter<String> {
         Bitmap imagem = null;
         try {
 //            if (!returnIdImg(Item.getTitle()).equals("null")) {
-                imagem = LoadImageFromWebOperations(imgAnimeUrl + returnIdImg(rowItem) + ".png");
-                System.out.println(imgAnimeUrl + returnIdImg(rowItem) + ".png");
+            imagem = LoadImageFromWebOperations(imgAnimeUrl + returnIdImg(rowItem) + ".png");
+            System.out.println(imgAnimeUrl + returnIdImg(rowItem) + ".png");
 
 //            }
-            } catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package com.teknestige.sinop;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,10 +22,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
-
+import android.widget.SearchView.OnQueryTextListener;
 import com.teknestige.classes.CustomListViewAdapter;
 import com.teknestige.classes.Item;
+import com.teknestige.classes.ListaNomesAdapter;
 import com.teknestige.entidades.Usuario;
 
 import org.json.JSONArray;
@@ -41,12 +45,13 @@ import DbControler.BDHelper;
 import static com.teknestige.sinop.R.id.myAnimeList;
 
 public class ListaAnimesActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
     BDHelper bdHelper = new BDHelper();
     Usuario usuario = new Usuario();
     ArrayList<String> list = new ArrayList<String>();
     ArrayList<String> listaNomes = new ArrayList<String>();
     ArrayList<Item> rowItems = new ArrayList<Item>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,10 +134,43 @@ public class ListaAnimesActivity extends AppCompatActivity
         }
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.lista_animes , menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        final android.widget.SearchView searchView =
+                (android.widget.SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener((android.widget.SearchView.OnQueryTextListener) this);
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query){
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+
+        try {
+            arrayAnimes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ListaNomesAdapter listaNomesAdapter = new ListaNomesAdapter(this, listaNomes);
+
+        listaNomesAdapter.getFilter().filter(newText);
+
         return true;
     }
 
@@ -217,7 +255,6 @@ public class ListaAnimesActivity extends AppCompatActivity
         neoListView.setAdapter(adapter);
         neoListView.setOnItemClickListener(this);
     }
-
 
     @Override
     public void onItemClick(AdapterView<?> parent , View v , int position , long id) {

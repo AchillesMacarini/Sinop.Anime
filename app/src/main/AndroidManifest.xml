@@ -70,7 +70,12 @@
         <activity
             android:name=".ListaAnimesActivity"
             android:label="@string/title_activity_lista_animes"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable_array">
+            </meta-data>
+        </activity>
         <activity
             android:name=".ResultadoActivity"
             android:label="@string/title_activity_resultado"
