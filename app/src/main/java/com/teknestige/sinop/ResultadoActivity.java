@@ -5,22 +5,26 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.teknestige.classes.CustomListViewAdapter;
-import com.teknestige.classes.Item;
+import com.teknestige.classes.CreateList;
+import com.teknestige.classes.MyAdapter;
 import com.teknestige.entidades.Usuario;
 
 import org.json.JSONArray;
@@ -28,9 +32,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.tartarus.snowball.ext.portugueseStemmer;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import DbControler.BDHelper;
 
@@ -65,7 +69,7 @@ public class ResultadoActivity  extends AppCompatActivity
 
         try {
             removeDangerWords();
-            makeAnimeArray();
+            createRecyclerView();
             System.out.println("deu cero");
         } catch (IOException e) {
             e.printStackTrace();
@@ -137,45 +141,45 @@ public class ResultadoActivity  extends AppCompatActivity
         }
     }
 
-    public void makeAnimeArray() throws IOException, JSONException{
-
-        JSONArray jsonPesquisas = bdHelper.selectAllFromPesquisinha(getApplicationContext(), getUserEmail());
-        JSONArray jsonTesterino = bdHelper.selectAllFromTesterino(getApplicationContext(), getUserEmail());
-
-        if (jsonTesterino != null) {
-
-            for (int i=0;i<jsonTesterino.length();i++){
-                JSONObject userObject = jsonTesterino.getJSONObject(i);
-                arrayPesquisas.add(userObject.getString("Testerino_conteudo"));
-            }
-        }
-        List<Item> rowItems = new ArrayList<Item>();
-        Item[] item = new Item[jsonPesquisas.length()];
-
-
-        for (int i = 0; i < jsonPesquisas.length(); i++) {
-            JSONObject animeObject = jsonPesquisas.getJSONObject(i);
-            String nomeAnime = animeObject.getString("Anime_Nome");
-            listaNomes.add(nomeAnime);
-
-            item[i] = new Item();
-            item[i].setTitle(nomeAnime);
-
-            rowItems.add(item[i]);
-
-        }
-
-        if (listaNomes.isEmpty()){
-            Intent voltar = new Intent(this, MainActivity.class);
-            startActivity(voltar);
-        }
-
-        ListView neoListView = (ListView) findViewById(R.id.listViewResultado);
-            CustomListViewAdapter adapter = new CustomListViewAdapter(this ,
-                    R.layout.list_style , listaNomes);
-            neoListView.setOnItemClickListener(this);
-            neoListView.setAdapter(adapter);
-    }
+//    public void makeAnimeArray() throws IOException, JSONException{
+//
+//        JSONArray jsonPesquisas = bdHelper.selectAllFromPesquisinha(getApplicationContext(), getUserEmail());
+//        JSONArray jsonTesterino = bdHelper.selectAllFromTesterino(getApplicationContext(), getUserEmail());
+//
+//        if (jsonTesterino != null) {
+//
+//            for (int i=0;i<jsonTesterino.length();i++){
+//                JSONObject userObject = jsonTesterino.getJSONObject(i);
+//                arrayPesquisas.add(userObject.getString("Testerino_conteudo"));
+//            }
+//        }
+//        List<Item> rowItems = new ArrayList<Item>();
+//        Item[] item = new Item[jsonPesquisas.length()];
+//
+//
+//        for (int i = 0; i < jsonPesquisas.length(); i++) {
+//            JSONObject animeObject = jsonPesquisas.getJSONObject(i);
+//            String nomeAnime = animeObject.getString("Anime_Nome");
+//            listaNomes.add(nomeAnime);
+//
+//            item[i] = new Item();
+//            item[i].setTitle(nomeAnime);
+//
+//            rowItems.add(item[i]);
+//
+//        }
+//
+//        if (listaNomes.isEmpty()){
+//            Intent voltar = new Intent(this, MainActivity.class);
+//            startActivity(voltar);
+//        }
+//
+//        ListView neoListView = (ListView) findViewById(R.id.listViewResultado);
+//            CustomListViewAdapter adapter = new CustomListViewAdapter(this ,
+//                    R.layout.list_style , listaNomes);
+//            neoListView.setOnItemClickListener(this);
+//            neoListView.setAdapter(adapter);
+//    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -208,6 +212,81 @@ public class ResultadoActivity  extends AppCompatActivity
         usuario.setDataCadastro(dateUser);
         String qntUser = sp.getString("qntLogado",null);
         usuario.setQtdTags(Integer.valueOf(String.valueOf(qntUser)));
+    }
+
+    public void createRecyclerView() throws IOException, JSONException {
+        JSONArray jsonPesquisas = bdHelper.selectAllFromPesquisinha(getApplicationContext(), getUserEmail());
+        JSONArray jsonTesterino = bdHelper.selectAllFromTesterino(getApplicationContext(), getUserEmail());
+
+        if (jsonTesterino != null) {
+
+            for (int i=0;i<jsonTesterino.length();i++){
+                JSONObject userObject = jsonTesterino.getJSONObject(i);
+                arrayPesquisas.add(userObject.getString("Testerino_conteudo"));
+            }
+        }
+        ArrayList<CreateList> rowItems = new ArrayList<CreateList>();
+        CreateList[] item = new CreateList[jsonPesquisas.length()];
+
+
+        for (int i = 0; i < jsonPesquisas.length(); i++) {
+            JSONObject animeObject = jsonPesquisas.getJSONObject(i);
+            String nomeAnime = animeObject.getString("Anime_Nome");
+            listaNomes.add(nomeAnime);
+
+            item[i] = new CreateList();
+            item[i].setImage_title(nomeAnime);
+
+            rowItems.add(item[i]);
+
+        }
+
+        if (listaNomes.isEmpty()){
+            Intent voltar = new Intent(this, MainActivity.class);
+            startActivity(voltar);
+        }
+
+
+
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.listViewResultado);
+        recyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),1);
+        recyclerView.setLayoutManager(layoutManager);
+//        ArrayList<CreateList> createLists = prepareData();
+        MyAdapter adapter = new MyAdapter(getApplicationContext(), rowItems, false);
+        recyclerView.setAdapter(adapter);
+
+        String path = Environment.getRootDirectory().toString();
+        File f = new File(path);
+        File file[] = f.listFiles();
+        for (int i=0; i < file.length; i++)
+        {
+            CreateList createList = new CreateList();
+            createList.setImage_Location(file[i].getName());
+        }
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback1 = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                // Row is swiped from recycler view
+                // remove it from adapter
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        };
+
+        // attaching the touch helper to recycler view
+        new ItemTouchHelper(itemTouchHelperCallback1).attachToRecyclerView(recyclerView);
     }
 
     public String getUserEmail() {

@@ -9,9 +9,9 @@
     tools:context=".ResultadoActivity"
     tools:showIn="@layout/app_bar_resultado">
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/listViewResultado"
-        android:layout_width="368dp"
+        android:layout_width="fill_parent"
         android:layout_height="520dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"

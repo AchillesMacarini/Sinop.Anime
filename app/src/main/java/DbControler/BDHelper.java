@@ -314,12 +314,12 @@ public class BDHelper {
     }
 
 
-    public void updateUsuarios(Context context, String email) throws IOException {
+    public void updateUsuarios(Context context, String email, String nick) throws IOException {
         if (!checkNetworkConnection(context)) {
             return;
         }
         checkThreadPolicy();
-        URL url = new URL(URL_GLOBAL_DB + "ws_update/ws_update_usuarios.php?email="+email);
+        URL url = new URL(URL_GLOBAL_DB + "ws_update/ws_update_usuarios.php?nickname="+nick+"&email="+email);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String response = bufferedReader.readLine();
@@ -327,6 +327,36 @@ public class BDHelper {
 //            Toast.makeText(context, "Erro no BD Global!", Toast.LENGTH_LONG).show();
         }
     }
+
+    public void updateUsuariosBiograph(Context context, String email, String biograph) throws IOException {
+        if (!checkNetworkConnection(context)) {
+            return;
+        }
+        checkThreadPolicy();
+        URL url = new URL(URL_GLOBAL_DB + "ws_update/ws_update_usuarios.php?biograph="+biograph+"&email="+email);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String response = bufferedReader.readLine();
+        if (response.equals("false")) {
+//            Toast.makeText(context, "Erro no BD Global!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    public void updateUsuariosSenha(Context context, String email, String senha) throws IOException {
+        if (!checkNetworkConnection(context)) {
+            return;
+        }
+        checkThreadPolicy();
+        URL url = new URL(URL_GLOBAL_DB + "ws_update/ws_update_usuarios.php?senha="+senha+"&email="+email);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String response = bufferedReader.readLine();
+        if (response.equals("false")) {
+//            Toast.makeText(context, "Erro no BD Global!", Toast.LENGTH_LONG).show();
+        }
+    }
+
 
     public void updateRelacao(Context context, String anime, String tag) throws IOException {
         if (!checkNetworkConnection(context)) {

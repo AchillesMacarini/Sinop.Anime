@@ -178,7 +178,7 @@ public class InicioActivity extends AppCompatActivity
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),1);
         recyclerView.setLayoutManager(layoutManager);
         ArrayList<CreateList> createLists = prepareData();
-        MyAdapter adapter = new MyAdapter(getApplicationContext(), createLists);
+        MyAdapter adapter = new MyAdapter(getApplicationContext(), createLists, true);
         recyclerView.setAdapter(adapter);
 
         String path = Environment.getRootDirectory().toString();

@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -245,20 +247,113 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         }
     }
 
-
-    public void buildAlertDialog(){
-
+    public void buildAlertDialog() {
+        //Como upar img???????????????????????
         // custom dialog
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_edit_profile);
         dialog.setTitle("Title...");
-
+        EditText nickEdit = (EditText) dialog.findViewById(R.id.nickname_edit);
+        final String nicknameEdit = nickEdit.getText().toString();
+        EditText bioEdit = (EditText) dialog.findViewById(R.id.biography_edit);
+        final String biographEdit = bioEdit.getText().toString();
+        final EditText passEdit = (EditText) dialog.findViewById(R.id.pass_edit);
+        final String passwordEdit = passEdit.getText().toString();
+        EditText confPassEdit = (EditText) dialog.findViewById(R.id.pass_confirm);
+        final String confirmPassEdit = confPassEdit.getText().toString();
         // set the custom dialog components - text, image and button
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         // if button is clicked, close the custom dialog
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (passwordEdit.isEmpty() && confirmPassEdit.isEmpty()){
+                    if (biographEdit.isEmpty()){
+                        try {
+                            bdHelper.updateUsuarios(getApplicationContext(), usuario.getEmail(), nicknameEdit);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else if (nicknameEdit.isEmpty()){
+                        //
+                        try {
+                            bdHelper.updateUsuariosBiograph(getApplicationContext(), usuario.getEmail(), biographEdit);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else{
+                        //os dois
+                        try {
+                            bdHelper.updateUsuariosBiograph(getApplicationContext(), usuario.getEmail(), biographEdit);
+                            bdHelper.updateUsuarios(getApplicationContext(), usuario.getEmail(), nicknameEdit);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                else if (biographEdit.isEmpty()){
+                    //apenas nick e senha
+                    if (passwordEdit.isEmpty()){
+                        //erro
+                    }
+                    else if (confirmPassEdit.isEmpty()){
+                        //erroTb
+                    }
+                    else if (passwordEdit.equals(confirmPassEdit)){
+                        try {
+                            bdHelper.updateUsuarios(getApplicationContext(), usuario.getEmail(), nicknameEdit);
+                            bdHelper.updateUsuariosSenha(getApplicationContext(), usuario.getEmail(), passwordEdit);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                else if (nicknameEdit.isEmpty()){
+                    //apenas bio e senha
+                    if (passwordEdit.isEmpty()){
+                        //erro
+                    }
+                    else if (confirmPassEdit.isEmpty()){
+                        //erroTb
+                    }
+                    else if (passwordEdit.equals(confirmPassEdit)){
+                        try {
+                            bdHelper.updateUsuariosBiograph(getApplicationContext(), usuario.getEmail(), biographEdit);
+                            bdHelper.updateUsuariosSenha(getApplicationContext(), usuario.getEmail(), passwordEdit);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                else if (biographEdit.isEmpty() && nicknameEdit.isEmpty()){
+                    //apenas senha
+
+                    if (passwordEdit.isEmpty()){
+                        //erro
+                    }
+                    else if (confirmPassEdit.isEmpty()){
+                        //erroTb
+                    }
+                    else if (passwordEdit.equals(confirmPassEdit)){
+                        try {
+                            bdHelper.updateUsuariosSenha(getApplicationContext(), usuario.getEmail(), passwordEdit);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                }
+                else if (!biographEdit.isEmpty() && !nicknameEdit.isEmpty() && !passwordEdit.isEmpty() && !confirmPassEdit.isEmpty()){
+                    //tudo
+                    if (passwordEdit.equals(confirmPassEdit)){
+
+                    }
+                }
+
+
                 dialog.dismiss();
             }
         });
@@ -279,11 +374,39 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 
     public void nickNavHeaderUser(){
+        String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         TextView text = (TextView) header.findViewById(R.id.user_nick_header);
         text.setText(usuario.getNickname());
+
+        ImageView pedra = (ImageView) header.findViewById(R.id.imageUserProfile);
+        Bitmap imagem = LoadImageFromWebUser(imgUserUrl+getUserEmail()+".png");
+
+        if (imagem == null) {
+            pedra.setImageResource(R.drawable.img2);
+        } else {
+            pedra.setImageBitmap(imagem);
+        }
+
     }
+
+    public Bitmap LoadImageFromWebUser(String url) {
+        try {
+
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            ImageView i = new ImageView(this);
+            i.setImageBitmap(bitmap);
+            return bitmap;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     public void emailNavHeaderUser(){
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);

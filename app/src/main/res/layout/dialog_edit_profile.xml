@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/img2" />
 
-        <TextView
+        <EditText
             android:id="@+id/nickname_edit"
             android:layout_width="285dp"
             android:layout_height="45dp"
@@ -42,7 +42,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/prophoto" />
 
-        <TextView
+        <EditText
             android:id="@+id/biography_edit"
             android:layout_width="355dp"
             android:layout_height="47dp"
@@ -57,7 +57,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nickname_edit" />
 
-        <TextView
+        <EditText
             android:id="@+id/pass_confirm"
             android:layout_width="355dp"
             android:layout_height="47dp"
@@ -72,7 +72,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pass_edit" />
 
-        <TextView
+        <EditText
             android:id="@+id/pass_edit"
             android:layout_width="355dp"
             android:layout_height="47dp"

@@ -42,13 +42,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private Context context;
     BDHelper bdHelper = new BDHelper();
     String imgNewUrl = bdHelper.returnUrl()+"ws_images_news/";
+    String imgWideUrl =  bdHelper.returnUrl()+"ws_images_wide_anime/";
     MyApplication myapp = new MyApplication();
     private ArrayList<String> listaNews = new ArrayList<String>();
     String imgAnimeUrl = bdHelper.returnUrl()+"ws_images_animes/";
-
-    public MyAdapter(Context context, ArrayList<CreateList> galleryList) {
+    Boolean newOrAnime;
+    public MyAdapter(Context context, ArrayList<CreateList> galleryList, Boolean newOrAnime) {
         this.galleryList = galleryList;
         this.context = context;
+        this.newOrAnime=newOrAnime;
     }
 
     @Override
@@ -65,8 +67,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         viewHolder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Bitmap imagem = null;
         try {
-//            System.out.println(imgNewUrl+returnIdImg(galleryList.get(i).getImage_title().toString(), i)+".png");
-            imagem = LoadImageFromWebOperations(imgNewUrl+returnIdImg(galleryList.get(i).getImage_title().toString(), i)+".png");
+            System.out.println("oieee" + imgWideUrl+returnIdImg(galleryList.get(i).getImage_title().toString(), i, newOrAnime)+".png");
+            if (newOrAnime){
+                imagem = LoadImageFromWebOperations(imgNewUrl+returnIdImg(galleryList.get(i).getImage_title().toString(), i, newOrAnime)+".png");
+            }
+            else {
+                imagem = LoadImageFromWebOperations(imgWideUrl+returnIdImg(galleryList.get(i).getImage_title().toString(), i, newOrAnime)+".png");
+            }
+
 //                imagem= LoadImageFromWebOperations(imgNewUrl+"01.png");
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,7 +88,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             public void onClick(View v) {
                 viewHolder.img.setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
                 try {
-                    buildNews();
+                    buildNews(newOrAnime);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -144,19 +152,28 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
     }
 
-    public void buildNews() throws IOException, JSONException{
+    public void buildNews(boolean newOrAnime) throws IOException, JSONException{
         JSONArray jsonNews = bdHelper.selectAllFromNoticias(context);
-
-        for (int i = 0; i < 5; i++) {
-            JSONObject animeObject = jsonNews.getJSONObject(i);
-            String id = animeObject.getString("noticia_imagem");
-            listaNews.add(id);
+        JSONArray jsonAnimes = bdHelper.selectAllFromAnime(context);
+        if (newOrAnime) {
+            for (int i = 0; i < 5; i++) {
+                JSONObject animeObject = jsonNews.getJSONObject(i);
+                String id = animeObject.getString("noticia_imagem");
+                listaNews.add(id);
+            }
+        }
+        else {
+            for (int i = 0; i < jsonAnimes.length(); i++) {
+                JSONObject animeObject = jsonNews.getJSONObject(i);
+                String id = animeObject.getString("anime_imagem");
+                listaNews.add(id);
+            }
         }
     }
 
 
-    public String returnIdImg(String tittle, int x) throws IOException, JSONException {
-        buildNews();
+    public String returnIdImg(String tittle, int x, boolean newOrAnime) throws IOException, JSONException {
+        buildNews(newOrAnime);
         for (int i = 0; i < listaNews.size(); i++){
             if (listaNews.get(x).equals(tittle)){
                 return listaNews.get(x);
