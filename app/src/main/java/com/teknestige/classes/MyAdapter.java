@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonIOException;
+import com.teknestige.entidades.Anime;
 import com.teknestige.sinop.AnimeActivity;
 import com.teknestige.sinop.NoticiaActivity;
 
@@ -45,6 +46,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     String imgWideUrl =  bdHelper.returnUrl()+"ws_images_wide_anime/";
     MyApplication myapp = new MyApplication();
     private ArrayList<String> listaNews = new ArrayList<String>();
+    private ArrayList<String> listaNomes = new ArrayList<String>();
     String imgAnimeUrl = bdHelper.returnUrl()+"ws_images_animes/";
     Boolean newOrAnime;
     public MyAdapter(Context context, ArrayList<CreateList> galleryList, Boolean newOrAnime) {
@@ -67,12 +69,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         viewHolder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Bitmap imagem = null;
         try {
-            System.out.println("oieee" + imgWideUrl+returnIdImg(galleryList.get(i).getImage_title().toString(), i, newOrAnime)+".png");
+            System.out.println("testando " + imgWideUrl+returnIdImg(galleryList.get(i).getImage_title().toString(), i, newOrAnime)+".png");
             if (newOrAnime){
                 imagem = LoadImageFromWebOperations(imgNewUrl+returnIdImg(galleryList.get(i).getImage_title().toString(), i, newOrAnime)+".png");
             }
             else {
                 imagem = LoadImageFromWebOperations(imgWideUrl+returnIdImg(galleryList.get(i).getImage_title().toString(), i, newOrAnime)+".png");
+
             }
 
 //                imagem= LoadImageFromWebOperations(imgNewUrl+"01.png");
@@ -164,8 +167,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
         else {
             for (int i = 0; i < jsonAnimes.length(); i++) {
-                JSONObject animeObject = jsonNews.getJSONObject(i);
+                JSONObject animeObject = jsonAnimes.getJSONObject(i);
                 String id = animeObject.getString("anime_imagem");
+                String name = animeObject.getString("Nome");
+                listaNomes.add(name);
                 listaNews.add(id);
             }
         }
@@ -174,12 +179,22 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     public String returnIdImg(String tittle, int x, boolean newOrAnime) throws IOException, JSONException {
         buildNews(newOrAnime);
-        for (int i = 0; i < listaNews.size(); i++){
-            if (listaNews.get(x).equals(tittle)){
-                return listaNews.get(x);
+        if (newOrAnime) {
+            for (int i = 0; i < listaNews.size(); i++) {
+                if (listaNews.get(x).equals(tittle)) {
+                    return listaNews.get(x);
+                }
             }
+            return listaNews.get(x);
         }
-        return listaNews.get(x);
+        else {
+            for (int i = 0; i < listaNews.size(); i++) {
+                if (listaNomes.get(x).equals(tittle)) {
+                    return listaNews.get(x);
+                }
+            }
+            return listaNews.get(x);
+        }
     }
 
     private Context getContext() {

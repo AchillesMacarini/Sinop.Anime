@@ -142,12 +142,11 @@ public class ListaAnimesActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.lista_animes , menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        final android.widget.SearchView searchView =
-                (android.widget.SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        final android.support.v7.widget.SearchView searchView =
+                (android.support.v7.widget.SearchView) menu.findItem(R.id.app_bar_search).getActionView();
 
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setSubmitButtonEnabled(true);
-        searchView.setOnQueryTextListener((android.widget.SearchView.OnQueryTextListener) this);
 
         return true;
     }

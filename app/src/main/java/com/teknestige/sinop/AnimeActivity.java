@@ -48,9 +48,11 @@ public class AnimeActivity extends AppCompatActivity
     BDHelper bdHelper = new BDHelper();
     Anime animes = new Anime();
     Comment comment = new Comment();
+    ArrayList<String> listaAnimes = new ArrayList<String>();
     ArrayList<String> listaNomesAnimes = new ArrayList<String>();
     String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
     String imgAnimeUrl = bdHelper.returnUrl()+"ws_images_animes/";
+    String imgWideUrl =  bdHelper.returnUrl()+"ws_images_wide_anime/";
     String imgNewUrl = bdHelper.returnUrl()+"ws_images_news/";
     long startTime = System.nanoTime();
     ArrayList<String> coments = new ArrayList<String>();
@@ -197,7 +199,7 @@ public void buildComments() throws  IOException, JSONException{
 
     }
 
-    public void settarAnimeView(){
+    public void settarAnimeView() throws IOException, JSONException {
         TextView nomeView = (TextView)findViewById(R.id.animeNameView);
         nomeView.setGravity(Gravity.CENTER);
         nomeView.setText(animes.getNome());
@@ -220,8 +222,51 @@ public void buildComments() throws  IOException, JSONException{
 
         TextView sinopseView = (TextView)findViewById(R.id.sinopseView);
         sinopseView.setText(animes.getSinopse());
+//        System.out.println("olha aqui " + imgWideUrl+(returnIdImg(animes.getNome()))+".png");
+        ImageView animeMain = findViewById(R.id.animeMain);
+        animeMain.setImageBitmap(LoadImageFromWeb(imgAnimeUrl+(returnIdImg(animes.getNome()))+".png"));
+
+        ImageView animeWide = findViewById(R.id.animeWide);
+        animeWide.setImageBitmap(LoadImageFromWeb(imgWideUrl+(returnIdImg(animes.getNome()))+".png"));
 
     }
+
+    public String returnIdImg(String tittle) throws IOException, JSONException {
+        JSONArray jsonAnimes = bdHelper.selectAllFromAnime(getApplicationContext());
+        String id = new String();
+        for (int i = 0; i < jsonAnimes.length(); i++) {
+            JSONObject animeObject = jsonAnimes.getJSONObject(i);
+            String name = animeObject.getString("Nome");
+            listaAnimes.add(name);
+        }
+
+        for (int i = 0; i < listaAnimes.size(); i++){
+            if (listaAnimes.get(i).equals(tittle)){
+                JSONObject animeObject = jsonAnimes.getJSONObject(i);
+                id = animeObject.getString("anime_imagem");
+
+            }
+        }
+        return id;
+    }
+
+
+    public Bitmap LoadImageFromWeb(String url) {
+        try {
+
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            ImageView i = new ImageView(this);
+            i.setImageBitmap(bitmap);
+            return bitmap;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     public void btnHelpPressed(View v){
         minusUpdater();
