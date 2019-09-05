@@ -262,14 +262,16 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         EditText confPassEdit = (EditText) dialog.findViewById(R.id.pass_confirm);
         final String confirmPassEdit = confPassEdit.getText().toString();
         // set the custom dialog components - text, image and button
-        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogProfileOK);
         // if button is clicked, close the custom dialog
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("OHMAMAMAE");
                 if (passwordEdit.isEmpty() && confirmPassEdit.isEmpty()){
                     if (biographEdit.isEmpty()){
                         try {
+                            System.out.println("ta ino");
                             bdHelper.updateUsuarios(getApplicationContext(), usuario.getEmail(), nicknameEdit);
                         } catch (IOException e) {
                             e.printStackTrace();

@@ -143,7 +143,7 @@ public class NoticiaActivity extends AppCompatActivity
     public String nomeClicado(){
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        String nomeClicado = bundle.getString("nomeNews");
+        String nomeClicado = bundle.getString("nome");
         return nomeClicado;
     }
 

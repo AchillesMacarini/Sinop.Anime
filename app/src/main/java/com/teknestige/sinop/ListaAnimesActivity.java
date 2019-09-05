@@ -260,7 +260,7 @@ public class ListaAnimesActivity extends AppCompatActivity
         String nomeAnime = listaNomes.get(position);
         Bundle b = new Bundle();
         Intent intent = new Intent(this , AnimeActivity.class);
-        b.putString("nomeAnime" , nomeAnime.toString());
+        b.putString("nome" , nomeAnime.toString());
         intent.putExtras(b);
         startActivity(intent);
     }

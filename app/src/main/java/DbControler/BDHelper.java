@@ -320,6 +320,7 @@ public class BDHelper {
         }
         checkThreadPolicy();
         URL url = new URL(URL_GLOBAL_DB + "ws_update/ws_update_usuarios.php?nickname="+nick+"&email="+email);
+        System.out.println(URL_GLOBAL_DB + "ws_update/ws_update_usuarios.php?nickname="+nick+"&email="+email);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String response = bufferedReader.readLine();

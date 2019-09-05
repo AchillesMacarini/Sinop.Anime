@@ -97,11 +97,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Intent intent = new Intent(context, NoticiaActivity.class);
+                Intent intent;
+                if (newOrAnime) {
+                    intent = new Intent(context , NoticiaActivity.class);
+                }
+
+                else {
+                    intent = new Intent(context , AnimeActivity.class);
+                }
                 String nomeNews = galleryList.get(i).getImage_title();
                     System.out.println("mamãe "+ nomeNews);
                     Bundle b = new Bundle();
-                    b.putString("nomeNews" , nomeNews.toString());
+                    b.putString("nome" , nomeNews.toString());
                     intent.putExtras(b);
                     context.startActivity(intent);
             }

@@ -165,7 +165,7 @@ public void buildComments() throws  IOException, JSONException{
     public String nomeClicado(){
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        String nomeClicado = bundle.getString("nomeAnime");
+        String nomeClicado = bundle.getString("nome");
         return nomeClicado;
     }
 
