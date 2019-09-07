@@ -6,6 +6,88 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".NotificationSettingsActivity"
-    tools:showIn="@layout/app_bar_notification_settings">
+    tools:showIn="@layout/app_bar_notification_settings"
+    android:background="@color/background">
 
+    <TableLayout
+        android:layout_width="382dp"
+        android:layout_height="650dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/news"
+                android:layout_width="299dp"
+                android:layout_height="55dp"
+                android:gravity="center_vertical"
+                android:text="TextView"
+                android:textColor="@color/cardview_light_background"
+                android:textSize="23dp" />
+
+            <Switch
+                android:id="@+id/switchNews"
+                android:layout_width="59dp"
+                android:layout_height="55dp"
+                android:gravity="center_vertical" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/answers"
+                android:layout_width="308dp"
+                android:layout_height="55dp"
+                android:gravity="center_vertical"
+                android:text="TextView"
+                android:textColor="@color/cardview_light_background"
+                android:textSize="23dp" />
+
+            <Switch
+                android:id="@+id/switchAnswers"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:gravity="center_vertical" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/conquistas"
+                android:layout_width="218dp"
+                android:layout_height="55dp"
+                android:gravity="center_vertical"
+                android:text="TextView"
+                android:textColor="@color/cardview_light_background"
+                android:textSize="23dp" />
+
+            <Switch
+                android:id="@+id/switchConquistas"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:gravity="center_vertical" />
+
+        </TableRow>
+
+    </TableLayout>
 </android.support.constraint.ConstraintLayout>

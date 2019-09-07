@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="550px"
-    android:layout_height="320px">
+    android:layout_height="320px"
+    android:background="#1d1f2d">
 
-    <Button
+
+<Button
         android:id="@+id/dialogButtonOK"
         android:layout_width="104dp"
         android:layout_height="wrap_content"
@@ -17,6 +19,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text=" Ok "
+        android:background="@color/design_default_color_primary_dark"
+    android:textColor="@color/cardview_light_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,6 +52,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="Light Theme"
+        android:textColor="@color/cardview_light_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -62,6 +67,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="Dark Theme"
+        android:textColor="@color/cardview_light_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

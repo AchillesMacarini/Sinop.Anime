@@ -6,6 +6,68 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".LanguagesActivity"
-    tools:showIn="@layout/app_bar_languages">
+    tools:showIn="@layout/app_bar_languages"
+    android:background="@color/background">
 
+    <TableLayout
+        android:layout_width="395dp"
+        android:layout_height="659dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/english"
+                android:layout_width="310dp"
+                android:layout_height="55dp"
+                android:text="TextView"
+                android:textSize="23dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/cardview_light_background" />
+
+            <TextView
+                android:id="@+id/enUS"
+                android:layout_width="87dp"
+                android:layout_height="55dp"
+                android:text="Text"
+                android:textSize="23dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/cardview_light_background" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/portuguese"
+                android:layout_width="310dp"
+                android:layout_height="55dp"
+                android:textSize="23dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/cardview_light_background"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/ptBr"
+                android:layout_width="87dp"
+                android:layout_height="55dp"
+                android:gravity="center_vertical"
+                android:textSize="23dp"
+                android:textColor="@color/cardview_light_background"
+                android:text="Text" />
+        </TableRow>
+
+    </TableLayout>
 </android.support.constraint.ConstraintLayout>
