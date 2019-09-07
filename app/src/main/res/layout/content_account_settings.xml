@@ -6,9 +6,11 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".AccountSettingsActivity"
-    tools:showIn="@layout/app_bar_account_settings">
+    tools:showIn="@layout/app_bar_account_settings"
+    android:background="@color/background">
 
-    <TableLayout
+
+<TableLayout
         android:layout_width="395dp"
         android:layout_height="659dp"
         android:layout_marginStart="8dp"
@@ -22,49 +24,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-            <Switch
-                android:id="@+id/switch2"
-                android:layout_width="125dp"
-                android:layout_height="52dp"
-                android:text="Switch"
-                tools:layout_editor_absoluteX="280dp"
-                tools:layout_editor_absoluteY="6dp" />
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            app:srcCompat="@drawable/keyicon" />
 
-        </TableRow>
+        <TextView
+            android:id="@+id/news"
+            android:layout_width="345dp"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
+            android:text="Alterar senha"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="23dp" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+    </TableRow>
 
-            <TextView
-                android:id="@+id/textView17"
-                android:layout_width="378dp"
-                android:layout_height="52dp"
-                android:text="TextView"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="8dp" />
-        </TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+        <ImageView
+            android:id="@+id/imageView13"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/poweroff" />
 
-            <TextView
-                android:id="@+id/textView18"
-                android:layout_width="378dp"
-                android:layout_height="52dp"
-                android:text="TextView"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="8dp" />
-        </TableRow>
+        <TextView
+            android:id="@+id/answers"
+            android:layout_width="310dp"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
+            android:text="Desativar conta"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="23dp" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    </TableRow>
     </TableLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -15,7 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class BDHelper {
-    public static String URL_GLOBAL_DB = "http://192.168.1.22/ws_otaku/";
+    public static String URL_GLOBAL_DB = "http://192.168.1.21/ws_otaku/";
 
     public JSONArray selectUserInfo(Context context, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
@@ -77,7 +77,6 @@ public class BDHelper {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String response = bufferedReader.readLine();
         if (response.equals("false")) {
-//            Toast.makeText(context, "Erro no BD Global!", Toast.LENGTH_LONG).show();
 
         } else {
 
@@ -94,7 +93,6 @@ public class BDHelper {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String response = bufferedReader.readLine();
         if (response.equals("false")) {
-//            Toast.makeText(context, "Erro no BD Global!", Toast.LENGTH_LONG).show();
 
         } else {
 
@@ -253,7 +251,6 @@ public class BDHelper {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String response = bufferedReader.readLine();
         if (response.equals("false")) {
-//            Toast.makeText(context, "Erro no BD Global!", Toast.LENGTH_LONG).show();
             return 0;
         } else {
             return 1;
