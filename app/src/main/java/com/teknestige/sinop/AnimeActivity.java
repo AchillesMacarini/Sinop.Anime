@@ -222,12 +222,14 @@ public void buildComments() throws  IOException, JSONException{
 
         TextView sinopseView = (TextView)findViewById(R.id.sinopseView);
         sinopseView.setText(animes.getSinopse());
-//        System.out.println("olha aqui " + imgWideUrl+(returnIdImg(animes.getNome()))+".png");
-        ImageView animeMain = findViewById(R.id.animeMain);
-        animeMain.setImageBitmap(LoadImageFromWeb(imgAnimeUrl+(returnIdImg(animes.getNome()))+".png"));
+        System.out.println("olha aqui " + imgWideUrl+(returnIdImg(animes.getNome()))+".png");
 
         ImageView animeWide = findViewById(R.id.animeWide);
         animeWide.setImageBitmap(LoadImageFromWeb(imgWideUrl+(returnIdImg(animes.getNome()))+".png"));
+
+        ImageView animeMain = findViewById(R.id.animeMain);
+        animeMain.setImageBitmap(LoadImageFromWeb(imgAnimeUrl+(returnIdImg(animes.getNome()))+".png"));
+
 
     }
 
@@ -253,10 +255,8 @@ public void buildComments() throws  IOException, JSONException{
 
     public Bitmap LoadImageFromWeb(String url) {
         try {
-
+            ImageView i = null;
             Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
-            ImageView i = new ImageView(this);
-            i.setImageBitmap(bitmap);
             return bitmap;
         } catch (MalformedURLException e) {
             e.printStackTrace();

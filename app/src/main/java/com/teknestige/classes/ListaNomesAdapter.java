@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,6 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.teknestige.entidades.Anime;
-import com.teknestige.entidades.Usuario;
 import com.teknestige.sinop.ListaAnimesActivity;
 import com.teknestige.sinop.R;
 
@@ -40,14 +37,13 @@ public class ListaNomesAdapter extends BaseAdapter implements Filterable {
     ArrayList<String> animeList;
     String imgAnimeUrl = bdHelper.returnUrl()+"ws_images_animes/";
     private ArrayList<String> animeFiltered;
-    AnimeFilter animeFilter;
+    ArrayList<String> animeFilter;
     private Typeface typeface;
     ListaAnimesActivity activity;
 
     public ListaNomesAdapter(ListaAnimesActivity activity, ArrayList<String> animeList) {
         this.activity = activity;
         this.animeList = animeList;
-        this.animeFiltered = animeList;
 
         getFilter();
     }
@@ -140,11 +136,34 @@ public class ListaNomesAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public Filter getFilter() {
-        if (animeFilter == null) {
-            animeFilter = new AnimeFilter();
-        }
+        return new Filter() {
 
-        return animeFilter;
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults oReturn = new FilterResults();
+                final ArrayList<String> results = new ArrayList<>();
+                if (animeFiltered == null)
+                    animeFiltered = animeList;
+                if (constraint != null) {
+                    if (animeFiltered != null && animeFiltered.size() > 0) {
+                        for (int i=0; i < animeList.size(); i++) {
+                            if (animeList.get(i).toLowerCase()
+                                    .contains(constraint.toString()))
+                                results.add(animeList.get(i));
+                        }
+                    }
+                    oReturn.values = results;
+                }
+                return oReturn;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults (CharSequence constraint, FilterResults results){
+                animeFiltered = (ArrayList<String>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
 /*private view holder class*/
