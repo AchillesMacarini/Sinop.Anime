@@ -1,9 +1,11 @@
 package com.teknestige.sinop;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.Toast;
 
 import com.teknestige.entidades.Usuario;
@@ -40,6 +44,34 @@ public class HelpActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        final int[] mClickedPosition = {0};
+
+        View.OnClickListener mListener = new View.OnClickListener() {
+
+            @SuppressLint("ResourceType")
+            public void onClick(View v) {
+                // v is the TableRow that was clicked
+                v.setBackgroundColor(Color.RED);
+                // mClickedPosition is a int field representing the clicked row(to know the position later)
+                // if you allow more than one row to be clicked at one time, use a list of ints
+                // or something like this
+                mClickedPosition[0] = v.getId() - 1000;
+            }
+        };
+
+
+        TableLayout tl = (TableLayout) findViewById(R.id.helpTabble);
+        TableRow clickedRow = (TableRow) tl.getChildAt(mClickedPosition[0]);
+
+        TableRow tr1 = (TableRow) findViewById(R.id.helpRow);
+        tr1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            buildAlertDialog(view);
+            }
+        });
+
     }
 
     @Override

@@ -4,37 +4,27 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
+import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.teknestige.classes.BackgroundPainter;
 import com.teknestige.classes.GradientBackgroundPainter;
 import com.teknestige.entidades.Usuario;
 
@@ -47,8 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import DbControler.BDHelper;
-
-import static android.Manifest.permission.READ_CONTACTS;
 
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -65,6 +53,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     Usuario usuario = new Usuario();
     boolean encontrado = false;
     private GradientBackgroundPainter gradientBackgroundPainter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,21 +66,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (emailLogado != null) {
 
 
-
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                  //  attemptLogin();
-                    return true;
+            mPasswordView = (EditText) findViewById(R.id.password);
+            mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                    if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+                        //  attemptLogin();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
 
 
-
-        });
+            });
 
 
             try {
@@ -115,7 +102,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //        backgroundPainter.animate(targetView, color1, color2);
 
 
-
         View backgroundImage = findViewById(R.id.root_layout);
 
         final int[] drawables = new int[3];
@@ -127,16 +113,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         gradientBackgroundPainter.start();
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         gradientBackgroundPainter.stop();
     }
 
-        public void irCadastro (View v){
+    public void irCadastro(View v) {
 
-            Intent intent = new Intent(this, CadastroActivity.class);
-            startActivity(intent);
-        }
+        Intent intent = new Intent(this, CadastroActivity.class);
+        startActivity(intent);
+    }
 
     private void buscarUsuario(String email) throws IOException, JSONException {
         JSONArray json = bdHelper.selectUserInfo(getApplicationContext(), email);
@@ -158,11 +145,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void verificarUsuario(String emailDigitado, String senhaDigitada) throws IOException, JSONException {
         JSONArray jsons = bdHelper.selectAllFromUser(getApplicationContext());
-
         String biographUser = "";
         String nickUser = "";
         String dateUser = "";
-        String qntUser  = "";
+        String qntUser = "";
 
         for (int i = 0; i < jsons.length(); i++) {
             JSONObject userObject = (JSONObject) jsons.get(i);
@@ -172,27 +158,44 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             nickUser = userObject.getString("Nickname");
             dateUser = userObject.getString("Data de cadastro");
             qntUser = userObject.getString("Quant. de tags");
+
             if (emailUser.toUpperCase().equals(emailDigitado) && senhaUser.equals(senhaDigitada)) {
                 encontrado = true;
 //                isPasswordValid(true);
                 break;
             }
         }
+
+        boolean isModerador = false;
+
         if (encontrado) {
             gerarAlertDialog("LOGIN", "Login efetuado com sucesso");
 
+            JSONArray jsonModera = bdHelper.selectModerador(getApplicationContext(), emailDigitado);
+            if (jsonModera.length() == 0) {
+                isModerador = false;
+            } else {
+                isModerador = true;
+            }
             SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
             editor.putString("emailLogado", emailDigitado);
             editor.putString("nickLogado", nickUser);
             editor.putString("biographLogado", biographUser);
-            editor.putString("dateLogado",dateUser);
+            editor.putString("dateLogado", dateUser);
             editor.putString("qntLogado", qntUser);
+            if (isModerador) {
+                editor.putInt("isModera", 1);
+            } else {
+                editor.putInt("isModera", 0);
+            }
+
             editor.apply();
 
             irParaMain();
 
-        }else{
+
+        } else {
             gerarAlertDialog("LOGIN", "tá errado issae");
         }
     }
@@ -213,7 +216,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     public String getUserEmail() throws IOException, JSONException {
         SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
-        String emailName = sp.getString("emailLogado",null);
+        String emailName = sp.getString("emailLogado", null);
         return emailName;
     }
 
@@ -338,24 +341,5 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return true;
         }
 
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
     }
 }
-

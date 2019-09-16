@@ -15,7 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class BDHelper {
-    public static String URL_GLOBAL_DB = "http://192.168.1.22/ws_otaku/";
+    public static String URL_GLOBAL_DB = "http://10.21.80.199/ws_otaku/";
 
     public JSONArray selectUserInfo(Context context, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
@@ -36,6 +36,25 @@ public class BDHelper {
     public String returnUrl(){
         return URL_GLOBAL_DB;
     }
+
+    public JSONArray selectModerador(Context context, String email) throws JSONException, IOException {
+        if (!checkNetworkConnection(context)) {
+            return null;
+        }
+        checkThreadPolicy();
+        URL url = new URL(URL_GLOBAL_DB + "ws_read/ws_read_moderador.php?email='"+email+"'");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        StringBuilder sb = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String json;
+        while ((json = bufferedReader.readLine()) != null) {
+            sb.append(json + "\n");
+        }
+        JSONArray jsonArray = new JSONArray(sb.toString().trim());
+        return jsonArray;
+    }
+
+
 
     public void goforIt(Context context, String hexadecimal)throws JSONException, IOException{
         if (!checkNetworkConnection(context)) {

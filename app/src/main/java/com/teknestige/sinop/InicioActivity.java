@@ -59,6 +59,7 @@ public class InicioActivity extends AppCompatActivity
 
     Usuario usuario = new Usuario();
     BDHelper bdHelper = new BDHelper();
+//    Constants constants = new Constants();
 
     String imgNewUrl = bdHelper.returnUrl()+"ws_images_news/";
 
@@ -79,6 +80,15 @@ public class InicioActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        MenuItem acc1 = (MenuItem) drawer.findViewById(R.id.nav_modera);
+        int isModera = sp.getInt("isModera", 0);
+        if (isModera==1){
+            acc1.setVisible(true);
+        }
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -139,11 +149,42 @@ public class InicioActivity extends AppCompatActivity
     }
 
     public void nickNavHeaderUser(){
+//        String imgUserUrl = String.valueOf(bdHelper.returnUrl())+"ws_images_users/";
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         TextView text = (TextView) header.findViewById(R.id.user_nick_header);
         text.setText(usuario.getNickname());
+
+
+        String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
+
+        ImageView pedra = (ImageView) header.findViewById(R.id.imageUserProfile);
+        Bitmap imagem = LoadImageFromWebUser(imgUserUrl+getUserEmail()+".png");
+
+        if (imagem == null) {
+            pedra.setImageResource(R.drawable.img2);
+        } else {
+            pedra.setImageBitmap(imagem);
+        }
+
     }
+
+    public Bitmap LoadImageFromWebUser(String url) {
+        try {
+
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            ImageView i = new ImageView(this);
+            i.setImageBitmap(bitmap);
+            return bitmap;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     public void emailNavHeaderUser(){
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -169,6 +210,7 @@ public class InicioActivity extends AppCompatActivity
 
         return true;
     }
+
 
 
     public void createRecyclerView(){
@@ -261,6 +303,16 @@ public class InicioActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
+
+
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        MenuItem acc1 = (MenuItem) drawer.findViewById(R.id.nav_modera);
+        int isModera = sp.getInt("isModera", 0);
+        if (isModera==1){
+            acc1.setVisible(true);
+        }
+
     }
 
 
@@ -285,6 +337,9 @@ public class InicioActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
         if (id == R.id.nav_inicio) {
             Intent intent = new Intent(this, InicioActivity.class);
             startActivity(intent);
@@ -300,14 +355,17 @@ public class InicioActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
             Intent intent = new Intent(this, ConfiguracaoActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_send) {
-            SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sp.edit();
+        }
+        else if (id == R.id.nav_modera) {
+
+
+        }else if (id == R.id.nav_send) {
             editor.remove("emailLogado");
             editor.remove("nickLogado");
             editor.remove("biographLogado");
             editor.remove("dateLogado");
             editor.remove("qntLogado");
+            editor.remove("isModera");
             editor.apply();
 
             Intent intent = new Intent(this, LoginActivity.class);

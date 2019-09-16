@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -376,11 +375,12 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 
     public void nickNavHeaderUser(){
-        String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         TextView text = (TextView) header.findViewById(R.id.user_nick_header);
         text.setText(usuario.getNickname());
+
+        String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
 
         ImageView pedra = (ImageView) header.findViewById(R.id.imageUserProfile);
         Bitmap imagem = LoadImageFromWebUser(imgUserUrl+getUserEmail()+".png");

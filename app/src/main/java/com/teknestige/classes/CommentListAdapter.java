@@ -1,23 +1,16 @@
 package com.teknestige.classes;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.teknestige.entidades.Comment;
-import com.teknestige.sinop.AnimeActivity;
 import com.teknestige.sinop.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -86,14 +79,14 @@ public class CommentListAdapter extends BaseAdapter {
         TextView email = (TextView) row.findViewById(R.id.emailCommentView);
         email.setText(comment.getEmail());
 
-        Button denunciar = (Button) row.findViewById(R.id.denunBtn);
-        denunciar.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            AnimeActivity animeActivity = new AnimeActivity();
-            animeActivity.buildAlertDialog(comment.getEmail());
-        }
-    });
+//        Button denunciar = (Button) row.findViewById(R.id.d);
+//        denunciar.setOnClickListener(new View.OnClickListener() {
+//        @Override
+//        public void onClick(View view) {
+//            AnimeActivity animeActivity = new AnimeActivity();
+//            animeActivity.buildAlertDialog(comment.getEmail());
+//        }
+//    });
 
         return row;
     }
