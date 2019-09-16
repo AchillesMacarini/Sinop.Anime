@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,6 +54,7 @@ public class ListaAnimesActivity extends AppCompatActivity
     ArrayList<Item> rowItems = new ArrayList<Item>();
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +70,8 @@ public class ListaAnimesActivity extends AppCompatActivity
         toggle.syncState();
         construirUsuario();
         printNavHederUser();
+
+        ListView neoListView = (ListView) findViewById(R.id.myAnimeList);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -134,8 +138,6 @@ public class ListaAnimesActivity extends AppCompatActivity
         }
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -158,17 +160,26 @@ public class ListaAnimesActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        ListView neoListView = (ListView) findViewById(R.id.myAnimeList);
 
-        try {
-            arrayAnimes();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (TextUtils.isEmpty(newText)) {
+            try {
+                arrayAnimes();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            ListaNomesAdapter listaNomesAdapter = new ListaNomesAdapter(this, listaNomes);
+
+            listaNomesAdapter.getFilter().filter(newText);
+
         }
-        ListaNomesAdapter listaNomesAdapter = new ListaNomesAdapter(this, listaNomes);
+        else {
+            neoListView.clearTextFilter();
 
-        listaNomesAdapter.getFilter().filter(newText);
+        }
+
 
         return true;
     }

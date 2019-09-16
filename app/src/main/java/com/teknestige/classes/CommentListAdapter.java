@@ -1,21 +1,28 @@
 package com.teknestige.classes;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.teknestige.entidades.Comment;
+import com.teknestige.sinop.AnimeActivity;
 import com.teknestige.sinop.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import DbControler.BDHelper;
 
 public class CommentListAdapter extends BaseAdapter {
     // ArrayList<String> name, company, email, id, status;
@@ -23,13 +30,21 @@ public class CommentListAdapter extends BaseAdapter {
     ArrayList<Comment> commentArrayList;
     Context c;
     String anime;
-    JSONArray jsonAnimes;
-    JSONArray jsonComments;
+    BDHelper bdHelper;
+
 
     public CommentListAdapter(Context c, String anime, ArrayList<Comment> list) {
         this.c = c;
         this.anime = anime;
         this.commentArrayList = list;
+
+        try {
+            buildComments();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -50,6 +65,7 @@ public class CommentListAdapter extends BaseAdapter {
         return position;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -64,30 +80,42 @@ public class CommentListAdapter extends BaseAdapter {
             row = convertView;
         }
 
-        Comment comment = commentArrayList.get(position);
+        final Comment comment = commentArrayList.get(position);
         TextView conteudo = (TextView) row.findViewById(R.id.conteudoCommentView);
         conteudo.setText(comment.getConteudo());
         TextView email = (TextView) row.findViewById(R.id.emailCommentView);
         email.setText(comment.getEmail());
+
+        Button denunciar = (Button) row.findViewById(R.id.denunBtn);
+        denunciar.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            AnimeActivity animeActivity = new AnimeActivity();
+            animeActivity.buildAlertDialog(comment.getEmail());
+        }
+    });
+
         return row;
     }
 
-    public ArrayList<Comment> buildComments() throws IOException, JSONException {
+    public void buildComments() throws IOException, JSONException {
         System.out.println(c + " - " + anime);
+//        JSONArray jsonComments = bdHelper.selectAllFromComentario(c, anime);
+//        JSONArray jsonAnimes = bdHelper.selectAllFromAnime(c);
+        for (int i=0; i<commentArrayList.size(); i++){
+//            JSONObject animeObject = jsonAnimes.getJSONObject(i);
+//            JSONObject commentObject = jsonComments.getJSONObject(i);
+//            String coment = commentObject.getString("comentario_cont");
+//            String email = commentObject.getString("usuario_Email");
+//            String id = commentObject.getString("idcomentario");
+//            comment.setEmailCom("capivarar@coisor.com");
+//            comment.setConteudo(coment);
+//            comment.setIdCom(id);
 
-        for (int i=0; i<jsonComments.length(); i++){
-            JSONObject animeObject = jsonAnimes.getJSONObject(i);
-            JSONObject commentObject = jsonComments.getJSONObject(i);
-            String coment = commentObject.getString("comentario_cont");
-            String email = commentObject.getString("usuario_Email");
-            String id = commentObject.getString("idcomentario");
-            comment.setEmailCom(email);
-            comment.setConteudo(coment);
-            comment.setIdCom(id);
+//            commentArrayList.add(comment);
+     System.out.println("aaaaa");
 
-            commentArrayList.add(comment);
         }
-        return commentArrayList;
     }
 
 

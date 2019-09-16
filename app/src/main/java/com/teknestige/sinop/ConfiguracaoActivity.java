@@ -72,7 +72,7 @@ public class ConfiguracaoActivity extends AppCompatActivity
             dialog.setContentView(R.layout.dialog);
             dialog.setTitle("Title...");
 
-            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+            Button dialogButton = (Button) dialog.findViewById(R.id.dialogBurronOK);
             // if button is clicked, close the custom dialog
             dialogButton.setOnClickListener(new View.OnClickListener() {
                 @Override

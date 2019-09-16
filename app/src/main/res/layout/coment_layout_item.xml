@@ -64,7 +64,7 @@
                 app:srcCompat="@drawable/ic_menu_send" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/denunBtn"
                 android:layout_width="48dp"
                 android:layout_height="19dp"
                 android:layout_marginStart="8dp"
