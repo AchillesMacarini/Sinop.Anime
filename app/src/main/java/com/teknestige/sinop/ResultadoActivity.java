@@ -137,6 +137,13 @@ public class ResultadoActivity  extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            try {
+                bdHelper.deleteFromUsuarioTesterino(getApplicationContext(), getUserEmail());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             super.onBackPressed();
         }
     }

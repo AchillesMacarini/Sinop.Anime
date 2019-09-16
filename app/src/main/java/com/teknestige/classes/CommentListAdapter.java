@@ -1,10 +1,13 @@
 package com.teknestige.classes;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.teknestige.entidades.Comment;
@@ -13,6 +16,7 @@ import com.teknestige.sinop.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,6 +54,31 @@ public class CommentListAdapter extends BaseAdapter {
         return position;
     }
 
+    public void buildAlertDialog() {
+        //Como upar img???????????????????????
+        // custom dialog
+        final Dialog dialog = new Dialog(c);
+        dialog.setContentView(R.layout.dialog_denuncia);
+        dialog.setTitle("Title...");
+
+        TextView userName = (TextView) dialog.findViewById(R.id.userName);
+        userName.setText(comment.getEmail());
+
+        // set the custom dialog components - text, image and button
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogProfileOK);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("OHMAMAMAE");
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -69,6 +98,16 @@ public class CommentListAdapter extends BaseAdapter {
         conteudo.setText(comment.getConteudo());
         TextView email = (TextView) row.findViewById(R.id.emailCommentView);
         email.setText(comment.getEmail());
+
+        Button denunciar = (Button) row.findViewById(R.id.denunBtn);
+        denunciar.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            buildAlertDialog();
+        }
+    });
+
         return row;
     }
 
