@@ -64,9 +64,15 @@ public class CustomListViewAdapter extends ArrayAdapter<String> {
 
         Bitmap imagem = null;
         try {
-//            if (!returnIdImg(Item.getTitle()).equals("null")) {
-            imagem = LoadImageFromWebOperations(imgAnimeUrl + returnIdImg(rowItem) + ".png");
-            System.out.println(imgAnimeUrl + returnIdImg(rowItem) + ".png");
+            if (!returnIdImg(rowItem).equals("null")) {
+                imagem = LoadImageFromWebOperations(imgAnimeUrl + returnIdImg(rowItem) + ".png");
+                if (!returnIdImg(rowItem).isEmpty()) {
+                    holder.imageView.setImageBitmap(imagem);
+                    System.out.println(imgAnimeUrl + returnIdImg(rowItem) + ".png");
+                }
+
+            }
+
 
 //            }
         } catch (IOException e) {
@@ -74,12 +80,13 @@ public class CustomListViewAdapter extends ArrayAdapter<String> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        holder.imageView.setImageBitmap(imagem);
-        holder.imageView.setMaxHeight(65);
-        holder.imageView.setMinimumHeight(65);
-        holder.imageView.setMaxWidth(65);
-        holder.imageView.setMinimumWidth(65);
-        return convertView;
+
+            holder.imageView.setMaxHeight(65);
+            holder.imageView.setMinimumHeight(65);
+            holder.imageView.setMaxWidth(65);
+            holder.imageView.setMinimumWidth(65);
+            return convertView;
+
     }
 
     public Bitmap LoadImageFromWebOperations(String url) {
@@ -105,7 +112,7 @@ public class CustomListViewAdapter extends ArrayAdapter<String> {
             listaAnimes.add(name);
         }
 
-        for (int i = 0; i < listaAnimes.size(); i++){
+        for (int i = 0; i < jsonAnimes.length(); i++){
             if (listaAnimes.get(i).equals(tittle)){
                 JSONObject animeObject = jsonAnimes.getJSONObject(i);
                 id = animeObject.getString("anime_imagem");

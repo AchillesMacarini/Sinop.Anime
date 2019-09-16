@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.teknestige.entidades.Comment;
+import com.teknestige.sinop.AnimeActivity;
 import com.teknestige.sinop.R;
 
 import org.json.JSONArray;
@@ -21,19 +22,29 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import DbControler.BDHelper;
+
 public class CommentListAdapter extends BaseAdapter {
     // ArrayList<String> name, company, email, id, status;
     Comment comment;
     ArrayList<Comment> commentArrayList;
     Context c;
     String anime;
-    JSONArray jsonAnimes;
-    JSONArray jsonComments;
+    BDHelper bdHelper;
+
 
     public CommentListAdapter(Context c, String anime, ArrayList<Comment> list) {
         this.c = c;
         this.anime = anime;
         this.commentArrayList = list;
+
+        try {
+            buildComments();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -54,30 +65,6 @@ public class CommentListAdapter extends BaseAdapter {
         return position;
     }
 
-    public void buildAlertDialog() {
-        //Como upar img???????????????????????
-        // custom dialog
-        final Dialog dialog = new Dialog(c);
-        dialog.setContentView(R.layout.dialog_denuncia);
-        dialog.setTitle("Title...");
-
-        TextView userName = (TextView) dialog.findViewById(R.id.userName);
-        userName.setText(comment.getEmail());
-
-        // set the custom dialog components - text, image and button
-        Button dialogButton = (Button) dialog.findViewById(R.id.dialogProfileOK);
-        // if button is clicked, close the custom dialog
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("OHMAMAMAE");
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -93,7 +80,7 @@ public class CommentListAdapter extends BaseAdapter {
             row = convertView;
         }
 
-        Comment comment = commentArrayList.get(position);
+        final Comment comment = commentArrayList.get(position);
         TextView conteudo = (TextView) row.findViewById(R.id.conteudoCommentView);
         conteudo.setText(comment.getConteudo());
         TextView email = (TextView) row.findViewById(R.id.emailCommentView);
@@ -103,30 +90,32 @@ public class CommentListAdapter extends BaseAdapter {
         denunciar.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
-            buildAlertDialog();
+            AnimeActivity animeActivity = new AnimeActivity();
+            animeActivity.buildAlertDialog(comment.getEmail());
         }
     });
 
         return row;
     }
 
-    public ArrayList<Comment> buildComments() throws IOException, JSONException {
+    public void buildComments() throws IOException, JSONException {
         System.out.println(c + " - " + anime);
+//        JSONArray jsonComments = bdHelper.selectAllFromComentario(c, anime);
+//        JSONArray jsonAnimes = bdHelper.selectAllFromAnime(c);
+        for (int i=0; i<commentArrayList.size(); i++){
+//            JSONObject animeObject = jsonAnimes.getJSONObject(i);
+//            JSONObject commentObject = jsonComments.getJSONObject(i);
+//            String coment = commentObject.getString("comentario_cont");
+//            String email = commentObject.getString("usuario_Email");
+//            String id = commentObject.getString("idcomentario");
+//            comment.setEmailCom("capivarar@coisor.com");
+//            comment.setConteudo(coment);
+//            comment.setIdCom(id);
 
-        for (int i=0; i<jsonComments.length(); i++){
-            JSONObject animeObject = jsonAnimes.getJSONObject(i);
-            JSONObject commentObject = jsonComments.getJSONObject(i);
-            String coment = commentObject.getString("comentario_cont");
-            String email = commentObject.getString("usuario_Email");
-            String id = commentObject.getString("idcomentario");
-            comment.setEmailCom(email);
-            comment.setConteudo(coment);
-            comment.setIdCom(id);
+//            commentArrayList.add(comment);
+     System.out.println("aaaaa");
 
-            commentArrayList.add(comment);
         }
-        return commentArrayList;
     }
 
 
