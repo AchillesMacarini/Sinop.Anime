@@ -1,86 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:id="@+id/helpTabble"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".HelpActivity"
     tools:showIn="@layout/app_bar_help"
     android:background="@color/background">
 
-    <TableLayout
-        android:id="@+id/helpTabble"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <TableRow
+        android:id="@+id/helpRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <TableRow
-            android:id="@+id/helpRow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="buildAlertDialog">
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            app:srcCompat="@drawable/mailicon" />
 
-            <ImageView
-                android:id="@+id/imageView6"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                app:srcCompat="@drawable/mailicon" />
-
-            <LinearLayout
-                android:layout_width="326dp"
-                android:layout_height="65dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/news"
-                    android:layout_width="fill_parent"
-                    android:layout_height="45dp"
-                    android:gravity="center_vertical"
-                    android:text="Contate-nos"
-                    android:textColor="@color/cardview_light_background"
-                    android:textSize="23dp" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:shadowColor="@android:color/background_light"
-                    android:text="Problemas? Ajuda?"
-                    android:textColor="@android:color/background_light" />
-            </LinearLayout>
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="buildAlertDialog">
-
-            <ImageView
-                android:id="@+id/imageView13"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:onClick="buildAlertDialog"
-                app:srcCompat="@drawable/privacyicon" />
+        <LinearLayout
+            android:layout_width="326dp"
+            android:layout_height="65dp"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/answers"
-                android:layout_width="310dp"
-                android:layout_height="55dp"
+                android:id="@+id/news"
+                android:layout_width="fill_parent"
+                android:layout_height="45dp"
                 android:gravity="center_vertical"
-                android:onClick="buildAlertDialog"
-                android:text="Política de privacidade"
+                android:text="Contate-nos"
                 android:textColor="@color/cardview_light_background"
                 android:textSize="23dp" />
 
-        </TableRow>
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:shadowColor="@android:color/background_light"
+                android:text="Problemas? Ajuda?"
+                android:textColor="@android:color/background_light" />
+        </LinearLayout>
 
-    </TableLayout>
-</android.support.constraint.ConstraintLayout>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/politicasRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView13"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            app:srcCompat="@drawable/privacyicon" />
+
+        <TextView
+            android:id="@+id/answers"
+            android:layout_width="310dp"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
+            android:text="Política de privacidade"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="23dp" />
+
+    </TableRow>
+
+</TableLayout>

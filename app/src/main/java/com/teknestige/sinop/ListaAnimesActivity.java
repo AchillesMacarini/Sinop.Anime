@@ -6,29 +6,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.SearchView.OnQueryTextListener;
+
 import com.teknestige.classes.CustomListViewAdapter;
 import com.teknestige.classes.Item;
-import com.teknestige.classes.ListaNomesAdapter;
 import com.teknestige.entidades.Usuario;
 
 import org.json.JSONArray;
@@ -42,8 +37,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import DbControler.BDHelper;
-
-import static com.teknestige.sinop.R.id.myAnimeList;
 
 public class ListaAnimesActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
@@ -78,7 +71,7 @@ public class ListaAnimesActivity extends AppCompatActivity
         System.out.println("Até aqui okay");
 
         try {
-            arrayAnimes();
+            arrayAnimes(null);
             System.out.println("Deu certo");
         } catch (IOException e) {
             e.printStackTrace();
@@ -160,26 +153,13 @@ public class ListaAnimesActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        ListView neoListView = (ListView) findViewById(R.id.myAnimeList);
-
-        if (TextUtils.isEmpty(newText)) {
-            try {
-                arrayAnimes();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            ListaNomesAdapter listaNomesAdapter = new ListaNomesAdapter(this, listaNomes);
-
-            listaNomesAdapter.getFilter().filter(newText);
-
+        try {
+            arrayAnimes(newText);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        else {
-            neoListView.clearTextFilter();
-
-        }
-
 
         return true;
     }
@@ -241,30 +221,42 @@ public class ListaAnimesActivity extends AppCompatActivity
         return true;
     }
 
-    public void arrayAnimes() throws IOException, JSONException {
+    public void arrayAnimes(String search) throws IOException, JSONException {
 
         JSONArray jsonAnimes = bdHelper.selectAllFromAnime(getApplicationContext());
 
         Item[] item = new Item[jsonAnimes.length()];
 
-        for (int i = 0; i < jsonAnimes.length(); i++) {
-            JSONObject animeObject = jsonAnimes.getJSONObject(i);
-            String nomeAnime = animeObject.getString("Nome");
-            listaNomes.add(nomeAnime);
+        if (search == null) {
 
-            item[i] = new Item();
-            item[i].setTitle(nomeAnime);
-            item[i].setImageId(0);
+            for (int i = 0; i < jsonAnimes.length(); i++) {
+                JSONObject animeObject = jsonAnimes.getJSONObject(i);
+                String nomeAnime = animeObject.getString("Nome");
+                listaNomes.add(nomeAnime);
+            }
 
-            rowItems.add(item[i]);
+            ListView neoListView = (ListView) findViewById(R.id.myAnimeList);
+            CustomListViewAdapter adapter = new CustomListViewAdapter(this, R.layout.list_style, listaNomes);
+            neoListView.setAdapter(adapter);
+            neoListView.setOnItemClickListener(this);
         }
 
-        ListView neoListView = (ListView) findViewById(R.id.myAnimeList);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_style, R.id.animeTitle, listaNomes);
-        CustomListViewAdapter adapter = new CustomListViewAdapter(this, R.layout.list_style, listaNomes);
-        neoListView.setAdapter(adapter);
-        neoListView.setOnItemClickListener(this);
+        else {
+            for (int i = 0; i < jsonAnimes.length(); i++) {
+                JSONObject animeObject = jsonAnimes.getJSONObject(i);
+                String nomeAnime = animeObject.getString("Nome");
+                if (nomeAnime.contains(search)) {
+                    listaNomes.add(nomeAnime);
+                }
+            }
+
+            ListView neoListView = (ListView) findViewById(R.id.myAnimeList);
+            CustomListViewAdapter adapter = new CustomListViewAdapter(this, R.layout.list_style, listaNomes);
+            neoListView.setAdapter(adapter);
+            neoListView.setOnItemClickListener(this);
+        }
     }
+
 
     @Override
     public void onItemClick(AdapterView<?> parent , View v , int position , long id) {

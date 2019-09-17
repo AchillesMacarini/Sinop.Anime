@@ -81,17 +81,16 @@ public class InicioActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        MenuItem acc1 = (MenuItem) drawer.findViewById(R.id.nav_modera);
-        int isModera = sp.getInt("isModera", 0);
-        if (isModera==1){
-            acc1.setVisible(true);
-        }
-
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        int isModera = sp.getInt("isModera", 0);
+        if (isModera==0){
+            Menu menu = (Menu) navigationView.getMenu();
+            menu.findItem(R.id.nav_modera).setVisible(true);
+        }
+
         construirUsuario();
         printNavHederUser();
 
@@ -220,7 +219,7 @@ public class InicioActivity extends AppCompatActivity
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),1);
         recyclerView.setLayoutManager(layoutManager);
         ArrayList<CreateList> createLists = prepareData();
-        MyAdapter adapter = new MyAdapter(getApplicationContext(), createLists, true);
+        MyAdapter adapter = new MyAdapter(InicioActivity.this, createLists, true);
         recyclerView.setAdapter(adapter);
 
         String path = Environment.getRootDirectory().toString();
@@ -355,8 +354,7 @@ public class InicioActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
             Intent intent = new Intent(this, ConfiguracaoActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.nav_modera) {
+        }else if (id == R.id.nav_modera) {
 
 
         }else if (id == R.id.nav_send) {
