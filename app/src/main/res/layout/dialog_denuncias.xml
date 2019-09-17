@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#1d1f2d">
+
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Denuncias"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/listDenuncias"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="15px"
+        app:layout_constraintTop_toBottomOf="@id/textView7"
+        app:layout_constraintBottom_toTopOf="@id/dialogBurronOK"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="83dp" >
+    </ListView>
+
+    <Button
+        android:id="@+id/dialogBurronOK"
+        android:layout_width="104dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/switch1"
+        android:background="@color/design_default_color_primary_dark"
+        android:text=" Ok "
+        app:layout_constraintTop_toBottomOf="@id/listDenuncias"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/cardview_light_background"
+        tools:layout_editor_absoluteX="141dp"
+        tools:layout_editor_absoluteY="455dp" />
+
+</android.support.constraint.ConstraintLayout>

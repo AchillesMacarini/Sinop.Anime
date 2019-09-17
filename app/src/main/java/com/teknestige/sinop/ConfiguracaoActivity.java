@@ -42,6 +42,14 @@ public class ConfiguracaoActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        int isModera = sp.getInt("isModera", 0);
+        if (isModera==1){
+            Menu menu = (Menu) navigationView.getMenu();
+            menu.findItem(R.id.nav_modera).setVisible(true);
+        }
+
         construirUsuario();
         printNavHederUser();
     }

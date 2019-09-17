@@ -1,5 +1,7 @@
 package com.teknestige.sinop;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,6 +28,15 @@ public class NotificationSettingsActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        int isModera = sp.getInt("isModera", 0);
+        if (isModera==1){
+            Menu menu = (Menu) navigationView.getMenu();
+            menu.findItem(R.id.nav_modera).setVisible(true);
+        }
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.teknestige.sinop;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +25,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.teknestige.classes.CreateList;
@@ -84,15 +87,22 @@ public class InicioActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        construirUsuario();
+
+        View header = navigationView.getHeaderView(0);
+        TextView text = (TextView) header.findViewById(R.id.user_nick_header);
+        text.setText(usuario.getNickname());
+
+        printNavHederUser();
+
         SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
         int isModera = sp.getInt("isModera", 0);
-        if (isModera==0){
+        if (isModera==1){
             Menu menu = (Menu) navigationView.getMenu();
             menu.findItem(R.id.nav_modera).setVisible(true);
         }
 
-        construirUsuario();
-        printNavHederUser();
+
 
         try {
             jsonManchetes = bdHelper.selectAllFromMancheteNoticia(getApplicationContext());
@@ -162,6 +172,9 @@ public class InicioActivity extends AppCompatActivity
 
         if (imagem == null) {
             pedra.setImageResource(R.drawable.img2);
+            pedra.setMaxWidth(85);
+            pedra.setMaxHeight(85);
+
         } else {
             pedra.setImageBitmap(imagem);
         }
@@ -355,8 +368,26 @@ public class InicioActivity extends AppCompatActivity
             Intent intent = new Intent(this, ConfiguracaoActivity.class);
             startActivity(intent);
         }else if (id == R.id.nav_modera) {
+                // custom dialog
+                final Dialog dialog = new Dialog(this);
+                dialog.setContentView(R.layout.dialog_denuncias);
+                dialog.setTitle("Title...");
 
+                Button dialogButton = (Button) dialog.findViewById(R.id.dialogBurronOK);
 
+                ListView denunciasList = (ListView) dialog.findViewById(R.id.listDenuncias);
+
+                
+
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
         }else if (id == R.id.nav_send) {
             editor.remove("emailLogado");
             editor.remove("nickLogado");

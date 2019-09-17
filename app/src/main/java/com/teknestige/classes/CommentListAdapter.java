@@ -1,10 +1,12 @@
 package com.teknestige.classes;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.teknestige.entidades.Comment;
@@ -64,29 +66,68 @@ public class CommentListAdapter extends BaseAdapter {
 
         // TODO Auto-generated method stub
         View row = null;
-        LayoutInflater inflater = (LayoutInflater) c
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (convertView == null) {
-            row = inflater.inflate(R.layout.coment_layout_item, parent,
-                    false);
-        } else {
-            row = convertView;
-        }
 
-        final Comment comment = commentArrayList.get(position);
-        TextView conteudo = (TextView) row.findViewById(R.id.conteudoCommentView);
-        conteudo.setText(comment.getConteudo());
-        TextView email = (TextView) row.findViewById(R.id.emailCommentView);
-        email.setText(comment.getEmail());
+        LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-//        Button denunciar = (Button) row.findViewById(R.id.d);
-//        denunciar.setOnClickListener(new View.OnClickListener() {
-//        @Override
-//        public void onClick(View view) {
-//            AnimeActivity animeActivity = new AnimeActivity();
-//            animeActivity.buildAlertDialog(comment.getEmail());
+//        if(position==0){
+//
+//            if (convertView == null) {
+//                row = inflater.inflate(R.layout.create_comment_layout, parent,
+//                        false);
+//            } else {
+//                row = convertView;
+//            }
 //        }
-//    });
+//
+//        else if (position > 0) {
+            final Comment comment = commentArrayList.get(position);
+
+            if (convertView == null) {
+                row = inflater.inflate(R.layout.coment_layout_item, parent,
+                        false);
+            } else {
+                row = convertView;
+            }
+
+            final Context newCont = c;
+
+            TextView conteudo = (TextView) row.findViewById(R.id.conteudoCommentView);
+            conteudo.setText(comment.getConteudo());
+            final TextView email = (TextView) row.findViewById(R.id.emailCommentView);
+            email.setText(comment.getEmail());
+            Button denunciar = (Button) row.findViewById(R.id.denunBtn);
+            denunciar.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    final Dialog dialog = new Dialog(newCont);
+                    dialog.setContentView(R.layout.dialog_denuncia);
+                    dialog.setTitle("Title...");
+
+                    Button dialogButton = (Button) dialog.findViewById(R.id.dialogClose2);
+                    // if button is clicked, close the custom dialog
+                    dialogButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            try {
+                                bdHelper.insertIntoDenunciaComentario(c, comment.getIdCom(), comment.getEmail());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.show();
+                }
+            });
+
+
+//        }
 
         return row;
     }

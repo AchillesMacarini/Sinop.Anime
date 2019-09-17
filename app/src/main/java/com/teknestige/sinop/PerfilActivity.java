@@ -33,12 +33,17 @@ import android.widget.TextView;
 
 import com.teknestige.entidades.Usuario;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import DbControler.BDHelper;
@@ -52,7 +57,7 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
     private ImageView imageView;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
     String imgConUrl = bdHelper.returnUrl()+"ws_images_conquistas/";
-
+    ArrayList<String> jsonConquistas = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +87,13 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
 
         construirUsuario();
         printNavHederUser();
-        buildTableDyn();
+        try {
+            buildTableDyn();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         setInfoUser();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -93,6 +104,15 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        int isModera = sp.getInt("isModera", 0);
+        if (isModera==1){
+            Menu menu = (Menu) navigationView.getMenu();
+            menu.findItem(R.id.nav_modera).setVisible(true);
+        }
+
     }
 
     public void setInfoUser(){
@@ -216,15 +236,21 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 
 
-    public void buildTableDyn() {
+    public void buildTableDyn() throws IOException, JSONException {
         {
+            JSONArray jsnConquista = bdHelper.selectAllFromConquista(getApplicationContext(), getUserEmail());
+
+            for (int i=0; i < jsnConquista.length(); i++){
+                JSONObject newsObject = jsnConquista.getJSONObject(i);
+                String nomeConquista = newsObject.getString("Conquista_Nome");
+                jsonConquistas.add(nomeConquista);
+            }
 
             GridLayout gl = (GridLayout) findViewById(R.id.gridLay);
             gl.setBackgroundResource(R.color.background);
             GridLayout.LayoutParams gridParam;
             System.out.println(imgConUrl+"01.png");
-            for (int i = 0; i < 10; i++) {
-                //gridParam = new GridLayout.LayoutParams(null, colspan);
+            for (int i = 0; i < jsonConquistas.size(); i++) {
                 gl.addView(LoadImageFromWebOperations(imgConUrl+"01"+".png"));
             }
         }
@@ -247,8 +273,6 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 
     public void buildAlertDialog() {
-        //Como upar img???????????????????????
-        // custom dialog
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_edit_profile);
         dialog.setTitle("Title...");

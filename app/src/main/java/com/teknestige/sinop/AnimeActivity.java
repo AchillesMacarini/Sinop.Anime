@@ -7,9 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -77,6 +75,12 @@ public class AnimeActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        int isModera = sp.getInt("isModera", 0);
+        if (isModera==1){
+            Menu menu = (Menu) navigationView.getMenu();
+            menu.findItem(R.id.nav_modera).setVisible(true);
+        }
 
         construirUsuario();
         printNavHederUser();
@@ -133,7 +137,7 @@ public void buildComments() throws  IOException, JSONException{
     }
 
     ListView neoListView = (ListView) findViewById(R.id.comentRecycler);
-    CommentListAdapter adapter = new CommentListAdapter(getApplicationContext(), nomeClicado(), commentArray());
+    CommentListAdapter adapter = new CommentListAdapter(AnimeActivity.this, nomeClicado(), commentArray());
     neoListView.setAdapter(adapter);
 }
 

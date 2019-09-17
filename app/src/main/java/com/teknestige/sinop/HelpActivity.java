@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TableRow;
 import android.widget.Toast;
 
@@ -37,6 +38,15 @@ public class HelpActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        int isModera = sp.getInt("isModera", 0);
+        if (isModera==1){
+            Menu menu = (Menu) navigationView.getMenu();
+            menu.findItem(R.id.nav_modera).setVisible(true);
+        }
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this , drawer , toolbar , R.string.navigation_drawer_open , R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -48,11 +58,20 @@ public class HelpActivity extends AppCompatActivity
         helpRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(HelpActivity.this);
-                builder.setTitle("Teste");
-                builder.setMessage("Mensageeeem");
-                builder.setPositiveButton("Ok", null);
-                builder.create().show();
+                final Dialog dialog = new Dialog(HelpActivity.this);
+                dialog.setContentView(R.layout.dialog_send_email);
+                dialog.setTitle("Title...");
+
+                ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.close_btn);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
             }
         });
         TableRow politicasRow = findViewById(R.id.politicasRow);
@@ -116,7 +135,7 @@ public class HelpActivity extends AppCompatActivity
     }
 
 
-    public void buildAlertDialog(View v) {
+    public void buildAlertDialog() {
         //Como upar img???????????????????????
         // custom dialog
         final Dialog dialog = new Dialog(this);

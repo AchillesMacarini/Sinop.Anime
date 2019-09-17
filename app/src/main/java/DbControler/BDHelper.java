@@ -42,7 +42,8 @@ public class BDHelper {
             return null;
         }
         checkThreadPolicy();
-        URL url = new URL(URL_GLOBAL_DB + "ws_read/ws_read_moderador.php?email='"+email+"'");
+        URL url = new URL(URL_GLOBAL_DB + "ws_read/ws_read_moderador.php?email="+email);
+
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         StringBuilder sb = new StringBuilder();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -107,16 +108,24 @@ public class BDHelper {
 
         }
         checkThreadPolicy();
+        System.out.println(URL_GLOBAL_DB + "ws_insert/ws_insert_usuario_testerino.php?conteudo="+conteudo+"&email="+email);
         URL url = new URL(URL_GLOBAL_DB + "ws_insert/ws_insert_usuario_testerino.php?conteudo="+conteudo+"&email="+email);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String response = bufferedReader.readLine();
-        if (response.equals("false")) {
+    }
 
-        } else {
+    public void insertIntoDenunciaComentario(Context context, String cod, String email) throws JSONException, IOException {
+        if (!checkNetworkConnection(context)) {
 
         }
+        checkThreadPolicy();
+        URL url = new URL(URL_GLOBAL_DB + "ws_insert/ws_insert_denuncia_comentario.php?email="+email+"&cod="+cod);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String response = bufferedReader.readLine();
     }
+
 
     public JSONArray selectAllFromTesterino(Context context, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
@@ -188,6 +197,25 @@ public class BDHelper {
         JSONArray jsonArray = new JSONArray(sb.toString().trim());
         return jsonArray;
     }
+
+
+    public JSONArray selectAllFromConquista(Context context, String email) throws JSONException, IOException {
+        if (!checkNetworkConnection(context)) {
+            return null;
+        }
+        checkThreadPolicy();
+        URL url = new URL(URL_GLOBAL_DB + "/ws_read/ws_read_conquista.php?email="+email);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        StringBuilder sb = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String json;
+        while ((json = bufferedReader.readLine()) != null) {
+            sb.append(json + "\n");
+        }
+        JSONArray jsonArray = new JSONArray(sb.toString().trim());
+        return jsonArray;
+    }
+
 
     public JSONArray selectAllFromComentario(Context context, String anime) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {

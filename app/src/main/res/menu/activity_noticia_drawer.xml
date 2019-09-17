@@ -25,6 +25,12 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Meus animes" />
+        <item
+            android:id="@+id/nav_modera"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Denuncias"
+            android:visible="false"/>
+
     </group>
 
     <item android:title="Communicate">

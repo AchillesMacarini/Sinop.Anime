@@ -18,6 +18,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -63,6 +64,15 @@ public class ResultadoActivity  extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        int isModera = sp.getInt("isModera", 0);
+        if (isModera==1){
+            Menu menu = (Menu) navigationView.getMenu();
+            menu.findItem(R.id.nav_modera).setVisible(true);
+        }
+
         construirUsuario();
         printNavHederUser();
 
@@ -261,7 +271,7 @@ public class ResultadoActivity  extends AppCompatActivity
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),1);
         recyclerView.setLayoutManager(layoutManager);
 //        ArrayList<CreateList> createLists = prepareData();
-        MyAdapter adapter = new MyAdapter(getApplicationContext(), rowItems, false);
+        MyAdapter adapter = new MyAdapter(ResultadoActivity.this, rowItems, false);
         recyclerView.setAdapter(adapter);
 
         String path = Environment.getRootDirectory().toString();
