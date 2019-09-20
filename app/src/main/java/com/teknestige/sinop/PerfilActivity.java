@@ -387,13 +387,9 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     }
 
-    public String getUserEmail() {
-        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
-        String emailName = sp.getString("emailLogado",null);
-        return emailName;
-    }
-
     public void printNavHederUser(){
+        construirUsuario();
+
         nickNavHeaderUser();
         emailNavHeaderUser();
     }
@@ -411,11 +407,23 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (imagem == null) {
             pedra.setImageResource(R.drawable.img2);
+            pedra.setMinimumWidth(105);
+            pedra.setMinimumHeight(105);
+            pedra.setMaxWidth(105);
+            pedra.setMaxHeight(105);
+
         } else {
             pedra.setImageBitmap(imagem);
+            pedra.setMinimumWidth(105);
+            pedra.setMinimumHeight(105);
+            pedra.setMaxWidth(105);
+            pedra.setMaxHeight(105);
+
         }
 
+
     }
+
 
     public Bitmap LoadImageFromWebUser(String url) {
         try {
@@ -433,13 +441,20 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         }
     }
 
-
     public void emailNavHeaderUser(){
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         TextView text = (TextView) header.findViewById(R.id.user_email_header);
         text.setText(usuario.getEmail().toLowerCase());
     }
+
+
+    public String getUserEmail() {
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        String emailName = sp.getString("emailLogado",null);
+        return emailName;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

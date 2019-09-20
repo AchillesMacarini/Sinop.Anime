@@ -15,7 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class BDHelper {
-    public static String URL_GLOBAL_DB = "http://10.21.80.199/ws_otaku/";
+    public static String URL_GLOBAL_DB = "http://192.168.1.22/ws_otaku/";
 
     public JSONArray selectUserInfo(Context context, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
@@ -115,12 +115,15 @@ public class BDHelper {
         String response = bufferedReader.readLine();
     }
 
+
+
     public void insertIntoDenunciaComentario(Context context, String cod, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
 
         }
         checkThreadPolicy();
         URL url = new URL(URL_GLOBAL_DB + "ws_insert/ws_insert_denuncia_comentario.php?email="+email+"&cod="+cod);
+        System.out.println(URL_GLOBAL_DB + "ws_insert/ws_insert_denuncia_comentario.php?email="+email+"&comentario="+cod);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String response = bufferedReader.readLine();

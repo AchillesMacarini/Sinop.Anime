@@ -172,11 +172,18 @@ public class InicioActivity extends AppCompatActivity
 
         if (imagem == null) {
             pedra.setImageResource(R.drawable.img2);
-            pedra.setMaxWidth(85);
-            pedra.setMaxHeight(85);
+            pedra.setMinimumWidth(105);
+            pedra.setMinimumHeight(105);
+            pedra.setMaxWidth(105);
+            pedra.setMaxHeight(105);
 
         } else {
             pedra.setImageBitmap(imagem);
+            pedra.setMinimumWidth(105);
+            pedra.setMinimumHeight(105);
+            pedra.setMaxWidth(105);
+            pedra.setMaxHeight(105);
+
         }
 
     }

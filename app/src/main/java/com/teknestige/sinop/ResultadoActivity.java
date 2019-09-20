@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.teknestige.classes.CreateList;
@@ -35,6 +38,9 @@ import org.tartarus.snowball.ext.portugueseStemmer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import DbControler.BDHelper;
@@ -306,13 +312,9 @@ public class ResultadoActivity  extends AppCompatActivity
         new ItemTouchHelper(itemTouchHelperCallback1).attachToRecyclerView(recyclerView);
     }
 
-    public String getUserEmail() {
-        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
-        String emailName = sp.getString("emailLogado",null);
-        return emailName;
-    }
-
     public void printNavHederUser(){
+        construirUsuario();
+
         nickNavHeaderUser();
         emailNavHeaderUser();
     }
@@ -322,6 +324,46 @@ public class ResultadoActivity  extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
         TextView text = (TextView) header.findViewById(R.id.user_nick_header);
         text.setText(usuario.getNickname());
+
+        String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
+
+        ImageView pedra = (ImageView) header.findViewById(R.id.imageUserProfile);
+        Bitmap imagem = LoadImageFromWebUser(imgUserUrl+getUserEmail()+".png");
+
+        if (imagem == null) {
+            pedra.setImageResource(R.drawable.img2);
+            pedra.setMinimumWidth(105);
+            pedra.setMinimumHeight(105);
+            pedra.setMaxWidth(105);
+            pedra.setMaxHeight(105);
+
+        } else {
+            pedra.setImageBitmap(imagem);
+            pedra.setMinimumWidth(105);
+            pedra.setMinimumHeight(105);
+            pedra.setMaxWidth(105);
+            pedra.setMaxHeight(105);
+
+        }
+
+
+    }
+
+
+    public Bitmap LoadImageFromWebUser(String url) {
+        try {
+
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            ImageView i = new ImageView(this);
+            i.setImageBitmap(bitmap);
+            return bitmap;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void emailNavHeaderUser(){
@@ -332,6 +374,11 @@ public class ResultadoActivity  extends AppCompatActivity
     }
 
 
+    public String getUserEmail() {
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        String emailName = sp.getString("emailLogado",null);
+        return emailName;
+    }
 
 
     @Override

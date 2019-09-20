@@ -91,43 +91,85 @@ public class ListaAnimesActivity extends AppCompatActivity
         }
     }
 
-    public void construirUsuario() {
-        SharedPreferences sp = getSharedPreferences("dadosCompartilhados" , Context.MODE_PRIVATE);
-        String emailUser = sp.getString("emailLogado" , null);
-        usuario.setEmail(emailUser);
-        String nickUser = sp.getString("nickLogado" , null);
-        usuario.setNickname(nickUser);
-        String biographUser = sp.getString("biographLogado" , null);
-        usuario.setBiograph(biographUser);
-        String dateUser = sp.getString("dateLogado" , null);
-        usuario.setDataCadastro(dateUser);
-        String qntUser = sp.getString("qntLogado" , null);
-        usuario.setQtdTags(Integer.valueOf(String.valueOf(qntUser)));
-    }
+    public void printNavHederUser(){
+        construirUsuario();
 
-    public String getUserEmail() {
-        SharedPreferences sp = getSharedPreferences("dadosCompartilhados" , Context.MODE_PRIVATE);
-        String emailName = sp.getString("emailLogado" , null);
-        return emailName;
-    }
-
-    public void printNavHederUser() {
         nickNavHeaderUser();
         emailNavHeaderUser();
     }
 
-    public void nickNavHeaderUser() {
+    public void nickNavHeaderUser(){
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         TextView text = (TextView) header.findViewById(R.id.user_nick_header);
         text.setText(usuario.getNickname());
+
+        String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
+
+        ImageView pedra = (ImageView) header.findViewById(R.id.imageUserProfile);
+        Bitmap imagem = LoadImageFromWebUser(imgUserUrl+getUserEmail()+".png");
+
+        if (imagem == null) {
+            pedra.setImageResource(R.drawable.img2);
+            pedra.setMinimumWidth(105);
+            pedra.setMinimumHeight(105);
+            pedra.setMaxWidth(105);
+            pedra.setMaxHeight(105);
+
+        } else {
+            pedra.setImageBitmap(imagem);
+            pedra.setMinimumWidth(105);
+            pedra.setMinimumHeight(105);
+            pedra.setMaxWidth(105);
+            pedra.setMaxHeight(105);
+
+        }
+
+
     }
 
-    public void emailNavHeaderUser() {
+
+    public Bitmap LoadImageFromWebUser(String url) {
+        try {
+
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            ImageView i = new ImageView(this);
+            i.setImageBitmap(bitmap);
+            return bitmap;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void emailNavHeaderUser(){
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         TextView text = (TextView) header.findViewById(R.id.user_email_header);
         text.setText(usuario.getEmail().toLowerCase());
+    }
+
+    public void construirUsuario(){
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        String emailUser = sp.getString("emailLogado",null);
+        usuario.setEmail(emailUser);
+        String nickUser = sp.getString("nickLogado",null);
+        usuario.setNickname(nickUser);
+        String biographUser = sp.getString("biographLogado",null);
+        usuario.setBiograph(biographUser);
+        String dateUser = sp.getString("dateLogado",null);
+        usuario.setDataCadastro(dateUser);
+        String qntUser = sp.getString("qntLogado",null);
+        usuario.setQtdTags(Integer.valueOf(String.valueOf(qntUser)));
+    }
+
+    public String getUserEmail() {
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        String emailName = sp.getString("emailLogado",null);
+        return emailName;
     }
 
     @Override

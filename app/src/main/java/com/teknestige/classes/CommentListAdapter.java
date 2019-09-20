@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.teknestige.entidades.Comment;
+import com.teknestige.sinop.AnimeActivity;
 import com.teknestige.sinop.R;
 
 import org.json.JSONException;
@@ -90,11 +91,13 @@ public class CommentListAdapter extends BaseAdapter {
             }
 
             final Context newCont = c;
-
+        final AnimeActivity animeActivity = new AnimeActivity();
             TextView conteudo = (TextView) row.findViewById(R.id.conteudoCommentView);
             conteudo.setText(comment.getConteudo());
             final TextView email = (TextView) row.findViewById(R.id.emailCommentView);
             email.setText(comment.getEmail());
+            final String getEmail = comment.getEmail();
+            final String getId = comment.getIdCom();
             Button denunciar = (Button) row.findViewById(R.id.denunBtn);
             denunciar.setOnClickListener(new View.OnClickListener() {
 
@@ -109,15 +112,14 @@ public class CommentListAdapter extends BaseAdapter {
                     dialogButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
-                            try {
-                                bdHelper.insertIntoDenunciaComentario(c, comment.getIdCom(), comment.getEmail());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
+                        animeActivity.denunciar(newCont,getId, getEmail);
+//                            try {
+//                                bdHelper.insertIntoDenunciaComentario(newCont, getId, getEmail);
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
                             dialog.dismiss();
                         }
                     });

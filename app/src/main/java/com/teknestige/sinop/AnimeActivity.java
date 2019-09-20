@@ -12,13 +12,17 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -136,6 +140,9 @@ public void buildComments() throws  IOException, JSONException{
         coments.add(coment);
     }
 
+
+
+
     ListView neoListView = (ListView) findViewById(R.id.comentRecycler);
     CommentListAdapter adapter = new CommentListAdapter(AnimeActivity.this, nomeClicado(), commentArray());
     neoListView.setAdapter(adapter);
@@ -217,8 +224,17 @@ public void buildComments() throws  IOException, JSONException{
         TextView episoView = (TextView)findViewById(R.id.numEpView);
         episoView.setText(String.valueOf(animes.getNum_ep()) + " episódios");
 
-        TextView sinopseView = (TextView)findViewById(R.id.sinopseView);
-        sinopseView.setText(animes.getSinopse());
+        WebView sinopseView = (WebView) findViewById(R.id.sinopseView);
+
+        String text = "<html><body>"
+                + "<p align=\"justify\"" +
+                "style=\"color:white\">"
+                + "<body style=\"background-color:#1d1f2d;\">"
+                + animes.getSinopse()
+                + "</p> "
+                + "</body></html>";
+
+        sinopseView.loadData(text, "text/html", "utf-8");
         System.out.println("olha aqui " + imgWideUrl+(returnIdImg(animes.getNome()))+".png");
 
         ImageView animeMain = findViewById(R.id.animeMain);
@@ -274,6 +290,8 @@ public void buildComments() throws  IOException, JSONException{
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Intent intent = new Intent(this, ListaAnimesActivity.class);
+            startActivity(intent);
             super.onBackPressed();
 
 
@@ -297,6 +315,18 @@ public void buildComments() throws  IOException, JSONException{
         SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
         String emailName = sp.getString("emailLogado",null);
         return emailName;
+    }
+
+
+    public void denunciar (Context context, String id, String email) {
+        try {
+            bdHelper.insertIntoDenunciaComentario(context, id, email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void buildAlertDialog(String email) {
@@ -364,15 +394,45 @@ public void buildComments() throws  IOException, JSONException{
         TextView text = (TextView) header.findViewById(R.id.user_nick_header);
         text.setText(usuario.getNickname());
 
+        String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
+
         ImageView pedra = (ImageView) header.findViewById(R.id.imageUserProfile);
-        Bitmap imagem = LoadImageFromWebOperations(imgUserUrl+getUserEmail()+".png");
+        Bitmap imagem = LoadImageFromWebUser(imgUserUrl+getUserEmail()+".png");
 
         if (imagem == null) {
             pedra.setImageResource(R.drawable.img2);
+            pedra.setMinimumWidth(105);
+            pedra.setMinimumHeight(105);
+            pedra.setMaxWidth(105);
+            pedra.setMaxHeight(105);
+
         } else {
             pedra.setImageBitmap(imagem);
+            pedra.setMinimumWidth(105);
+            pedra.setMinimumHeight(105);
+            pedra.setMaxWidth(105);
+            pedra.setMaxHeight(105);
+
         }
 
+
+    }
+
+
+    public Bitmap LoadImageFromWebUser(String url) {
+        try {
+
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            ImageView i = new ImageView(this);
+            i.setImageBitmap(bitmap);
+            return bitmap;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void emailNavHeaderUser(){
