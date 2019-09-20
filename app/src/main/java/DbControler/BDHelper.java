@@ -11,8 +11,10 @@ import org.json.JSONException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 public class BDHelper {
@@ -38,6 +40,27 @@ public class BDHelper {
         return URL_GLOBAL_DB;
     }
 
+    //
+
+    public JSONArray selectTagComent(Context context, String email) throws JSONException, IOException {
+        if (!checkNetworkConnection(context)) {
+            return null;
+        }
+        checkThreadPolicy();
+        URL url = new URL(URL_GLOBAL_DB + "ws_read/selects_tag_coment.php?email="+email);
+
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        StringBuilder sb = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String json;
+        while ((json = bufferedReader.readLine()) != null) {
+            sb.append(json + "\n");
+        }
+        JSONArray jsonArray = new JSONArray(sb.toString().trim());
+        return jsonArray;
+    }
+
+
     public JSONArray selectModerador(Context context, String email) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
             return null;
@@ -56,7 +79,27 @@ public class BDHelper {
         return jsonArray;
     }
 
+    public JSONArray selectModeradorNoticia(Context context, String manchete) throws JSONException, IOException {
+        if (!checkNetworkConnection(context)) {
+            return null;
+        }
+        checkThreadPolicy();
 
+        String result = "";
+            result = URL_GLOBAL_DB + "ws_read/ws_read_moderador_noticia.php?manchete="+manchete.replace(" ", "%20");
+        System.out.println(result);
+        URL url = new URL(result);
+
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        StringBuilder sb = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String json;
+        while ((json = bufferedReader.readLine()) != null) {
+            sb.append(json + "\n");
+        }
+        JSONArray jsonArray = new JSONArray(sb.toString().trim());
+        return jsonArray;
+    }
 
     public void goforIt(Context context, String hexadecimal)throws JSONException, IOException{
         if (!checkNetworkConnection(context)) {
@@ -86,6 +129,7 @@ public class BDHelper {
 
         }
     }
+
 
 
 

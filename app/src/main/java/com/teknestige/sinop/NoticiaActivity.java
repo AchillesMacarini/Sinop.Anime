@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -200,13 +201,50 @@ public class NoticiaActivity extends AppCompatActivity
             }
         }
 
-        TextView titulo = (TextView) findViewById(R.id.tituloView);
-        titulo.setText(noticia.getManchete());
-        TextView conteudo = (TextView) findViewById(R.id.conteudoView);
-        conteudo.setText(noticia.getConteudo());
-        TextView data = (TextView) findViewById(R.id.dataView);
-        data.setText(noticia.getData());
+        JSONArray jsons = bdHelper.selectAllFromUser(getApplicationContext());
+        JSONArray jsonModeras = bdHelper.selectModeradorNoticia(getApplicationContext(), noticia.getManchete());
+        String moderadores = "";
+        for (int i = 0; i < jsonModeras.length(); i++) {
+            JSONObject newsObject = jsonModeras.getJSONObject(i);
+            String moderador = newsObject.getString("Moderador_Usuario_Email");
+            for (int j = 0; j < jsons.length(); j++) {
+                JSONObject userObject = (JSONObject) jsons.get(j);
+                String emailUser = userObject.getString("Email");
+                String nickUser = userObject.getString("Nickname");
+                if (emailUser.equals(moderador)) {
+                    moderadores = nickUser;
+                }
+            }
+        }
 
+            WebView sinopseView = (WebView) findViewById(R.id.tituloWebView);
+
+        String text = "<html>\n" +
+                "<body style=\"background-color:#1d1f2d;\">\n" +
+                "\n" +
+                "<h5 style=\"font-family:Arial; color:gray\"> Por: "+ moderadores + " - " +  noticia.getData() + "</h5>\n" +
+                "</n>\n" +
+                "<h1 align=\"justify\" style=\"font-family:Verdana; color:white\"><b>"+ noticia.getManchete().toUpperCase() +"</b></h1>\n" +
+                "\n" +
+                "\n" +
+                "<hr align=\"center\" width=\"100%\" size=\"1\" color=red>\n" +
+                "</body>\n" +
+                "</html>";
+
+        sinopseView.loadData(text, "text/html", "utf-8");
+
+
+        WebView conteudoView = (WebView) findViewById(R.id.conteudoView);
+
+        String text2 = "<html><body>"
+                + "<p align=\"justify\"" +
+                "style=\"font-family:Arial; color:white\">"
+                + "<body style=\"background-color:#1d1f2d;\">"
+                + noticia.getConteudo()
+                + "</p> "
+                + "</body></html>";
+
+        conteudoView.loadData(text2, "text/html", "utf-8");
 
     }
 

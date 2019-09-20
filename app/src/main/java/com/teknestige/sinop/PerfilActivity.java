@@ -96,7 +96,13 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        setInfoUser();
+        try {
+            setInfoUser();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -117,13 +123,13 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
 
     }
 
-    public void setInfoUser(){
+    public void setInfoUser() throws IOException, JSONException {
 
         ImageView pedra = (ImageView) findViewById(R.id.prophoto);
 
-        String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
+        String imgUserUrl = bdHelper.returnUrl() + "ws_images_users/";
 
-        Bitmap imagem = LoadImageFromWebUser(imgUserUrl+getUserEmail()+".png");
+        Bitmap imagem = LoadImageFromWebUser(imgUserUrl + getUserEmail() + ".png");
 
         if (imagem == null) {
             pedra.setImageResource(R.drawable.img2);
@@ -141,8 +147,28 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
         nickname.setText(usuario.getNickname());
         biogra.setText(usuario.getBiograph());
         especialization.setText("Moderador");
-        tagCount.setText("14");
-        comCount.setText("1");
+
+        ArrayList<String> tags = new ArrayList<>();
+        ArrayList<String> comments = new ArrayList<>();
+
+        JSONArray tagsJson = bdHelper.selectTagComent(getApplicationContext() , usuario.getEmail());
+
+        for (int i = 0; i < tagsJson.length(); i++) {
+            JSONObject animeObject = tagsJson.getJSONObject(i);
+            String tag = animeObject.getString("tags");
+            tags.add(tag);
+
+            String com = animeObject.getString("coment");
+            comments.add(com);
+
+        }
+
+        tagCount.setText(tags.get(0) + " TAGS");
+        if (Integer.valueOf(comments.get(0)) == 1) {
+            comCount.setText(comments.get(0) + " COMENTÁRIO");
+        } else {
+            comCount.setText(comments.get(0) + " COMENTÁRIOS");
+        }
     }
 
     @Override

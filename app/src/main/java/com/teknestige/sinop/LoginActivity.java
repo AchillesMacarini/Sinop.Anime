@@ -102,15 +102,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //        backgroundPainter.animate(targetView, color1, color2);
 
 
-        View backgroundImage = findViewById(R.id.root_layout);
-
-        final int[] drawables = new int[3];
-        drawables[0] = R.drawable.gradient_1;
-        drawables[1] = R.drawable.gradient_2;
-        drawables[2] = R.drawable.gradient_3;
-
-        gradientBackgroundPainter = new GradientBackgroundPainter(backgroundImage, drawables);
-        gradientBackgroundPainter.start();
+//        View backgroundImage = findViewById(R.id.root_layout);
+//
+//        final int[] drawables = new int[3];
+//        drawables[0] = R.drawable.gradient_1;
+//        drawables[1] = R.drawable.gradient_2;
+//        drawables[2] = R.drawable.gradient_3;
+//
+//        gradientBackgroundPainter = new GradientBackgroundPainter(backgroundImage, drawables);
+//        gradientBackgroundPainter.start();
     }
 
     @Override
