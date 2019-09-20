@@ -1,5 +1,6 @@
 package com.teknestige.sinop;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -237,6 +239,9 @@ public class ListaAnimesActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
         if (id == R.id.nav_inicio) {
             Intent intent = new Intent(this, InicioActivity.class);
             startActivity(intent);
@@ -252,16 +257,35 @@ public class ListaAnimesActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
             Intent intent = new Intent(this, ConfiguracaoActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_send) {
-            SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sp.edit();
+        }else if (id == R.id.nav_modera) {
+            // custom dialog
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.dialog_denuncias);
+            dialog.setTitle("Title...");
+
+            Button dialogButton = (Button) dialog.findViewById(R.id.dialogBurronOK);
+
+            ListView denunciasList = (ListView) dialog.findViewById(R.id.listDenuncias);
+
+
+
+            // if button is clicked, close the custom dialog
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        }else if (id == R.id.nav_send) {
             editor.remove("emailLogado");
             editor.remove("nickLogado");
             editor.remove("biographLogado");
             editor.remove("dateLogado");
             editor.remove("qntLogado");
+            editor.remove("isModera");
             editor.apply();
-
 
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);

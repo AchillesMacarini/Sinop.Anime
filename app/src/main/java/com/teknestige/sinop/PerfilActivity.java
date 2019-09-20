@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.teknestige.entidades.Usuario;
@@ -55,6 +56,7 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
     private Uri mImageCaptureUri;
     private static final int CAMERA_REQUEST = 1888;
     private ImageView imageView;
+    JSONArray jsonImagesCon = new JSONArray();
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
     String imgConUrl = bdHelper.returnUrl()+"ws_images_conquistas/";
     ArrayList<String> jsonConquistas = new ArrayList<String>();
@@ -116,6 +118,20 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
     }
 
     public void setInfoUser(){
+
+        ImageView pedra = (ImageView) findViewById(R.id.prophoto);
+
+        String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
+
+        Bitmap imagem = LoadImageFromWebUser(imgUserUrl+getUserEmail()+".png");
+
+        if (imagem == null) {
+            pedra.setImageResource(R.drawable.img2);
+        } else {
+            pedra.setImageBitmap(imagem);
+        }
+
+
         TextView nickname = (TextView) findViewById(R.id.nickname_edit);
         TextView biogra = (TextView) findViewById(R.id.biography_edit);
         TextView especialization = (TextView) findViewById(R.id.especialization);
@@ -180,6 +196,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
     ImageView image = (ImageView) findViewById(R.id.prophoto);
+
         if (resultCode == RESULT_OK){
         Uri targetUri = data.getData();
         Bitmap bitmap;
@@ -194,31 +211,6 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         }
         }
         }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), inImage, UUID.randomUUID().toString() + ".png", "drawing");
-        return Uri.parse(path);
-    }
-
-    public byte[] imageToByte(ImageView imageView) {
-    Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.JPEG , 100 , baos);
-    byte[] imageInByte = baos.toByteArray();
-    return imageInByte;
-}
-
-    private static String bytesToHex(byte[] hashInBytes) {
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < hashInBytes.length; i++) {
-            sb.append(Integer.toString((hashInBytes[i] & 0xff) + 0x100, 16).substring(1));
-        }
-        return sb.toString();
-
-    }
 
 
     public void construirUsuario(){
@@ -239,19 +231,34 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     public void buildTableDyn() throws IOException, JSONException {
         {
             JSONArray jsnConquista = bdHelper.selectAllFromConquista(getApplicationContext(), getUserEmail());
+            jsonImagesCon = bdHelper.selectAllFromConquistaImagem(getApplicationContext());
+            ArrayList<String> newImgs = new ArrayList<String>();
 
             for (int i=0; i < jsnConquista.length(); i++){
                 JSONObject newsObject = jsnConquista.getJSONObject(i);
+
                 String nomeConquista = newsObject.getString("Conquista_Nome");
+
                 jsonConquistas.add(nomeConquista);
+
+                for (int j=0; j<jsonImagesCon.length(); j++) {
+                    JSONObject imgObject = jsonImagesCon.getJSONObject(j);
+                    String verificaConquista = imgObject.getString("Nome");
+                    String idConquista = imgObject.getString("conquista_imagem");
+
+                    if (nomeConquista.equals(verificaConquista)) {
+                        newImgs.add(idConquista);
+                    }
+                }
             }
+
 
             GridLayout gl = (GridLayout) findViewById(R.id.gridLay);
             gl.setBackgroundResource(R.color.background);
             GridLayout.LayoutParams gridParam;
             System.out.println(imgConUrl+"01.png");
             for (int i = 0; i < jsonConquistas.size(); i++) {
-                gl.addView(LoadImageFromWebOperations(imgConUrl+"01"+".png"));
+                gl.addView(LoadImageFromWebOperations(imgConUrl+newImgs.get(i)+".png"));
             }
         }
     }
@@ -484,6 +491,9 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
         if (id == R.id.nav_inicio) {
             Intent intent = new Intent(this, InicioActivity.class);
             startActivity(intent);
@@ -497,18 +507,37 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             Intent intent = new Intent(this, ListaNoticiasActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_manage) {
-            Intent intent = new Intent(this, ListaAnimesActivity.class);
+            Intent intent = new Intent(this, ConfiguracaoActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_send) {
-            SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sp.edit();
+        }else if (id == R.id.nav_modera) {
+            // custom dialog
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.dialog_denuncias);
+            dialog.setTitle("Title...");
+
+            Button dialogButton = (Button) dialog.findViewById(R.id.dialogBurronOK);
+
+            ListView denunciasList = (ListView) dialog.findViewById(R.id.listDenuncias);
+
+
+
+            // if button is clicked, close the custom dialog
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        }else if (id == R.id.nav_send) {
             editor.remove("emailLogado");
             editor.remove("nickLogado");
             editor.remove("biographLogado");
             editor.remove("dateLogado");
             editor.remove("qntLogado");
+            editor.remove("isModera");
             editor.apply();
-
 
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);

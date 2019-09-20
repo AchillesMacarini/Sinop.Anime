@@ -1,6 +1,8 @@
 package com.teknestige.sinop;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,7 +16,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.teknestige.entidades.Usuario;
@@ -177,21 +181,59 @@ public class NotificationSettingsActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
+        SharedPreferences sp = getSharedPreferences("dadosCompartilhados", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        if (id == R.id.nav_inicio) {
+            Intent intent = new Intent(this, InicioActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.nav_camera) {
+            Intent intent = new Intent(this, PerfilActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
-
+            Intent intent = new Intent(this, ListaAnimesActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
+            Intent intent = new Intent(this, ListaNoticiasActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_manage) {
+            Intent intent = new Intent(this, ConfiguracaoActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.nav_modera) {
+            // custom dialog
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.dialog_denuncias);
+            dialog.setTitle("Title...");
 
-        } else if (id == R.id.nav_tools) {
+            Button dialogButton = (Button) dialog.findViewById(R.id.dialogBurronOK);
 
-        } else if (id == R.id.nav_share) {
+            ListView denunciasList = (ListView) dialog.findViewById(R.id.listDenuncias);
 
-        } else if (id == R.id.nav_send) {
 
+
+            // if button is clicked, close the custom dialog
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        }else if (id == R.id.nav_send) {
+            editor.remove("emailLogado");
+            editor.remove("nickLogado");
+            editor.remove("biographLogado");
+            editor.remove("dateLogado");
+            editor.remove("qntLogado");
+            editor.remove("isModera");
+            editor.apply();
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

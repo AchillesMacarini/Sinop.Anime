@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class BDHelper {
     public static String URL_GLOBAL_DB = "http://192.168.1.22/ws_otaku/";
@@ -219,6 +220,24 @@ public class BDHelper {
         return jsonArray;
     }
 
+
+
+    public JSONArray selectAllFromConquistaImagem(Context context) throws JSONException, IOException {
+        if (!checkNetworkConnection(context)) {
+            return null;
+        }
+        checkThreadPolicy();
+        URL url = new URL(URL_GLOBAL_DB + "ws_read/ws_read_conquistas_nome.php");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        StringBuilder sb = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String json;
+        while ((json = bufferedReader.readLine()) != null) {
+            sb.append(json + "\n");
+        }
+        JSONArray jsonArray = new JSONArray(sb.toString().trim());
+        return jsonArray;
+    }
 
     public JSONArray selectAllFromComentario(Context context, String anime) throws JSONException, IOException {
         if (!checkNetworkConnection(context)) {
