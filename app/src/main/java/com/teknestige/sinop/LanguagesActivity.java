@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -61,6 +62,16 @@ public class LanguagesActivity extends AppCompatActivity
 
     printNavHederUser();
 
+        WebView ptBr = (WebView) findViewById(R.id.ptBr);
+        String html = "<html>\n" +
+                "\n" +
+                "<body style=\"background-color:#1d1f2d\">\n" +
+                "<h2 align=\"center\" style=\"font-family:Arial; line-height: 1px; color:white\">POR</h2>\n" +
+                "<h4 align=\"center\" style=\"font-family:Arial; color:white; line-height: 1px; \">PTB2</h4>\n" +
+                "</body>\n" +
+                "\n" +
+                "</html>\n";
+        ptBr.loadData(html, "text/html", "utf-8");
     }
 
     public void printNavHederUser(){

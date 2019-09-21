@@ -1,8 +1,10 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:innerRadius="0dp"
-    android:shape="oval"
+    android:shape="ring"
     android:thicknessRatio="1.9"
-    android:useLevel="false" >
+    android:useLevel="false"
+    android:background="@android:color/background_light"
+    >
     <solid android:color="@android:color/transparent" />
 
     <stroke

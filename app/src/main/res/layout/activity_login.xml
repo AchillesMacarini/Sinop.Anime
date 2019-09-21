@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/backgrouns_login"
+    android:scaleType="centerCrop"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
@@ -13,13 +14,14 @@
         android:id="@+id/button4"
         android:layout_width="324dp"
         android:layout_height="47dp"
-        android:layout_marginTop="47dp"
+        android:layout_marginTop="44dp"
         android:background="#3e3565"
         android:onClick="logar"
         android:text="LOGIN"
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
@@ -29,7 +31,6 @@
         android:layout_height="45dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="36dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:background="@color/item_name"
@@ -37,31 +38,36 @@
         android:text="CADASTRAR-SE"
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.552"
+        app:layout_constraintHorizontal_bias="0.54"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintTop_toBottomOf="@+id/button4"
+        app:layout_constraintVertical_bias="0.043" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="344dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="230dp"
         android:layout_marginRight="15dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.241">
 
         <EditText
             android:id="@+id/email"
             android:layout_width="fill_parent"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:layout_marginBottom="3dp"
-            android:background="@android:color/transparent"
-            android:drawableLeft="@drawable/mailicon"
-            android:drawablePadding="3dp"
+            android:background="@drawable/rounded_corner"
+            android:drawableLeft="@drawable/background_drawableleft"
+            android:drawablePadding="10dp"
             android:ems="10"
             android:hint="@string/prompt_email"
             android:inputType="textEmailAddress"
@@ -76,16 +82,18 @@
         <EditText
             android:id="@+id/password"
             android:layout_width="fill_parent"
-            android:layout_height="70dp"
-            android:background="@android:color/transparent"
+            android:layout_height="50dp"
+            android:background="@drawable/rounded_corner"
+            android:drawableLeft="@drawable/background_passleft"
+            android:drawablePadding="10dp"
             android:ems="10"
             android:hint="@string/prompt_password"
             android:inputType="textPassword"
-            android:textSize="18sp"
             android:textColor="@android:color/background_light"
             android:textColorHighlight="@color/design_default_color_primary_dark"
             android:textColorHint="@android:color/darker_gray"
-            android:textColorLink="@color/design_default_color_primary_dark" />
+            android:textColorLink="@color/design_default_color_primary_dark"
+            android:textSize="18sp" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -75,7 +75,7 @@ public class HelpActivity extends AppCompatActivity
                 dialog.setContentView(R.layout.dialog_send_email);
                 dialog.setTitle("Title...");
 
-                ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.close_btn);
+                Button dialogButton = (Button) dialog.findViewById(R.id.dialogProfileOK);
                 // if button is clicked, close the custom dialog
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -94,6 +94,7 @@ public class AnimeActivity extends AppCompatActivity
             construirAnime();
             settarAnimeView();
             buildComments();
+            setCommentView();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -226,13 +227,21 @@ public void buildComments() throws  IOException, JSONException{
 
         WebView sinopseView = (WebView) findViewById(R.id.sinopseView);
 
-        String text = "<html><body>"
-                + "<p align=\"justify\"" +
-                "style=\"color:white\">"
-                + "<body style=\"background-color:#1d1f2d;\">"
-                + animes.getSinopse()
-                + "</p> "
-                + "</body></html>";
+        String text = "<html>\n" +
+                "\n" +
+                "<body align=\"center\" style=\"background-color:#1d1f2d \">\n" +
+                "<div style=\"position: absolute;\n" +
+                "    top: 50%;\n" +
+                "    left: 50%;\n" +
+                "    -moz-transform: translateX(-50%) translateY(-50%);\n" +
+                "    -webkit-transform: translateX(-50%) translateY(-50%);\n" +
+                "    transform: translateX(-50%) translateY(-50%);\">\n" +
+                "<h2 align=\"center\" style=\";font-family:Arial; line-height: 1px; color:white \">POR</h2>\n" +
+                "<h4 align=\"center\" style=\"font-family:Arial; color:white; line-height: 1px; \">PTB2</h4>\n" +
+                "</div>\n" +
+                "</body>\n" +
+                "\n" +
+                "</html>\n";
 
         sinopseView.loadData(text, "text/html", "utf-8");
         System.out.println("olha aqui " + imgWideUrl+(returnIdImg(animes.getNome()))+".png");
@@ -351,6 +360,22 @@ public void buildComments() throws  IOException, JSONException{
         });
 
         dialog.show();
+
+    }
+
+    public void setCommentView (){
+        String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
+
+        ImageView pedra = findViewById(R.id.imageView7);
+        Bitmap imagem = LoadImageFromWebUser(imgUserUrl+getUserEmail()+".png");
+
+        if (imagem != null) {
+            pedra.setImageBitmap(imagem);
+            pedra.setMinimumWidth(85);
+            pedra.setMinimumHeight(85);
+            pedra.setMaxWidth(85);
+            pedra.setMaxHeight(85);
+        }
 
     }
 
