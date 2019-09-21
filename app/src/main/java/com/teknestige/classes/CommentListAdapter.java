@@ -2,20 +2,30 @@ package com.teknestige.classes;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.teknestige.entidades.Anime;
 import com.teknestige.entidades.Comment;
 import com.teknestige.sinop.AnimeActivity;
 import com.teknestige.sinop.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import DbControler.BDHelper;
@@ -26,7 +36,12 @@ public class CommentListAdapter extends BaseAdapter {
     ArrayList<Comment> commentArrayList;
     Context c;
     String anime;
-    BDHelper bdHelper;
+    BDHelper bdHelper = new BDHelper();
+
+
+    String imgConUrl = bdHelper.returnUrl()+"ws_images_conquistas/";
+    JSONArray jsonImagesCon = new JSONArray();
+    ArrayList<String> jsonConquistas = new ArrayList<String>();
 
 
     public CommentListAdapter(Context c, String anime, ArrayList<Comment> list) {
@@ -91,7 +106,7 @@ public class CommentListAdapter extends BaseAdapter {
             }
 
             final Context newCont = c;
-        final AnimeActivity animeActivity = new AnimeActivity();
+            final AnimeActivity animeActivity = new AnimeActivity();
             TextView conteudo = (TextView) row.findViewById(R.id.conteudoCommentView);
             conteudo.setText(comment.getConteudo());
             final TextView email = (TextView) row.findViewById(R.id.emailCommentView);
@@ -113,13 +128,7 @@ public class CommentListAdapter extends BaseAdapter {
                         @Override
                         public void onClick(View v) {
                         animeActivity.denunciar(newCont,getId, getEmail);
-//                            try {
-//                                bdHelper.insertIntoDenunciaComentario(newCont, getId, getEmail);
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
+
                             dialog.dismiss();
                         }
                     });
@@ -128,11 +137,98 @@ public class CommentListAdapter extends BaseAdapter {
                 }
             });
 
+        ImageView profileImage = (ImageView) row.findViewById(R.id.imageView7);
+        final View finalRow = row;
+        profileImage.setOnClickListener(new View.OnClickListener() {
 
-//        }
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(newCont);
+                dialog.setContentView(R.layout.dialog_see_profile);
+                JSONArray jsnConquista = null;
+                try {
+                    jsnConquista = bdHelper.selectAllFromConquista(c, getEmail);
+                    jsonImagesCon = bdHelper.selectAllFromConquistaImagem(c);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                ArrayList<String> newImgs = new ArrayList<String>();
+
+                for (int i=0; i < jsnConquista.length(); i++){
+                    JSONObject newsObject = null;
+                    String nomeConquista = null;
+
+                    try {
+                        newsObject = jsnConquista.getJSONObject(i);
+                        nomeConquista = newsObject.getString("Conquista_Nome");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    jsonConquistas.add(nomeConquista);
+
+                    for (int j=0; j<jsonImagesCon.length(); j++) {
+                        JSONObject imgObject = null;
+                        String verificaConquista = null;
+                        String idConquista = null;
+                        try {
+                            imgObject = jsonImagesCon.getJSONObject(j);
+                            verificaConquista = imgObject.getString("Nome");
+                            idConquista = imgObject.getString("conquista_imagem");
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        if (nomeConquista.equals(verificaConquista)) {
+                            newImgs.add(idConquista);
+                        }
+                    }
+                }
+
+                GridLayout gl = (GridLayout) dialog.findViewById(R.id.gridLay);
+                gl.setBackgroundResource(R.color.background);
+                GridLayout.LayoutParams gridParam;
+                System.out.println(imgConUrl+"01.png");
+                for (int i = 0; i < jsonConquistas.size(); i++) {
+                    gl.addView(LoadImageFromWebOperations(imgConUrl+newImgs.get(i)+".png"));
+                }
+            }
+
+
+        });
 
         return row;
     }
+
+
+
+    public void buildTableDyn(View convertView, String emailClicado, int position) throws IOException, JSONException {
+
+
+    }
+
+    public ImageView LoadImageFromWebOperations(String url) {
+        try {
+
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            ImageView i = new ImageView(c);
+            i.setImageBitmap(bitmap);
+            return i;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
 
     public void buildComments() throws IOException, JSONException {
         System.out.println(c + " - " + anime);

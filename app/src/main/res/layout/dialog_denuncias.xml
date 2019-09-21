@@ -24,16 +24,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:id="@+id/listDenuncias"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/newLinear"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:minHeight="15px"
         app:layout_constraintTop_toBottomOf="@id/textView7"
-        app:layout_constraintBottom_toTopOf="@id/dialogBurronOK"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="83dp" >
-    </ListView>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="3dp"
+        android:orientation="horizontal">
+
+        <ListView
+            android:id="@+id/listDenuncias"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:layout_width="0dip"
+            android:minHeight="15px"></ListView>
+
+        <ListView
+            android:id="@+id/listEmails"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:layout_width="0dip"
+            android:minHeight="15px"></ListView>
+    </LinearLayout>
 
     <Button
         android:id="@+id/dialogBurronOK"
@@ -42,7 +56,7 @@
         android:layout_below="@+id/switch1"
         android:background="@color/design_default_color_primary_dark"
         android:text=" Ok "
-        app:layout_constraintTop_toBottomOf="@id/listDenuncias"
+        app:layout_constraintTop_toBottomOf="@id/newLinear"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -21,6 +21,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Adapter;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -62,6 +63,11 @@ public class AnimeActivity extends AppCompatActivity
     ArrayList<String> coments = new ArrayList<String>();
     ArrayList<Comment> commentArrayList = new ArrayList<Comment>();
 
+    String imgConUrl = bdHelper.returnUrl()+"ws_images_conquistas/";
+    JSONArray jsonImagesCon = new JSONArray();
+    ArrayList<String> jsonConquistas = new ArrayList<String>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,20 +108,6 @@ public class AnimeActivity extends AppCompatActivity
         }
 
     }
-    public Bitmap LoadImageFromWebOperations(String url) {
-        try {
-            ImageView i = null;
-            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
-            return bitmap;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
 
     public void arrayAnimes() throws IOException, JSONException {
 
@@ -227,21 +219,13 @@ public void buildComments() throws  IOException, JSONException{
 
         WebView sinopseView = (WebView) findViewById(R.id.sinopseView);
 
-        String text = "<html>\n" +
-                "\n" +
-                "<body align=\"center\" style=\"background-color:#1d1f2d \">\n" +
-                "<div style=\"position: absolute;\n" +
-                "    top: 50%;\n" +
-                "    left: 50%;\n" +
-                "    -moz-transform: translateX(-50%) translateY(-50%);\n" +
-                "    -webkit-transform: translateX(-50%) translateY(-50%);\n" +
-                "    transform: translateX(-50%) translateY(-50%);\">\n" +
-                "<h2 align=\"center\" style=\";font-family:Arial; line-height: 1px; color:white \">POR</h2>\n" +
-                "<h4 align=\"center\" style=\"font-family:Arial; color:white; line-height: 1px; \">PTB2</h4>\n" +
-                "</div>\n" +
-                "</body>\n" +
-                "\n" +
-                "</html>\n";
+        String text = "<html><body>"
+                + "<p align=\"justify\"" +
+                "style=\"font-family:Arial; color:white\">"
+                + "<body style=\"background-color:#1d1f2d;\">"
+                + animes.getSinopse()
+                + "</p> "
+                + "</body></html>";
 
         sinopseView.loadData(text, "text/html", "utf-8");
         System.out.println("olha aqui " + imgWideUrl+(returnIdImg(animes.getNome()))+".png");
@@ -253,6 +237,10 @@ public void buildComments() throws  IOException, JSONException{
         animeWide.setImageBitmap(LoadImageFromWeb(imgWideUrl+(returnIdImg(animes.getNome()))+".png"));
 
     }
+
+
+
+
 
     public String returnIdImg(String tittle) throws IOException, JSONException {
         JSONArray jsonAnimes = bdHelper.selectAllFromAnime(getApplicationContext());

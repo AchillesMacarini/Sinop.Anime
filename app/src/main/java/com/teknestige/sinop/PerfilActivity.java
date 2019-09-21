@@ -56,9 +56,9 @@ public class PerfilActivity extends AppCompatActivity implements NavigationView.
     private Uri mImageCaptureUri;
     private static final int CAMERA_REQUEST = 1888;
     private ImageView imageView;
-    JSONArray jsonImagesCon = new JSONArray();
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
     String imgConUrl = bdHelper.returnUrl()+"ws_images_conquistas/";
+    JSONArray jsonImagesCon = new JSONArray();
     ArrayList<String> jsonConquistas = new ArrayList<String>();
 
     @Override

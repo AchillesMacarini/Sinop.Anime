@@ -25,12 +25,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.teknestige.classes.CreateList;
+import com.teknestige.classes.Denuncia;
 import com.teknestige.classes.ImageListAdapter;
 import com.teknestige.classes.Item;
 import com.teknestige.classes.MyAdapter;
@@ -62,6 +65,7 @@ public class InicioActivity extends AppCompatActivity
 
     Usuario usuario = new Usuario();
     BDHelper bdHelper = new BDHelper();
+    Denuncia denuncia = new Denuncia();
 //    Constants constants = new Constants();
 
     String imgNewUrl = bdHelper.returnUrl()+"ws_images_news/";
@@ -383,10 +387,25 @@ public class InicioActivity extends AppCompatActivity
                 Button dialogButton = (Button) dialog.findViewById(R.id.dialogBurronOK);
 
                 ListView denunciasList = (ListView) dialog.findViewById(R.id.listDenuncias);
+                ListView denunciasEmailList = (ListView) dialog.findViewById(R.id.listEmails);
 
-                
+            try {
+                ArrayAdapter<String> adapter1 =
+             new ArrayAdapter<String>(this, R.layout.list_style, denuncia.returnAnimeArrayDenuncias(getApplicationContext()));
 
-                // if button is clicked, close the custom dialog
+                ArrayAdapter<String> adapter2 =
+        new ArrayAdapter<String>(this, R.layout.list_style, denuncia.returnEmailArrayDenuncias(getApplicationContext()));
+
+                denunciasList.setAdapter(adapter1);
+                denunciasEmailList.setAdapter(adapter2);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            // if button is clicked, close the custom dialog
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

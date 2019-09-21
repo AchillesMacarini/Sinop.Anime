@@ -14,62 +14,77 @@
 
         <ImageView
             android:id="@+id/prophoto"
-            android:layout_width="143dp"
-            android:layout_height="148dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/img2" />
 
         <TextView
-            android:id="@+id/pass_confirm"
+            android:id="@+id/descriptionView"
             android:layout_width="355dp"
             android:layout_height="47dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:background="#000000"
             android:textColor="@color/cardview_light_background"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.545"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pass_edit" />
+            app:layout_constraintTop_toBottomOf="@+id/nameNickView" />
 
         <TextView
-            android:id="@+id/pass_edit"
+            android:id="@+id/nameNickView"
             android:layout_width="355dp"
             android:layout_height="47dp"
+            android:layout_marginTop="212dp"
+            android:background="#CC000000"
+            android:textColor="@color/cardview_light_background"
+            app:layout_constraintEnd_toEndOf="@+id/prophoto"
+            app:layout_constraintStart_toStartOf="@+id/prophoto"
+            app:layout_constraintTop_toTopOf="@+id/prophoto" />
+
+        <HorizontalScrollView
+            android:id="@+id/activity_horizontalView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:textColor="@color/cardview_light_background"
+            android:scrollbars="horizontal|vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/prophoto" />
+            app:layout_constraintTop_toBottomOf="@id/descriptionView"
+            app:layout_constraintVertical_bias="0.017">
 
-        <Button
-            android:id="@+id/dialogProfileOK"
-            android:layout_width="104dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/switch1"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="8dp"
-            android:text=" Ok "
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pass_confirm" />
+            <GridLayout
+                android:id="@+id/gridLay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@android:color/background_light"
+                android:columnCount="10"
+                android:maxHeight="300px"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/prophoto" />
+        </HorizontalScrollView>
+
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>
