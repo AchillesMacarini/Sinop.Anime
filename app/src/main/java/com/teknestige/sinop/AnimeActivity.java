@@ -150,9 +150,11 @@ public void buildComments() throws  IOException, JSONException{
         String coment = commentObject.getString("comentario_cont");
         String email = commentObject.getString("usuario_Email");
         String id = commentObject.getString("idcomentario");
+        String likes = commentObject.getString("num_like");
         comment.setEmailCom(email);
         comment.setConteudo(coment);
         comment.setIdCom(id);
+        comment.setLikes(likes);
 
         commentArrayList.add(comment);
     }

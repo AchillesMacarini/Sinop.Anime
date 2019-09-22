@@ -114,6 +114,61 @@ public class CommentListAdapter extends BaseAdapter {
             final String getEmail = comment.getEmail();
             final String getId = comment.getIdCom();
             Button denunciar = (Button) row.findViewById(R.id.denunBtn);
+            TextView likesView = row.findViewById(R.id.likesView);
+            likesView.setText(comment.getLikes() + " likes");
+
+            String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
+
+            ImageView imageView = (ImageView) row.findViewById(R.id.imageView7);
+            imageView.setImageBitmap(LoadImageFromWebUser(imgUserUrl+comment.getEmail()+".png"));
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    final Dialog dialog = new Dialog(newCont);
+                    dialog.setContentView(R.layout.dialog_see_profile);
+
+                    String imgUserUrl = bdHelper.returnUrl()+"ws_images_users/";
+
+                    String biographUser = "";
+                    String nickUser = "";
+
+                    try {
+                        JSONArray jsons = bdHelper.selectAllFromUser(c);
+
+                        for (int i = 0; i < jsons.length(); i++) {
+                            JSONObject userObject = (JSONObject) jsons.get(i);
+                            String emailUser = userObject.getString("Email");
+                            biographUser = userObject.getString("Biograph");
+                            nickUser = userObject.getString("Nickname");
+
+                            if (emailUser.toUpperCase().equals(comment.getEmail().toUpperCase())) {
+
+                                TextView emailuser = (TextView) dialog.findViewById(R.id.nameNickView);
+                                emailuser.setText(nickUser);
+
+                                TextView nickuser = (TextView) dialog.findViewById(R.id.descriptionView);
+                                nickuser.setText(biographUser);
+
+                                ImageView imageView1 = (ImageView) dialog.findViewById(R.id.prophoto);
+                                imageView1.setImageBitmap(LoadImageFromWebUser(imgUserUrl+comment.getEmail()+".png"));
+
+
+                                break;
+                            }
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    dialog.show();
+                }
+            });
+
             denunciar.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -122,12 +177,15 @@ public class CommentListAdapter extends BaseAdapter {
                     dialog.setContentView(R.layout.dialog_denuncia);
                     dialog.setTitle("Title...");
 
+                    TextView emailuser = (TextView) dialog.findViewById(R.id.userName);
+                    emailuser.setText(comment.getEmail() + "?");
                     Button dialogButton = (Button) dialog.findViewById(R.id.dialogClose2);
+
                     // if button is clicked, close the custom dialog
                     dialogButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                        animeActivity.denunciar(newCont,getId, getEmail);
+                        animeActivity.denunciar(newCont, comment.getIdCom(), comment.getEmail());
 
                             dialog.dismiss();
                         }
@@ -137,80 +195,22 @@ public class CommentListAdapter extends BaseAdapter {
                 }
             });
 
-        ImageView profileImage = (ImageView) row.findViewById(R.id.imageView7);
-        final View finalRow = row;
-        profileImage.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                final Dialog dialog = new Dialog(newCont);
-                dialog.setContentView(R.layout.dialog_see_profile);
-                JSONArray jsnConquista = null;
-                try {
-                    jsnConquista = bdHelper.selectAllFromConquista(c, getEmail);
-                    jsonImagesCon = bdHelper.selectAllFromConquistaImagem(c);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                ArrayList<String> newImgs = new ArrayList<String>();
-
-                for (int i=0; i < jsnConquista.length(); i++){
-                    JSONObject newsObject = null;
-                    String nomeConquista = null;
-
-                    try {
-                        newsObject = jsnConquista.getJSONObject(i);
-                        nomeConquista = newsObject.getString("Conquista_Nome");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    jsonConquistas.add(nomeConquista);
-
-                    for (int j=0; j<jsonImagesCon.length(); j++) {
-                        JSONObject imgObject = null;
-                        String verificaConquista = null;
-                        String idConquista = null;
-                        try {
-                            imgObject = jsonImagesCon.getJSONObject(j);
-                            verificaConquista = imgObject.getString("Nome");
-                            idConquista = imgObject.getString("conquista_imagem");
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        if (nomeConquista.equals(verificaConquista)) {
-                            newImgs.add(idConquista);
-                        }
-                    }
-                }
-
-                GridLayout gl = (GridLayout) dialog.findViewById(R.id.gridLay);
-                gl.setBackgroundResource(R.color.background);
-                GridLayout.LayoutParams gridParam;
-                System.out.println(imgConUrl+"01.png");
-                for (int i = 0; i < jsonConquistas.size(); i++) {
-                    gl.addView(LoadImageFromWebOperations(imgConUrl+newImgs.get(i)+".png"));
-                }
-            }
-
-
-        });
-
         return row;
     }
 
 
-
-    public void buildTableDyn(View convertView, String emailClicado, int position) throws IOException, JSONException {
-
-
+    public Bitmap LoadImageFromWebUser(String url) {
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            return bitmap;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-
     public ImageView LoadImageFromWebOperations(String url) {
         try {
 

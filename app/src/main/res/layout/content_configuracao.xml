@@ -13,13 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:gravity="center_vertical"
             android:onClick="goToAccountSettings"
-            android:text="Account"
+            android:text="Conta"
             android:textColor="#ffffff"
             android:textSize="25dp"
             app:fontFamily="sans-serif-light" />
@@ -30,7 +31,7 @@
             android:layout_height="46dp"
             android:gravity="center_vertical"
             android:onClick="goToNotificationSettings"
-            android:text="Notifications"
+            android:text="Notificações"
             android:textColor="#ffffff"
             android:textSize="25dp"
             app:fontFamily="sans-serif-light" />
@@ -41,7 +42,7 @@
             android:layout_height="46dp"
             android:gravity="center_vertical"
             android:onClick="buildAlertDialog"
-            android:text="Theme"
+            android:text="Tema"
             android:textColor="#ffffff"
             android:textSize="25dp"
             app:fontFamily="sans-serif-light" />
@@ -52,7 +53,7 @@
             android:layout_height="46dp"
             android:gravity="center_vertical"
             android:onClick="goToLanguagesSettings"
-            android:text="Language"
+            android:text="Linguagem"
             android:textColor="@android:color/background_light"
             android:textSize="25dp"
             app:fontFamily="sans-serif-light" />
@@ -69,7 +70,7 @@
             android:layout_height="46dp"
             android:gravity="center_vertical"
             android:onClick="goToHelp"
-            android:text="Help"
+            android:text="Ajuda"
 
             android:textColor="#ffffff"
             android:textSize="25dp"

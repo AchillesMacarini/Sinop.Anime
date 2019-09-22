@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="750px"
-    android:layout_height="450px"
+    android:layout_height="wrap_content"
     android:background="#1d1f2d">
 
 
@@ -12,25 +12,24 @@
         android:layout_width="104dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/switch1"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text=" Ok "
         android:background="@color/design_default_color_primary_dark"
+        android:text=" Ok "
         android:textColor="@color/cardview_light_background"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="5dp"
+        tools:layout_editor_absoluteX="91dp"
+        tools:layout_editor_absoluteY="107dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@id/userName" />
 
     <TextView
         android:id="@+id/areYouSure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="8dp"
         android:text="Você deseja denunciar o usuário"
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
@@ -43,9 +42,12 @@
         android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
+        android:layout_below="@id/areYouSure"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="16dp"
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/areYouSure"
         app:layout_constraintBottom_toTopOf="@id/dialogClose2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -6,11 +6,14 @@ public class Comment {
     private String anime;
     private String id;
 
-    public Comment(String conteudo , String email , String anime , String id) {
+    private String likes;
+
+    public Comment(String conteudo , String email , String anime , String id, String likes) {
         this.conteudo = conteudo;
         this.email = email;
         this.anime = anime;
         this.id = id;
+        this.likes = likes;
     }
 
     public Comment() {
@@ -49,5 +52,14 @@ public class Comment {
     public void setIdCom(String id) {
         this.id = id;
     }
+
+    public String getLikes() {
+        return likes;
+    }
+
+    public void setLikes(String likes) {
+        this.likes = likes;
+    }
+
 
 }

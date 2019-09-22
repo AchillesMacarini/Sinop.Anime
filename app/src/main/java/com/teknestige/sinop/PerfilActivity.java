@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -22,14 +24,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.teknestige.entidades.Usuario;
@@ -48,6 +53,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import DbControler.BDHelper;
+
+import static com.teknestige.sinop.R.layout.cell_layout;
 
 public class PerfilActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Usuario usuario = new Usuario();
@@ -259,6 +266,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             JSONArray jsnConquista = bdHelper.selectAllFromConquista(getApplicationContext(), getUserEmail());
             jsonImagesCon = bdHelper.selectAllFromConquistaImagem(getApplicationContext());
             ArrayList<String> newImgs = new ArrayList<String>();
+            ArrayList<String> newTitles = new ArrayList<String>();
 
             for (int i=0; i < jsnConquista.length(); i++){
                 JSONObject newsObject = jsnConquista.getJSONObject(i);
@@ -274,18 +282,39 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
                     if (nomeConquista.equals(verificaConquista)) {
                         newImgs.add(idConquista);
+                        newTitles.add(verificaConquista);
                     }
                 }
             }
 
 
             GridLayout gl = (GridLayout) findViewById(R.id.gridLay);
+
             gl.setBackgroundResource(R.color.background);
             GridLayout.LayoutParams gridParam;
             System.out.println(imgConUrl+"01.png");
+
+            System.out.println(jsonConquistas.size());
+
             for (int i = 0; i < jsonConquistas.size(); i++) {
-                gl.addView(LoadImageFromWebOperations(imgConUrl+newImgs.get(i)+".png"));
+                View child = getLayoutInflater().inflate(cell_layout, null);
+
+                ImageView imageChild = (ImageView) child.findViewById(R.id.img);
+                TextView textChild = (TextView) child.findViewById(R.id.title);
+
+                imageChild.setImageBitmap(LoadImageForConquistas(imgConUrl+newImgs.get(i)+".png"));
+                textChild.setText(newTitles.get(i));
+
+                textChild.setMaxWidth(225);
+
+                if(child.getParent() != null) {
+                    ((ViewGroup)child.getParent()).removeView(child); // <- fix
+                }
+
+                gl.addView(child);
+
             }
+
         }
     }
 
@@ -304,6 +333,23 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             return null;
         }
     }
+
+    public Bitmap LoadImageForConquistas(String url) {
+        try {
+
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            ImageView i = new ImageView(this);
+            i.setImageBitmap(bitmap);
+            return bitmap;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     public void buildAlertDialog() {
         final Dialog dialog = new Dialog(this);
