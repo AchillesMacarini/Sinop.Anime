@@ -195,17 +195,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             return listaNews.get(x);
         }
         else {
-            for (int i = 0; i < listaNews.size(); i++) {
-                if (listaNomes.get(x).equals(tittle)) {
-                    return listaNews.get(x);
+            int i =0;
+            for (i = 0; i < listaNews.size(); i++) {
+                if (listaNomes.get(i).equals(tittle)) {
+                    return listaNews.get(i);
                 }
             }
-            return listaNews.get(x);
+            return listaNews.get(i);
         }
     }
-
-    private Context getContext() {
-        return MyApplication.getContext();
-    }
-
 }

@@ -186,7 +186,7 @@ public void buildComments() throws  IOException, JSONException{
 
                 animes.setNome(nomeClicado());
                 animes.setClassificacao(animeTudosObject.getString("Classificacao indicativa"));
-//                animes.setData_lan(Date.valueOf(animeTudosObject.getString("Data de lancamento")));
+                animes.setData_lan(animeTudosObject.getString("Data de lancamento"));
                 animes.setDiretor(animeTudosObject.getString("Diretor"));
                 animes.setEstudio(animeTudosObject.getString("Estudio"));
                 animes.setNum_ep(animeTudosObject.getInt("Numero de episodios"));
@@ -210,11 +210,11 @@ public void buildComments() throws  IOException, JSONException{
         TextView estudioView = (TextView)findViewById(R.id.estudioVIew);
         estudioView.setText("Estudio: " + animes.getEstudio());
 
-//        TextView statusView = (TextView)findViewById(R.id.statusView);
-//        statusView.setText("Status: " + animes.getStatus());
+        TextView statusView = (TextView)findViewById(R.id.status);
+        statusView.setText(animes.getStatus());
 
         TextView classificacaoView = (TextView)findViewById(R.id.classificacaoView);
-        classificacaoView.setText("Classificação Indicativa: " + animes.getClassificacao());
+        classificacaoView.setText(animes.getClassificacao());
 
         TextView episoView = (TextView)findViewById(R.id.numEpView);
         episoView.setText(String.valueOf(animes.getNum_ep()) + " episódios");
@@ -234,6 +234,9 @@ public void buildComments() throws  IOException, JSONException{
 
         ImageView animeMain = findViewById(R.id.animeMain);
         animeMain.setImageBitmap(LoadImageFromWeb(imgAnimeUrl+(returnIdImg(animes.getNome()))+".png"));
+
+        TextView dataView = findViewById(R.id.dataLancamentoView);
+        dataView.setText(animes.getData_lan());
 
         ImageView animeWide = findViewById(R.id.animeWide);
         animeWide.setImageBitmap(LoadImageFromWeb(imgWideUrl+(returnIdImg(animes.getNome()))+".png"));

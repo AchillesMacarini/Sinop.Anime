@@ -9,14 +9,14 @@ public class Anime {
     private String estudio;
     private String diretor;
     private String sinopse;
-    private Date data_lan;
+    private String data_lan;
     private int num_ep;
     private String classificacao;
 
     public Anime(){    }
 
 
-    public Anime(String nome, String status, String estudio, String diretor, String sinopse, Date data_lan, int num_ep, String classificacao) {
+    public Anime(String nome, String status, String estudio, String diretor, String sinopse, String data_lan, int num_ep, String classificacao) {
         this.nome = nome;
         this.status = status;
         this.estudio = estudio;
@@ -67,11 +67,11 @@ public class Anime {
         this.sinopse = sinopse;
     }
 
-    public Date getData_lan() {
+    public String getData_lan() {
         return data_lan;
     }
 
-    public void setData_lan(Date data_lan) {
+    public void setData_lan(String data_lan) {
         this.data_lan = data_lan;
     }
 
